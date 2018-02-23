@@ -13,12 +13,10 @@ public class AuthServer {
     private final String CLIENT_ID = "client";
     private final String CLIENT_SECRET = "secret";
 
-    public AuthServer(Database database) {
-        this.database = database;
-    }
+    public AuthServer(Database database) { this.database = database; }
 
     @PostMapping("/auth")
-    public void getCode(HttpServletRequest request,
+    public void getCode(HttpServletRequest request,//todo change to requestBody
                           HttpServletResponse response,
                           @RequestParam(value="client_id") String client_id,
                           @RequestParam(value="redirect_uri") String redirect_uri,
@@ -54,7 +52,7 @@ public class AuthServer {
                             "  token_type: \"bearer\",\n" +
                             "  access_token: \"ACCESS_TOKEN\",\n" +
                             "  refresh_token: \"REFRESH_TOKEN\",\n" +
-                            "  expires_in: SECONDS_TO_EXPIRATION\n" +
+                            "  expires_in: 3600\n" +
                             "}";
             }
             case "refresh_token": {
@@ -67,7 +65,5 @@ public class AuthServer {
     }
 
     @RequestMapping("/")
-    public String getHome(){
-        return "<h3>Hell Yeah Server</h3>";
-    }
+    public String getHome(){ return "<h3>Hell Yeah Server</h3>"; }
 }
