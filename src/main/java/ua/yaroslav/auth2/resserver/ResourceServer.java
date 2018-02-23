@@ -2,7 +2,6 @@ package ua.yaroslav.auth2.resserver;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.datastore.Database;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
