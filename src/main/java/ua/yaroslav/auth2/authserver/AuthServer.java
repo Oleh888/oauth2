@@ -43,7 +43,7 @@ public class AuthServer {
                            @RequestParam(value = "client_secret") String client_secret,
                            @RequestParam(value = "grant_type") String grant_type,
                            @RequestParam(value = "code") String code,
-                           @RequestParam(value = "code") String scope) {
+                           @RequestParam(value = "scope") String scope) {
         System.out.println("\n--get token invocation--");
         System.out.println("client_id: " + client_id);
         System.out.println("client_secret: " + client_secret);
