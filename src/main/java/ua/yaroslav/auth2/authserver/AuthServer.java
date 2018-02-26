@@ -21,19 +21,16 @@ public class AuthServer {
                         @RequestParam(value="client_id") String client_id,
                         @RequestParam(value="redirect_uri") String redirect_uri,
                         @RequestParam(value="response_type") String response_type,
-                        @RequestParam(value="user_login") String user_login,
-                        @RequestParam(value="user_pass") String user_pass,
                         @RequestParam(value="scope") String scope) throws IOException, ServletException {
         System.out.println("--get code invocation [GET]--");
         System.out.println("client_id: " + client_id);
         System.out.println("redirect_uri: " + redirect_uri);
         System.out.println("response_type: " + response_type);
-        System.out.println("user_login: " + user_login);
         System.out.println("scope: " + scope);
 
         if (client_id.equals(CLIENT_ID)){
             if (response_type.equals("code")){
-                String authCode = Base64.getEncoder().encodeToString(user_login.getBytes());
+                String authCode = Base64.getEncoder().encodeToString("userlogin".getBytes());
                 database.addAuthCode(authCode);
                 response.sendRedirect(redirect_uri + "?authorization_code=" + authCode);
             }
