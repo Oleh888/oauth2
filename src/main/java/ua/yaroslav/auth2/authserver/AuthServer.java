@@ -1,10 +1,8 @@
 package ua.yaroslav.auth2.authserver;
-
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.yaroslav.auth2.datastore.Database;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -46,7 +44,7 @@ public class AuthServer {
         System.out.println("\n--get token invocation--");
         System.out.println("client_id: \n\t" + client_id);
         System.out.println("client_secret: \n\t" + client_secret);
-        System.out.println("grand_type: \n\t" + grant_type);
+        System.out.println("grant_type: \n\t" + grant_type);
         System.out.println("code: \n\t" + code);
 
         switch (grant_type) {
