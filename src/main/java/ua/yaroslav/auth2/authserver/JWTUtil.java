@@ -11,7 +11,7 @@ public class JWTUtil {
 
     public String getCode(FormData formData){
         String json = "{\n" +
-                "  client_id: \"" + formData.getClient_id() + "\",\n" +
+                "  client_id: \"" + formData.getClientID() + "\",\n" +
                 "  username: \"" + formData.getUsername() + "\",\n" +
                 "  time: " + new Date().getTime()+ "\n" +
                 "}";

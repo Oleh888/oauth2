@@ -1,5 +1,5 @@
 package ua.yaroslav.auth2.resserver;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.datastore.Database;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ public class ResourceServer{
         this.database = database;
     }
 
-    @RequestMapping(value = {"/private"})
+    @GetMapping(value = {"/private"})
     public String getPrivateData(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println(request.getHeader("Authorization"));
         if(request.getHeader("Authorization") == null) {
@@ -23,14 +23,9 @@ public class ResourceServer{
         }
         else {
             if(database.isValidToken(request.getHeader("Authorization").substring(6)))
-                return "private data for user " + request.getRemoteUser() + "<br>" + request.getHeader("Authorization");
+                return "private data " + request.getRemoteUser() + "<br>" + request.getHeader("Authorization");
         }
         System.out.println("Header: " + request.getHeader("Authorization"));
         return "Token is invalid";
-    }
-
-    @RequestMapping(value = {"/private2"})
-    public String getP(){
-        return "P2";
     }
 }

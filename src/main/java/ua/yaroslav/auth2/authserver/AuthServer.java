@@ -23,16 +23,16 @@ public class AuthServer {
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void getCode(FormData formData, HttpServletResponse response) throws IOException {
         System.out.println("\n--get code invocation--");
-        System.out.println("client_id: \n\t" + formData.getClient_id());
-        System.out.println("redirect_uri: \n\t" + formData.getRedirect_uri());
-        System.out.println("response_type: \n\t" + formData.getResponse_type());
+        System.out.println("client_id: \n\t" + formData.getClientID());
+        System.out.println("redirect_uri: \n\t" + formData.getRedirectURI());
+        System.out.println("response_type: \n\t" + formData.getResponseType());
         System.out.println("username: \n\t" + formData.getUsername());
         System.out.println("password: \n\t" + formData.getPassword());
         System.out.println("scope: \n\t" + formData.getScope());
 
-        if (formData.getClient_id().equals(CLIENT_ID)) {
-            if (formData.getResponse_type().equals("code")) {
-                response.sendRedirect(formData.getRedirect_uri() + "?authorization_code=" + jwtUtil.getCode(formData));
+        if (formData.getClientID().equals(CLIENT_ID)) {
+            if (formData.getResponseType().equals("code")) {
+                response.sendRedirect(formData.getRedirectURI() + "?authorization_code=" + jwtUtil.getCode(formData));
             }
         }
     }
@@ -42,14 +42,12 @@ public class AuthServer {
     public String getToken(@RequestParam(value = "client_id") String client_id,
                            @RequestParam(value = "client_secret") String client_secret,
                            @RequestParam(value = "grant_type") String grant_type,
-                           @RequestParam(value = "code") String code,
-                           @RequestParam(value = "scope") String scope) {
+                           @RequestParam(value = "code") String code) {
         System.out.println("\n--get token invocation--");
         System.out.println("client_id: \n\t" + client_id);
         System.out.println("client_secret: \n\t" + client_secret);
         System.out.println("grand_type: \n\t" + grant_type);
         System.out.println("code: \n\t" + code);
-        System.out.println("scope: \n\t" + scope);
 
         switch (grant_type) {
             case "authorization_code": {
@@ -59,8 +57,8 @@ public class AuthServer {
                     System.out.println(encoded);
                     return "{\n" +
                             "  token_type: \"bearer\",\n" +
-                            "  access_token: \"ACCESS_TOKEN\",\n" +
-                            "  refresh_token: \"REFRESH_TOKEN\",\n" +
+                            "  access_token: \"SlAV32hkKG\",\n" +
+                            "  refresh_token: \"8xLOxBtZp8\",\n" +
                             "  expires_in: 3600\n" +
                             "}";
                 }

@@ -26,15 +26,15 @@ public class FormData {
         return password;
     }
 
-    public String getClient_id() {
+    public String getClientID() {
         return client_id;
     }
 
-    public String getRedirect_uri() {
+    public String getRedirectURI() {
         return redirect_uri;
     }
 
-    public String getResponse_type() {
+    public String getResponseType() {
         return response_type;
     }
 
