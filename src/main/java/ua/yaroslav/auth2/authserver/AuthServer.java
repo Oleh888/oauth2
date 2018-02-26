@@ -15,19 +15,47 @@ public class AuthServer {
 
     public AuthServer(Database database) { this.database = database; }
 
+    @GetMapping("/auth")
+    public void getCodeG(HttpServletRequest request,//todo change to requestBody
+                        HttpServletResponse response,
+                        @RequestParam(value="client_id") String client_id,
+                        @RequestParam(value="redirect_uri") String redirect_uri,
+                        @RequestParam(value="response_type") String response_type,
+                        @RequestParam(value="user_login") String user_login,
+                        @RequestParam(value="user_pass") String user_pass,
+                        @RequestParam(value="scope") String scope) throws IOException, ServletException {
+        System.out.println("--get code invocation [GET]--");
+        System.out.println("client_id: " + client_id);
+        System.out.println("redirect_uri: " + redirect_uri);
+        System.out.println("response_type: " + response_type);
+        System.out.println("user_login: " + user_login);
+        System.out.println("scope: " + scope);
+
+        if (client_id.equals(CLIENT_ID)){
+            if (response_type.equals("code")){
+                String authCode = Base64.getEncoder().encodeToString(user_login.getBytes());
+                database.addAuthCode(authCode);
+                response.sendRedirect(redirect_uri + "?authorization_code=" + authCode);
+            }
+        }
+    }
+
     @PostMapping("/auth")
-    public void getCode(HttpServletRequest request,//todo change to requestBody
+    public void getCodeP(HttpServletRequest request,//todo change to requestBody
                           HttpServletResponse response,
                           @RequestParam(value="client_id") String client_id,
                           @RequestParam(value="redirect_uri") String redirect_uri,
                           @RequestParam(value="response_type") String response_type,
                           @RequestParam(value="user_login") String user_login,
-                          @RequestParam(value="user_pass") String user_pass) throws IOException, ServletException {
-        System.out.println("--get code invocation--");
+                          @RequestParam(value="user_pass") String user_pass,
+                          @RequestParam(value="scope") String scope) throws IOException, ServletException {
+        System.out.println("--get code invocation-- [POST]");
         System.out.println("client_id: " + client_id);
         System.out.println("redirect_uri: " + redirect_uri);
         System.out.println("response_type: " + response_type);
         System.out.println("user_login: " + user_login);
+        System.out.println("scope: " + scope);
+
         if (client_id.equals(CLIENT_ID)){
             if (response_type.equals("code")){
                 String authCode = Base64.getEncoder().encodeToString(user_login.getBytes());
