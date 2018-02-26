@@ -9,6 +9,8 @@ public class Database {
     private Set<String> tokens = new HashSet<>();
     private Set<User> users = new HashSet<>();
 
+    public Database(){this.tokens.add("SlAV32hkKG");}
+
     public void addAuthCode(String authCode) {
         authCodes.add(authCode);
     }

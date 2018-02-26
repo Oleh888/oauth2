@@ -18,7 +18,7 @@ public class ResourceServer{
     @GetMapping(value = {"/private"})
     public String getPrivateData(HttpServletRequest request,
                                  HttpServletResponse response,
-                                 @RequestParam("token") String token) throws IOException {
+                                 @RequestParam(value = "token", required = false) String token) throws IOException {
         System.out.println(request.getHeader("Authorization"));
         if(request.getHeader("Authorization") == null) {
             System.out.println("Send redirect ot /oauth");
@@ -29,7 +29,7 @@ public class ResourceServer{
             if(database.isValidToken(request.getHeader("Authorization").substring(6)))
                 return "private data " + request.getRemoteUser() + "<br>" + request.getHeader("Authorization");
             else if(database.isValidToken(token))
-                return "private data " + request.getRemoteUser() + "<br>" + request.getHeader("Authorization");
+                return "private data" + " <br> " + request.getHeader("Authorization");
         }
         System.out.println("Header: [" + request.getHeader("Authorization") + "]");
         return "Token is invalid";
