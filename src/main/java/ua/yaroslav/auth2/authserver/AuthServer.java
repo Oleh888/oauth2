@@ -55,6 +55,7 @@ public class AuthServer {
                     String encoded = jwtUtil.decodeAC(code);
                     System.out.println("Decoded data:");
                     System.out.println(encoded);
+                    database.addToken("SlAV32hkKG");
                     return "{\n" +
                             "  token_type: \"bearer\",\n" +
                             "  access_token: \"SlAV32hkKG\",\n" +

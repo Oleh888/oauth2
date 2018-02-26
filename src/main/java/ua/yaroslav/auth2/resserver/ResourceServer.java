@@ -25,7 +25,7 @@ public class ResourceServer{
             if(database.isValidToken(request.getHeader("Authorization").substring(6)))
                 return "private data " + request.getRemoteUser() + "<br>" + request.getHeader("Authorization");
         }
-        System.out.println("Header: " + request.getHeader("Authorization"));
+        System.out.println("Header: [" + request.getHeader("Authorization") + "]");
         return "Token is invalid";
     }
 }
