@@ -23,10 +23,11 @@ public class AuthServer {
                           @RequestParam(value="response_type") String response_type,
                           @RequestParam(value="user_login") String user_login,
                           @RequestParam(value="user_pass") String user_pass) throws IOException, ServletException {
-        System.out.println(client_id);
-        System.out.println(redirect_uri);
-        System.out.println(response_type);
-        System.out.println(user_login);
+        System.out.println("--get code invocation--");
+        System.out.println("client_id: " + client_id);
+        System.out.println("redirect_uri: " + redirect_uri);
+        System.out.println("response_type: " + response_type);
+        System.out.println("user_login: " + user_login);
         if (client_id.equals(CLIENT_ID)){
             if (response_type.equals("code")){
                 String authCode = Base64.getEncoder().encodeToString(user_login.getBytes());
@@ -41,10 +42,11 @@ public class AuthServer {
                            @RequestParam(value="client_secret") String client_secret,
                            @RequestParam(value="grand_type") String grand_type,
                            @RequestParam(value="code") String code){
-        System.out.println(client_id);
-        System.out.println(client_secret);
-        System.out.println(grand_type);
-        System.out.println(code);
+        System.out.println("--get token invocation--");
+        System.out.println("client_id: " + client_id);
+        System.out.println("client_secret: " + client_secret);
+        System.out.println("grand_type: " + grand_type);
+        System.out.println("code: " + code);
         switch (grand_type){
             case "authorization_code" : {
                 if (database.isValidAuthCode(code))
