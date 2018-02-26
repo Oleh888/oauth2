@@ -30,7 +30,10 @@ public class AuthServer {
 
         if (formData.getClientID().equals(CLIENT_ID)) {
             if (formData.getResponseType().equals("code")) {
-                response.sendRedirect(formData.getRedirectURI() + "?authorization_code=" + jwtUtil.getCode(formData));
+                response.sendRedirect(formData.getRedirectURI() +
+                        "?authorization_code=" + jwtUtil.getCode(formData) +
+                        "?state=markOne"
+                );
             }
         }
     }
