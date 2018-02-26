@@ -33,6 +33,8 @@ public class AuthServer {
                 String authCode = Base64.getEncoder().encodeToString("userlogin".getBytes());
                 database.addAuthCode(authCode);
                 response.sendRedirect(redirect_uri + "?authorization_code=" + authCode);
+                System.out.println("---------------------------------");
+                System.out.println("send redirect...");
                 System.out.println("authorization_code = " + authCode);
             }
         }
