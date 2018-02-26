@@ -41,14 +41,14 @@ public class AuthServer {
     @ResponseBody
     public String getToken(@RequestParam(value = "client_id") String client_id,
                            @RequestParam(value = "client_secret") String client_secret,
-                           @RequestParam(value = "grand_type") String grand_type,
+                           @RequestParam(value = "grant_type") String grant_type,
                            @RequestParam(value = "code") String code) {
         System.out.println("--get token invocation--");
         System.out.println("client_id: " + client_id);
         System.out.println("client_secret: " + client_secret);
-        System.out.println("grand_type: " + grand_type);
+        System.out.println("grand_type: " + grant_type);
         System.out.println("code: " + code);
-        switch (grand_type) {
+        switch (grant_type) {
             case "authorization_code": {
                 if (database.isValidAuthCode(code))
                     return "{\n" +
