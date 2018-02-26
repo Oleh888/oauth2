@@ -1,64 +1,55 @@
 package ua.yaroslav.auth2.authserver;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.yaroslav.auth2.datastore.Database;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Base64;
 
 @Controller
 public class AuthServer {
-    private final Database database;
     private final String CLIENT_ID = "client";
     private final String CLIENT_SECRET = "secret";
+    private final Database database;
+    private final JWTUtil jwtUtil;
 
-    public AuthServer(Database database) { this.database = database; }
+    public AuthServer(Database database, JWTUtil jwtUtil) {
+        this.database = database;
+        this.jwtUtil = jwtUtil;
+    }
 
-    @PostMapping("/auth")
-    @ResponseBody
-    public ResponseEntity getCodeP(HttpServletRequest request,//todo change to requestBody
-                                   HttpServletResponse response,
-                                   @RequestParam(value="client_id") String client_id,
-                                   @RequestParam(value="redirect_uri") String redirect_uri,
-                                   @RequestParam(value="response_type") String response_type,
-                                   @RequestParam(value="username") String username,
-                                   @RequestParam(value="password") String password,
-                                   @RequestParam(value="scope") String scope) throws IOException, ServletException {
+    @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public void getCode(FormData formData, HttpServletResponse response) throws IOException {
         System.out.println("--get code invocation-- [POST]");
-        System.out.println("client_id: " + client_id);
-        System.out.println("redirect_uri: " + redirect_uri);
-        System.out.println("response_type: " + response_type);
-        System.out.println("user_login: " + username);
-        System.out.println("scope: " + scope);
+        System.out.println("client_id: " + formData.getClient_id());
+        System.out.println("redirect_uri: " + formData.getRedirect_uri());
+        System.out.println("response_type: " + formData.getResponse_type());
+        System.out.println("username: " + formData.getUsername());
+        System.out.println("password: " + formData.getPassword());
+        System.out.println("scope: " + formData.getScope());
 
-        if (client_id.equals(CLIENT_ID)){
-            if (response_type.equals("code")){
-                String authCode = Base64.getEncoder().encodeToString(username.getBytes());
-                database.addAuthCode(authCode);
-                response.sendRedirect(redirect_uri + "?authorization_code=" + authCode);
-                return ResponseEntity.ok(HttpStatus.OK);
+        if (formData.getClient_id().equals(CLIENT_ID)) {
+            if (formData.getResponse_type().equals("code")) {
+                response.sendRedirect(formData.getRedirect_uri() + "?authorization_code=" + jwtUtil.getCode(formData));
             }
         }
-        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/token")
     @ResponseBody
-    public String getToken(@RequestParam(value="client_id") String client_id,
-                           @RequestParam(value="client_secret") String client_secret,
-                           @RequestParam(value="grand_type") String grand_type,
-                           @RequestParam(value="code") String code){
+    public String getToken(@RequestParam(value = "client_id") String client_id,
+                           @RequestParam(value = "client_secret") String client_secret,
+                           @RequestParam(value = "grand_type") String grand_type,
+                           @RequestParam(value = "code") String code) {
         System.out.println("--get token invocation--");
         System.out.println("client_id: " + client_id);
         System.out.println("client_secret: " + client_secret);
         System.out.println("grand_type: " + grand_type);
         System.out.println("code: " + code);
-        switch (grand_type){
-            case "authorization_code" : {
+        switch (grand_type) {
+            case "authorization_code": {
                 if (database.isValidAuthCode(code))
                     return "{\n" +
                             "  token_type: \"bearer\",\n" +
@@ -70,7 +61,7 @@ public class AuthServer {
             case "refresh_token": {
 
             }
-            default:{
+            default: {
                 return "{\"error\": \"invalid_grant_type\"}";
             }
         }
@@ -78,5 +69,12 @@ public class AuthServer {
 
     @RequestMapping("/")
     @ResponseBody
-    public String getHome(){ return "<h3>Hell Yeah</h3>"; }
+    public String getHome() {
+        return "<h3>Hell Yeah</h3>";
+    }
+
+    @GetMapping("/auth")
+    public String getLogin() {
+        return "login";
+    }
 }
