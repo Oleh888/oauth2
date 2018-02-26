@@ -21,4 +21,8 @@ public class JWTUtil {
         database.addAuthCode(authCode);
         return authCode;
     }
+
+    public String decodeAC(String code) {
+        return Base64.getEncoder().encodeToString(code.getBytes());
+    }
 }

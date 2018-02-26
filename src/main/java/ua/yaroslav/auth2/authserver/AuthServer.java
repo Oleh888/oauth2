@@ -22,7 +22,7 @@ public class AuthServer {
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void getCode(FormData formData, HttpServletResponse response) throws IOException {
-        System.out.println("--get code invocation-- [POST]");
+        System.out.println("\n--get code invocation--");
         System.out.println("client_id: " + formData.getClient_id());
         System.out.println("redirect_uri: " + formData.getRedirect_uri());
         System.out.println("response_type: " + formData.getResponse_type());
@@ -43,20 +43,24 @@ public class AuthServer {
                            @RequestParam(value = "client_secret") String client_secret,
                            @RequestParam(value = "grant_type") String grant_type,
                            @RequestParam(value = "code") String code) {
-        System.out.println("--get token invocation--");
+        System.out.println("\n--get token invocation--");
         System.out.println("client_id: " + client_id);
         System.out.println("client_secret: " + client_secret);
         System.out.println("grand_type: " + grant_type);
         System.out.println("code: " + code);
+
         switch (grant_type) {
             case "authorization_code": {
-                if (database.isValidAuthCode(code))
+                if (database.isValidAuthCode(code)) {
+                    String encoded = jwtUtil.decodeAC(code);
+                    System.out.println(encoded);
                     return "{\n" +
                             "  token_type: \"bearer\",\n" +
                             "  access_token: \"ACCESS_TOKEN\",\n" +
                             "  refresh_token: \"REFRESH_TOKEN\",\n" +
                             "  expires_in: 3600\n" +
                             "}";
+                }
             }
             case "refresh_token": {
 
