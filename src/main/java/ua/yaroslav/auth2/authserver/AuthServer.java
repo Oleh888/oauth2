@@ -23,12 +23,12 @@ public class AuthServer {
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void getCode(FormData formData, HttpServletResponse response) throws IOException {
         System.out.println("\n--get code invocation--");
-        System.out.println("client_id: " + formData.getClient_id());
-        System.out.println("redirect_uri: " + formData.getRedirect_uri());
-        System.out.println("response_type: " + formData.getResponse_type());
-        System.out.println("username: " + formData.getUsername());
-        System.out.println("password: " + formData.getPassword());
-        System.out.println("scope: " + formData.getScope());
+        System.out.println("client_id: \n\t" + formData.getClient_id());
+        System.out.println("redirect_uri: \n\t" + formData.getRedirect_uri());
+        System.out.println("response_type: \n\t" + formData.getResponse_type());
+        System.out.println("username: \n\t" + formData.getUsername());
+        System.out.println("password: \n\t" + formData.getPassword());
+        System.out.println("scope: \n\t" + formData.getScope());
 
         if (formData.getClient_id().equals(CLIENT_ID)) {
             if (formData.getResponse_type().equals("code")) {
@@ -45,11 +45,11 @@ public class AuthServer {
                            @RequestParam(value = "code") String code,
                            @RequestParam(value = "scope") String scope) {
         System.out.println("\n--get token invocation--");
-        System.out.println("client_id: " + client_id);
-        System.out.println("client_secret: " + client_secret);
-        System.out.println("grand_type: " + grant_type);
-        System.out.println("code: " + code);
-        System.out.println("scope: " + scope);
+        System.out.println("client_id: \n\t" + client_id);
+        System.out.println("client_secret: \n\t" + client_secret);
+        System.out.println("grand_type: \n\t" + grant_type);
+        System.out.println("code: \n\t" + code);
+        System.out.println("scope: \n\t" + scope);
 
         switch (grant_type) {
             case "authorization_code": {
@@ -74,7 +74,7 @@ public class AuthServer {
         }
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     @ResponseBody
     public String getHome() {
         return "<h3>Hell Yeah</h3>";
