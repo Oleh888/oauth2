@@ -23,6 +23,6 @@ public class JWTUtil {
     }
 
     public String decodeAC(String code) {
-        return String.valueOf(Base64.getDecoder().decode(code));
+        return new String(Base64.getDecoder().decode(code));
     }
 }

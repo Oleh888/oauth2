@@ -42,17 +42,20 @@ public class AuthServer {
     public String getToken(@RequestParam(value = "client_id") String client_id,
                            @RequestParam(value = "client_secret") String client_secret,
                            @RequestParam(value = "grant_type") String grant_type,
-                           @RequestParam(value = "code") String code) {
+                           @RequestParam(value = "code") String code,
+                           @RequestParam(value = "code") String scope) {
         System.out.println("\n--get token invocation--");
         System.out.println("client_id: " + client_id);
         System.out.println("client_secret: " + client_secret);
         System.out.println("grand_type: " + grant_type);
         System.out.println("code: " + code);
+        System.out.println("scope: " + scope);
 
         switch (grant_type) {
             case "authorization_code": {
                 if (database.isValidAuthCode(code)) {
                     String encoded = jwtUtil.decodeAC(code);
+                    System.out.println("Decoded data:");
                     System.out.println(encoded);
                     return "{\n" +
                             "  token_type: \"bearer\",\n" +
