@@ -15,30 +15,10 @@ public class AuthServer {
 
     public AuthServer(Database database) { this.database = database; }
 
-    @GetMapping("/auth")
-    public void getCodeG(HttpServletRequest request,//todo change to requestBody
-                        HttpServletResponse response,
-                        @RequestParam(value="client_id") String client_id,
-                        @RequestParam(value="redirect_uri") String redirect_uri,
-                        @RequestParam(value="response_type") String response_type,
-                        @RequestParam(value="scope") String scope) throws IOException, ServletException {
-        System.out.println("--get code invocation [GET]--");
-        System.out.println("client_id: " + client_id);
-        System.out.println("redirect_uri: " + redirect_uri);
-        System.out.println("response_type: " + response_type);
-        System.out.println("scope: " + scope);
-
-        if (client_id.equals(CLIENT_ID)){
-            if (response_type.equals("code")){
-                String authCode = Base64.getEncoder().encodeToString("userlogin".getBytes());
-                database.addAuthCode(authCode);
-                response.sendRedirect(redirect_uri + "?authorization_code=" + authCode);
-                System.out.println("---------------------------------");
-                System.out.println("send redirect...");
-                System.out.println("authorization_code = " + authCode);
-            }
-        }
-    }
+//    @GetMapping("/auth")
+//    public void getLoginPage(){
+//
+//    }
 
     @PostMapping("/auth")
     public void getCodeP(HttpServletRequest request,//todo change to requestBody
@@ -65,7 +45,7 @@ public class AuthServer {
         }
     }
 
-    @RequestMapping(value = "/token", method = RequestMethod.POST)
+    @PostMapping("/token")
     public String getToken(@RequestParam(value="client_id") String client_id,
                            @RequestParam(value="client_secret") String client_secret,
                            @RequestParam(value="grand_type") String grand_type,
@@ -96,4 +76,10 @@ public class AuthServer {
 
     @RequestMapping("/")
     public String getHome(){ return "<h3>Hell Yeah</h3>"; }
+
+//    @PostMapping("/auth")
+//    public String forLogin(){
+//        System.out.println("login!");
+//        return "result";
+//    }
 }
