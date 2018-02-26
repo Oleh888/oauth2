@@ -1,4 +1,7 @@
 package ua.yaroslav.auth2.authserver;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.yaroslav.auth2.datastore.Database;
 import javax.servlet.ServletException;
@@ -7,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Base64;
 
-@RestController
+@Controller
 public class AuthServer {
     private final Database database;
     private final String CLIENT_ID = "client";
@@ -15,37 +18,36 @@ public class AuthServer {
 
     public AuthServer(Database database) { this.database = database; }
 
-//    @GetMapping("/auth")
-//    public void getLoginPage(){
-//
-//    }
-
     @PostMapping("/auth")
-    public void getCodeP(HttpServletRequest request,//todo change to requestBody
-                          HttpServletResponse response,
-                          @RequestParam(value="client_id") String client_id,
-                          @RequestParam(value="redirect_uri") String redirect_uri,
-                          @RequestParam(value="response_type") String response_type,
-                          @RequestParam(value="user_login") String user_login,
-                          @RequestParam(value="user_pass") String user_pass,
-                          @RequestParam(value="scope") String scope) throws IOException, ServletException {
+    @ResponseBody
+    public ResponseEntity getCodeP(HttpServletRequest request,//todo change to requestBody
+                                   HttpServletResponse response,
+                                   @RequestParam(value="client_id") String client_id,
+                                   @RequestParam(value="redirect_uri") String redirect_uri,
+                                   @RequestParam(value="response_type") String response_type,
+                                   @RequestParam(value="username") String username,
+                                   @RequestParam(value="password") String password,
+                                   @RequestParam(value="scope") String scope) throws IOException, ServletException {
         System.out.println("--get code invocation-- [POST]");
         System.out.println("client_id: " + client_id);
         System.out.println("redirect_uri: " + redirect_uri);
         System.out.println("response_type: " + response_type);
-        System.out.println("user_login: " + user_login);
+        System.out.println("user_login: " + username);
         System.out.println("scope: " + scope);
 
         if (client_id.equals(CLIENT_ID)){
             if (response_type.equals("code")){
-                String authCode = Base64.getEncoder().encodeToString(user_login.getBytes());
+                String authCode = Base64.getEncoder().encodeToString(username.getBytes());
                 database.addAuthCode(authCode);
                 response.sendRedirect(redirect_uri + "?authorization_code=" + authCode);
+                return ResponseEntity.ok(HttpStatus.OK);
             }
         }
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/token")
+    @ResponseBody
     public String getToken(@RequestParam(value="client_id") String client_id,
                            @RequestParam(value="client_secret") String client_secret,
                            @RequestParam(value="grand_type") String grand_type,
@@ -75,11 +77,6 @@ public class AuthServer {
     }
 
     @RequestMapping("/")
+    @ResponseBody
     public String getHome(){ return "<h3>Hell Yeah</h3>"; }
-
-//    @PostMapping("/auth")
-//    public String forLogin(){
-//        System.out.println("login!");
-//        return "result";
-//    }
 }
