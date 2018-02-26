@@ -22,6 +22,7 @@ public class ResourceServer{
             response.sendRedirect("/oauth");
         }
         else {
+            System.out.println(database.isValidToken(request.getHeader("Authorization").substring(6)));
             if(database.isValidToken(request.getHeader("Authorization").substring(6)))
                 return "private data " + request.getRemoteUser() + "<br>" + request.getHeader("Authorization");
         }
