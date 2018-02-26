@@ -33,6 +33,7 @@ public class AuthServer {
                 String authCode = Base64.getEncoder().encodeToString("userlogin".getBytes());
                 database.addAuthCode(authCode);
                 response.sendRedirect(redirect_uri + "?authorization_code=" + authCode);
+                System.out.println("authorization_code = " + authCode);
             }
         }
     }
@@ -92,5 +93,5 @@ public class AuthServer {
     }
 
     @RequestMapping("/")
-    public String getHome(){ return "<h3>Hell Yeah Server</h3>"; }
+    public String getHome(){ return "<h3>Hell Yeah</h3>"; }
 }
