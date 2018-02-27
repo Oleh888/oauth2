@@ -35,8 +35,8 @@ public class ResourceServer{
 //                return "private data" + " <br> " + request.getHeader("Authorization");
 //        }
 //        System.out.println("Header: [" + request.getHeader("Authorization") + "]");
-        Map<String, String> map = new HashMap<String, String>();
 
+        System.out.println("--------------" + request.getHeader("Authorization") + "--------------");
         Enumeration headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
@@ -44,7 +44,6 @@ public class ResourceServer{
             if(value.length() < 60)
                 System.out.println(key + " -> [" + value + "]");
             else System.out.println(key + " -> [" + value.substring(0, 100) + "...]");
-            map.put(key, value);
         }
         System.out.println("--------------------------------------------------------------");
         return "DATA";
