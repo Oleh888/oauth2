@@ -14,7 +14,7 @@ public class JWTUtil {
         String json = "{\n" +
                 "  client_id: \"" + formData.getClientID() + "\",\n" +
                 "  username: \"" + formData.getUsername() + "\",\n" +
-                "  time: " + new Date().getTime()+ "\n" + //todo change to expare time
+                "  time: " + new Date().getTime()+ "\n" + //todo change to expiration time
                 "}";
         //ObjectMapper
         System.out.println(json);

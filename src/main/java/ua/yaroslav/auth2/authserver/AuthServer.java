@@ -30,8 +30,7 @@ public class AuthServer {
 
         if (formData.getClientID().equals(CLIENT_ID)) {
             if (formData.getResponseType().equals("code")) {
-                String url = "https://oauth-redirect.googleusercontent.com/r/mark-i-ff5cc?code=" +
-                        jwtUtil.getCode(formData) + "&state=markOne";
+                String url = "https://developers.google.com/oauthplayground?code=" + jwtUtil.getCode(formData) + "&state=markOne";
                 response.sendRedirect(url);
             }
         }
