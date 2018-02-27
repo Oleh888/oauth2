@@ -26,7 +26,6 @@ public class AuthServer {
     public void getCode(FormData formData, HttpServletResponse response) throws IOException {
         System.out.println("\n--------------------get-code-invocation---------------------");
         System.out.println("client_id: \n\t" + formData.getClientID());
-        System.out.println("redirect_uri: \n\t" + formData.getRedirectURI());
         System.out.println("response_type: \n\t" + formData.getResponseType());
         System.out.println("username: \n\t" + formData.getUsername());
         System.out.println("password: \n\t" + formData.getPassword());

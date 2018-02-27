@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Base64;
+import java.util.Objects;
 
 public class JWTToken {
     private String clientID;
@@ -55,20 +56,19 @@ public class JWTToken {
         this.scope = scope;
     }
 
-    public String getEncoded() {
-        return Base64.getEncoder().encodeToString(this.toString().getBytes());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JWTToken jwtToken = (JWTToken) o;
+        return expiresIn == jwtToken.expiresIn &&
+                Objects.equals(clientID, jwtToken.clientID) &&
+                Objects.equals(username, jwtToken.username) &&
+                Objects.equals(scope, jwtToken.scope);
     }
 
-    public String getDecoded() {
-        return new String(Base64.getDecoder().decode(this.toString().getBytes()));
-    }
-
-    public String toString(){
-        try {
-            return new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientID, username, expiresIn, scope);
     }
 }

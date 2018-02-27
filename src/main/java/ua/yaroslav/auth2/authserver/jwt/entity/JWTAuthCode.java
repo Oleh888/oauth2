@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Base64;
+import java.util.Objects;
 
 public class JWTAuthCode {
     private String clientID;
@@ -44,11 +45,18 @@ public class JWTAuthCode {
         this.expiresIn = expiresIn;
     }
 
-//    public String getEncoded() {
-//        return Base64.getEncoder().encodeToString(this.toString().getBytes());
-//    }
-//
-//    public String getDecoded() {
-//        return new String(Base64.getDecoder().decode(this.toString().getBytes()));
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JWTAuthCode that = (JWTAuthCode) o;
+        return expiresIn == that.expiresIn &&
+                Objects.equals(clientID, that.clientID) &&
+                Objects.equals(username, that.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientID, username, expiresIn);
+    }
 }
