@@ -1,4 +1,5 @@
 package ua.yaroslav.auth2.authserver;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.datastore.Database;
 import java.util.Base64;
@@ -13,9 +14,9 @@ public class JWTUtil {
         String json = "{\n" +
                 "  client_id: \"" + formData.getClientID() + "\",\n" +
                 "  username: \"" + formData.getUsername() + "\",\n" +
-                "  time: " + new Date().getTime()+ "\n" +
+                "  time: " + new Date().getTime()+ "\n" + //todo change to expare time
                 "}";
-
+        //ObjectMapper
         System.out.println(json);
         String authCode = Base64.getEncoder().encodeToString(json.getBytes());
         database.addAuthCode(authCode);
