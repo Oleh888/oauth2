@@ -55,7 +55,8 @@ public class AuthServer {
         System.out.println("client_secret: \n\t" + client_secret);
         System.out.println("grant_type: \n\t" + grant_type);
         System.out.println("code: \n\t" + code);
-        System.out.println("scope: \n\t" + scope);
+        System.out.println("scope: \n\t" + "[" + scope + "]");
+        System.out.println();
 
         switch (grant_type) {
             case "authorization_code": {
@@ -63,6 +64,7 @@ public class AuthServer {
                 if (database.isCodeValid(jwtAuthCode)) {
                     System.out.println("hell yeah!");
                 }
+                jwtUtil.getToken(jwtAuthCode.getClientID(), jwtAuthCode.getUsername(), scope);
 //                if (database.isValidAuthCode(code)) {
 //                    System.out.println("\nDecoded data:");
 //                    System.out.println(jwtUtil.decodeAC(code));

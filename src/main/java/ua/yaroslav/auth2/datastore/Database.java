@@ -1,10 +1,10 @@
 package ua.yaroslav.auth2.datastore;
+
 import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class Database {
@@ -32,7 +32,7 @@ public class Database {
         return this.codes.contains(code);
     }
 
-    public List<JWTAuthCode> getCodes(){
+    public ArrayList<JWTAuthCode> getCodes(){
         return codes;
     }
 }

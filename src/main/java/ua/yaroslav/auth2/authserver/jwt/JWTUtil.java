@@ -23,6 +23,7 @@ public class JWTUtil {
     }
 
     public JWTToken getToken(String clientID, String username , String scope){
+        if (scope == null) scope = "grant_all";
         return new JWTToken(clientID, username, new Date().getTime() + 3600, scope);
     }
 

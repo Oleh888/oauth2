@@ -1,4 +1,5 @@
 package ua.yaroslav.auth2.resserver;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,8 +9,8 @@ import ua.yaroslav.auth2.datastore.Database;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 
 @RestController
 public class ResourceServer {
@@ -39,7 +40,7 @@ public class ResourceServer {
     }
 
     @GetMapping(value = {"/codes"})
-    public List<JWTAuthCode> getCodes(){
+    public ArrayList<JWTAuthCode> getCodes(){
         return database.getCodes();
     }
 }
