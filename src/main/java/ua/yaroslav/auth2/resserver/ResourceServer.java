@@ -43,7 +43,7 @@ public class ResourceServer{
             String value = request.getHeader(key);
             if(value.length() < 60)
                 System.out.println(key + " -> [" + value + "]");
-            else System.out.println(key + " -> [" + value.substring(0, 60) + "]");
+            else System.out.println(key + " -> [" + value.substring(0, 100) + "...]");
             map.put(key, value);
         }
         return "DATA";
