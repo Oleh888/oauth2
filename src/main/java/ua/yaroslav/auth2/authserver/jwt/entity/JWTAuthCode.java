@@ -44,15 +44,6 @@ public class JWTAuthCode {
         this.expiresIn = expiresIn;
     }
 
-    public String toString() {
-        try {
-            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public String getEncoded() {
         return Base64.getEncoder().encodeToString(this.toString().getBytes());
     }

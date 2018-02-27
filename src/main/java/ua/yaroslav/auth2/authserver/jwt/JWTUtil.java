@@ -1,4 +1,5 @@
 package ua.yaroslav.auth2.authserver.jwt;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.authserver.FormData;
