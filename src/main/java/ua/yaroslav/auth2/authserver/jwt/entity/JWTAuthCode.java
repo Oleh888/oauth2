@@ -1,8 +1,12 @@
 package ua.yaroslav.auth2.authserver.jwt.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JWTAuthCode extends JWTAbstract{
+import java.util.Base64;
+
+public class JWTAuthCode {
     private String clientID;
     private String username;
     private long expiresIn;
@@ -38,5 +42,22 @@ public class JWTAuthCode extends JWTAbstract{
 
     public void setExpiresIn(long expiresIn) {
         this.expiresIn = expiresIn;
+    }
+
+    public String toString() {
+        try {
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getEncoded() {
+        return Base64.getEncoder().encodeToString(this.toString().getBytes());
+    }
+
+    public String getDecoded() {
+        return new String(Base64.getDecoder().decode(this.toString().getBytes()));
     }
 }

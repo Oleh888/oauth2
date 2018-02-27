@@ -2,7 +2,6 @@ package ua.yaroslav.auth2.authserver.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.authserver.FormData;
-import ua.yaroslav.auth2.authserver.jwt.entity.JWTAbstract;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
 

@@ -1,7 +1,11 @@
 package ua.yaroslav.auth2.authserver.jwt.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JWTToken extends JWTAbstract {
+import java.util.Base64;
+
+public class JWTToken {
     private String clientID;
     private String username;
     private long expiresIn;
@@ -49,5 +53,22 @@ public class JWTToken extends JWTAbstract {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public String toString() {
+        try {
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getEncoded() {
+        return Base64.getEncoder().encodeToString(this.toString().getBytes());
+    }
+
+    public String getDecoded() {
+        return new String(Base64.getDecoder().decode(this.toString().getBytes()));
     }
 }
