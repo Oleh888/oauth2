@@ -22,7 +22,7 @@ public class ResourceServer{
     public String getPrivateData(HttpServletRequest request,
                                  HttpServletResponse response,
                                  @RequestParam(value = "token", required = false) String token) throws IOException {
-        System.out.println("------------------" + request.getHeader("Authorization") + "------------------");
+        System.out.println("\nAuth Header -> " + request.getHeader("Authorization") );
         Enumeration headerNames = request.getHeaderNames();
         StringBuilder builder = new StringBuilder();
         while (headerNames.hasMoreElements()) {
