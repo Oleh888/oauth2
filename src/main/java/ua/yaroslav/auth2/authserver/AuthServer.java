@@ -32,7 +32,7 @@ public class AuthServer {
             if (formData.getResponseType().equals("code")) {
                 String url = "https://oauth-redirect.googleusercontent.com/r/YOUR_PROJECT_ID?code=AUTHORIZATION_CODE&state=STATE_STRING";
                 response.sendRedirect(formData.getRedirectURI() +
-                        "?authorization_code=" + jwtUtil.getCode(formData) +
+                        "?code=" + jwtUtil.getCode(formData) +
                         "&state=markOne"
                 );
             }
