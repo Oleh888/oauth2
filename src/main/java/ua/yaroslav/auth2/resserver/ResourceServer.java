@@ -22,20 +22,6 @@ public class ResourceServer{
     public String getPrivateData(HttpServletRequest request,
                                  HttpServletResponse response,
                                  @RequestParam(value = "token", required = false) String token) throws IOException {
-//        System.out.println(request.getHeader("Authorization"));
-//        if(request.getHeader("Authorization") == null) {
-//            System.out.println("Send redirect ot /oauth");
-//            response.sendRedirect("/oauth");
-//        }
-//        else {
-//            System.out.println(database.isValidToken(request.getHeader("Authorization").substring(6)));
-//            if(database.isValidToken(request.getHeader("Authorization").substring(6)))
-//                return "private data"+ "<br>" + request.getHeader("Authorization");
-//            else if(database.isValidToken(token))
-//                return "private data" + " <br> " + request.getHeader("Authorization");
-//        }
-//        System.out.println("Header: [" + request.getHeader("Authorization") + "]");
-
         System.out.println("------------------" + request.getHeader("Authorization") + "------------------");
         Enumeration headerNames = request.getHeaderNames();
         StringBuilder builder = new StringBuilder();
