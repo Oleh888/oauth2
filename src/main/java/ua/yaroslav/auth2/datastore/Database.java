@@ -4,6 +4,7 @@ import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class Database {
@@ -29,5 +30,9 @@ public class Database {
 
     public boolean isCodeValid(JWTAuthCode code){
         return this.codes.contains(code);
+    }
+
+    public List<JWTAuthCode> getCodes(){
+        return codes;
     }
 }

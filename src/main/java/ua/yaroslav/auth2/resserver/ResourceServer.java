@@ -2,15 +2,22 @@ package ua.yaroslav.auth2.resserver;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
+import ua.yaroslav.auth2.datastore.Database;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @RestController
 public class ResourceServer {
+    private final Database database;
+
+    public ResourceServer(Database database) {
+        this.database = database;
+    }
 
     @GetMapping(value = {"/private"})
     public String getPrivateData(HttpServletRequest request, HttpServletResponse response,
@@ -31,4 +38,8 @@ public class ResourceServer {
         return builder.toString();
     }
 
+    @GetMapping(value = {"/private"})
+    public List<JWTAuthCode> getCodes(){
+        return database.getCodes();
+    }
 }
