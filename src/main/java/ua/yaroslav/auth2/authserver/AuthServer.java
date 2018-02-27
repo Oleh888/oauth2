@@ -55,7 +55,7 @@ public class AuthServer {
                     System.out.println("\nDecoded data:");
                     System.out.println(encoded);
                     database.addToken("SlAV32hkKG");
-                    System.out.println();
+                    System.out.println("------------------------------------------------------------");
                     return "{\n" +
                             "token_type: \"bearer\",\n" +
                             "access_token: \"SlAV32hkKG\",\n" +

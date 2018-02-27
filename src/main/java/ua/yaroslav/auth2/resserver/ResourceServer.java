@@ -26,7 +26,7 @@ public class ResourceServer{
         Enumeration headerNames = request.getHeaderNames();
         StringBuilder builder = new StringBuilder();
         if (request.getHeader("Authorization").length() > 8)
-            builder.append("<h3>Access granted!</h3><br>");
+            builder.append("<h3>Access granted!</h3>");
         else builder.append("<h3>Access not granted!</h3><br>");
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
