@@ -33,7 +33,7 @@ public class ResourceServer{
             String value = request.getHeader(key);
             if(value.length() < 60)
                 builder.append(key + " -> [" + value + "]").append("<br>");
-            else builder.append(key + " -> [" + value.substring(0, 100) + "...]").append("<br>");
+            else builder.append(key + " -> [" + value.substring(0, 110) + "...]").append("<br>");
         }
         return builder.toString();
     }
