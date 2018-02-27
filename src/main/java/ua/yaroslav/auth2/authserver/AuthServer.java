@@ -31,7 +31,7 @@ public class AuthServer {
         System.out.println("response_type: \n\t" + formData.getResponseType());
         System.out.println("username: \n\t" + formData.getUsername());
         System.out.println("password: \n\t" + formData.getPassword());
-        System.out.println("scope: \n\t" + formData.getScope());
+        System.out.println("scope: \n\t" + "[" + formData.getScope() + "]\n");
 
         if (formData.getClientID().equals(CLIENT_ID)) {
             if (formData.getResponseType().equals(RESPONSE_TYPE)) {
@@ -57,7 +57,7 @@ public class AuthServer {
         System.out.println("client_secret: \n\t" + client_secret);
         System.out.println("grant_type: \n\t" + grant_type);
         System.out.println("code: \n\t" + code);
-        System.out.println("scope: \n\t" + "[" + scope + "]\n\n");
+        System.out.println("scope: \n\t" + "[" + scope + "]\n");
 
         switch (grant_type) {
             case "authorization_code": {
@@ -65,27 +65,14 @@ public class AuthServer {
                 if (database.isCodeValid(jwtAuthCode)) {
                     JWTToken token = jwtUtil.getToken(jwtAuthCode.getClientID(), jwtAuthCode.getUsername(), scope);
                     jwtUtil.encodeObject(token);
-                }
-//                if (database.isValidAuthCode(code)) {
-//                    System.out.println("\nDecoded data:");
-//                    System.out.println(jwtUtil.decodeAC(code));
-//
-//                    database.addToken("SlAV32hkKG");
-//                    System.out.println("------------------------------------------------------------");
-//                    System.out.println(jwtUtil.getToken(client_id,"username","read"));
-//                    return "{\n" +
-//                            "token_type: \"bearer\",\n" +
-//                            "access_token: \"SlAV32hkKG\",\n" +
-//                            "refresh_token: \"8xLOxBtZp8\",\n" +
-//                            "expires_in: 3600\n" +
-//                            "}";
-//                }
-                return "{\n" +
-                            "token_type: \"bearer\",\n" +
-                            "access_token: \"SlAV32hkKG\",\n" +
-                            "refresh_token: \"8xLOxBtZp8\",\n" +
-                            "expires_in: 3600\n" +
+
+                    return "{\n" +
+                            "token_type: \"" + token.getType() +"\",\n" +
+                            "access_token: \"" + jwtUtil.encodeObject(token) + "\",\n" +
+                            "refresh_token: \"" + jwtUtil.encodeObject(jwtUtil.encodeObject(token)) + "\",\n" +
+                            "expires_in: " + token.getExpiresIn() +"\n" +
                             "}";
+                }
             }
             case "refresh_token": {
                 System.out.println("RT");
