@@ -62,4 +62,13 @@ public class JWTToken {
     public String getDecoded() {
         return new String(Base64.getDecoder().decode(this.toString().getBytes()));
     }
+
+    public String toString(){
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
