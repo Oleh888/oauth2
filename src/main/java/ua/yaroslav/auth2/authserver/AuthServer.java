@@ -4,10 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.yaroslav.auth2.authserver.jwt.JWTUtil;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
+import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
 import ua.yaroslav.auth2.datastore.Database;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Controller
 public class AuthServer {
@@ -62,9 +64,9 @@ public class AuthServer {
             case "authorization_code": {
                 JWTAuthCode jwtAuthCode = jwtUtil.readCodeFromB64(code);
                 if (database.isCodeValid(jwtAuthCode)) {
-                    System.out.println("hell yeah!");
+                    JWTToken token = jwtUtil.getToken(jwtAuthCode.getClientID(), jwtAuthCode.getUsername(), scope);
+                    jwtUtil.encodeObject(token);
                 }
-                jwtUtil.getToken(jwtAuthCode.getClientID(), jwtAuthCode.getUsername(), scope);
 //                if (database.isValidAuthCode(code)) {
 //                    System.out.println("\nDecoded data:");
 //                    System.out.println(jwtUtil.decodeAC(code));
@@ -99,6 +101,12 @@ public class AuthServer {
     @ResponseBody
     public String getHome() {
         return "<h3>Hell Yeah</h3>";
+    }
+
+    @GetMapping(value = {"/tokens"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ArrayList<JWTToken> getTokens(){
+        return database.getTokens();
     }
 
     @GetMapping("/auth")

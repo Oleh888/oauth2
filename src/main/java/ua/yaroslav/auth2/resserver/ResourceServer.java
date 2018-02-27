@@ -3,6 +3,7 @@ package ua.yaroslav.auth2.resserver;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
 import ua.yaroslav.auth2.datastore.Database;
@@ -41,6 +42,7 @@ public class ResourceServer {
     }
 
     @GetMapping(value = {"/codes"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ArrayList<JWTAuthCode> getCodes(){
         return database.getCodes();
     }

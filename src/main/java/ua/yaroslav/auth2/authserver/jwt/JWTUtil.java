@@ -39,7 +39,7 @@ public class JWTUtil {
         return mapper.readValue(new String(Base64.getDecoder().decode(token.getBytes())), JWTToken.class);
     }
 
-    public String objectToString(JWTAuthCode code){
+    public String objectToString(Object code){
         try {
             return new ObjectMapper().writeValueAsString(code);
         } catch (JsonProcessingException e) {
@@ -48,10 +48,10 @@ public class JWTUtil {
         return null;
     }
 
-    public String encodeObject(JWTAuthCode code){
+    public String encodeObject(Object code){
         String s = objectToString(code);
-        System.out.println("text before b64encode");
-        System.out.println(s);
+        System.out.println("JSON object as string:");
+        System.out.println("\t" + s);
         return Base64.getEncoder().encodeToString(s.getBytes());
     }
 }

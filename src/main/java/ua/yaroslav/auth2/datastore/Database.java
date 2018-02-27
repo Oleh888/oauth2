@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 @Component
 public class Database {
-    private ArrayList<JWTToken> tokens;
-    private ArrayList<JWTAuthCode> codes;
+    private final ArrayList<JWTToken> tokens;
+    private final ArrayList<JWTAuthCode> codes;
 
     public Database() {
         this.tokens = new ArrayList<>();
@@ -35,4 +35,5 @@ public class Database {
     public ArrayList<JWTAuthCode> getCodes(){
         return codes;
     }
+    public ArrayList<JWTToken> getTokens(){ return tokens; }
 }
