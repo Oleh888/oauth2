@@ -20,7 +20,7 @@ public class AuthServer {
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void getCode(FormData formData, HttpServletResponse response) throws IOException {
-        System.out.println("\n--get code invocation--");
+        System.out.println("\n--------------------get-code-invocation---------------------");
         System.out.println("client_id: \n\t" + formData.getClientID());
         System.out.println("redirect_uri: \n\t" + formData.getRedirectURI());
         System.out.println("response_type: \n\t" + formData.getResponseType());
@@ -52,7 +52,7 @@ public class AuthServer {
             case "authorization_code": {
                 if (database.isValidAuthCode(code)) {
                     String encoded = jwtUtil.decodeAC(code);
-                    System.out.println("Decoded data:");
+                    System.out.println("\nDecoded data:");
                     System.out.println(encoded);
                     database.addToken("SlAV32hkKG");
                     return "{\n" +
