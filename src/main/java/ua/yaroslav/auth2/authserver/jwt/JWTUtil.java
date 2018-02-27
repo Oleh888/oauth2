@@ -23,15 +23,12 @@ public class JWTUtil {
     }
 
     public JWTToken getToken(String clientID, String username , String scope){
-        if (scope == null) scope = "grant_all";
-        return new JWTToken(clientID, username, new Date().getTime() + 3600, scope);
+        if (scope == "") scope = "grant_all";
+        return new JWTToken(clientID, username, new Date().getTime() + 3600, scope, "bearer");
     }
 
     public JWTAuthCode readCodeFromB64(String code) throws IOException {
-        System.out.println(code);
         String s = new String(Base64.getDecoder().decode(code.getBytes()));
-        System.out.println(s);
-        System.out.println();
         return mapper.readValue(s, JWTAuthCode.class);
     }
 
@@ -50,7 +47,7 @@ public class JWTUtil {
 
     public String encodeObject(Object code){
         String s = objectToString(code);
-        System.out.println("JSON object as string:");
+        System.out.println("JSON object as string after encoding:");
         System.out.println("\t" + s);
         return Base64.getEncoder().encodeToString(s.getBytes());
     }

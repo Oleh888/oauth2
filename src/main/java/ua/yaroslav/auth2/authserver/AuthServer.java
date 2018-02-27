@@ -57,8 +57,7 @@ public class AuthServer {
         System.out.println("client_secret: \n\t" + client_secret);
         System.out.println("grant_type: \n\t" + grant_type);
         System.out.println("code: \n\t" + code);
-        System.out.println("scope: \n\t" + "[" + scope + "]");
-        System.out.println();
+        System.out.println("scope: \n\t" + "[" + scope + "]\n\n");
 
         switch (grant_type) {
             case "authorization_code": {

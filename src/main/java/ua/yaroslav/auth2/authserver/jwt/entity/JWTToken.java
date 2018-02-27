@@ -11,16 +11,20 @@ public class JWTToken {
     private String username;
     private long expiresIn;
     private String scope;
+    private String type;
+
 
     public JWTToken(){}
     public JWTToken(@JsonProperty("client_id") String clientID,
                     @JsonProperty("username") String username,
                     @JsonProperty("expires_in") long expiresIn,
-                    @JsonProperty("scope") String scope) {
+                    @JsonProperty("scope") String scope,
+                    @JsonProperty("type") String type) {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
         this.scope = scope;
+        this.type = type;
     }
 
 
@@ -54,6 +58,14 @@ public class JWTToken {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
