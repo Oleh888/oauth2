@@ -37,4 +37,17 @@ public class JWTUtil {
     public JWTToken readTokenFromB64(String token) throws IOException {
         return mapper.readValue(new String(Base64.getDecoder().decode(token.getBytes())), JWTToken.class);
     }
+
+    public String objectToString(JWTAuthCode code){
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String encodeObject(JWTAuthCode code){
+        return Base64.getEncoder().encodeToString(objectToString(code).getBytes());
+    }
 }

@@ -44,20 +44,11 @@ public class JWTAuthCode {
         this.expiresIn = expiresIn;
     }
 
-    public String getEncoded() {
-        return Base64.getEncoder().encodeToString(this.toString().getBytes());
-    }
-
-    public String getDecoded() {
-        return new String(Base64.getDecoder().decode(this.toString().getBytes()));
-    }
-
-    public String toString(){
-        try {
-            return new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public String getEncoded() {
+//        return Base64.getEncoder().encodeToString(this.toString().getBytes());
+//    }
+//
+//    public String getDecoded() {
+//        return new String(Base64.getDecoder().decode(this.toString().getBytes()));
+//    }
 }

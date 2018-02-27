@@ -37,7 +37,7 @@ public class AuthServer {
                 JWTAuthCode code = jwtUtil.getCode(formData);
                 database.addCode(code);
                 String url = "https://developers.google.com/oauthplayground?" +
-                        "code=" + jwtUtil.getCode(formData).getEncoded() + "&" +
+                        "code=" + jwtUtil.encodeObject(code) + "&" +
                         "state=markOne";
                 response.sendRedirect(url);
             }
