@@ -49,6 +49,7 @@ public class JWTUtil {
 
     public String encodeObject(JWTAuthCode code){
         String s = objectToString(code);
+        System.out.println("text before b64encode");
         System.out.println(s);
         return Base64.getEncoder().encodeToString(s.getBytes());
     }
