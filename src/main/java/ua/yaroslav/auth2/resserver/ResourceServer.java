@@ -41,7 +41,9 @@ public class ResourceServer{
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
             String value = request.getHeader(key);
-            System.out.println(key + " -> " + value);
+            if(value.length() < 60)
+                System.out.println(key + " -> [" + value + "]");
+            else System.out.println(key + " -> [" + value.substring(0, 60) + "]");
             map.put(key, value);
         }
         return "DATA";
