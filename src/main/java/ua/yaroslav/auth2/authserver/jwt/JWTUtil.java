@@ -40,7 +40,7 @@ public class JWTUtil {
 
     public String objectToString(JWTAuthCode code){
         try {
-            return new ObjectMapper().writeValueAsString(this);
+            return new ObjectMapper().writeValueAsString(code);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
