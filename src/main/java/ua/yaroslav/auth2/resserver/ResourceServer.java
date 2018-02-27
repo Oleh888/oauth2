@@ -38,13 +38,14 @@ public class ResourceServer{
 
         System.out.println("------------------" + request.getHeader("Authorization") + "------------------");
         Enumeration headerNames = request.getHeaderNames();
+        StringBuilder builder = new StringBuilder();
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
             String value = request.getHeader(key);
             if(value.length() < 60)
-                System.out.println(key + " -> [" + value + "]");
-            else System.out.println(key + " -> [" + value.substring(0, 100) + "...]");
+                builder.append(key + " -> [" + value + "]").append("<br>");
+            else builder.append(key + " -> [" + value.substring(0, 100) + "...]").append("<br>");
         }
-        return request.getHeader("Authorization");
+        return builder.toString();
     }
 }
