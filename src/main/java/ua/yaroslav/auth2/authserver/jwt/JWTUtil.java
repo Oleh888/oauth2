@@ -48,6 +48,8 @@ public class JWTUtil {
     }
 
     public String encodeObject(JWTAuthCode code){
-        return Base64.getEncoder().encodeToString(objectToString(code).getBytes());
+        String s = objectToString(code);
+        System.out.println(s);
+        return Base64.getEncoder().encodeToString(s.getBytes());
     }
 }
