@@ -1,38 +1,33 @@
 package ua.yaroslav.auth2.datastore;
 import org.springframework.stereotype.Component;
-import java.util.HashSet;
-import java.util.Set;
+import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
+import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 @Component
 public class Database {
-    private Set<String> authCodes = new HashSet<>();
-    private Set<String> tokens = new HashSet<>();
-    private Set<User> users = new HashSet<>();
+    private ArrayList<JWTToken> tokens;
+    private ArrayList<JWTAuthCode> codes;
 
-    public Database(){this.tokens.add("SlAV32hkKG");}
-
-    public void addAuthCode(String authCode) {
-        authCodes.add(authCode);
+    public Database() {
+        this.tokens = new ArrayList<>();
+        this.codes = new ArrayList<>();
     }
 
-    public boolean isValidAuthCode(String authCode) {
-        return authCodes.contains(authCode);
+    public void addToken(JWTToken token){
+        this.tokens.add(token);
     }
 
-    public void addToken(String token) {
-        tokens.add(token);
+    public void addCode(JWTAuthCode code){
+        this.codes.add(code);
     }
 
-    public boolean isValidToken(String token) {
-        return tokens.contains(token);
+    public boolean isTokenValid(JWTToken token){
+        return this.tokens.contains(token);
     }
 
-    public void addUser(User user) {users.add(user); }
-
-    public boolean checkUser(String login, String pass){
-        for (User u: users){
-            return u.getLogin().equals(login) && u.getPass().equals(pass);
-        }
-        return false;
+    public boolean isCodeValid(JWTAuthCode code){
+        return this.codes.contains(code);
     }
 }

@@ -3,7 +3,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ua.yaroslav.auth2.authserver.jwt.JWTUtil;
+import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
 import ua.yaroslav.auth2.datastore.Database;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -11,12 +13,13 @@ import java.io.IOException;
 public class AuthServer {
     private final String CLIENT_ID = "client";
     private final String CLIENT_SECRET = "secret";
-    private final Database database;
+    private final String RESPONSE_TYPE = "code";
     private final JWTUtil jwtUtil;
+    private final Database database;
 
-    public AuthServer(Database database, JWTUtil jwtUtil) {
-        this.database = database;
+    public AuthServer(JWTUtil jwtUtil, Database database) {
         this.jwtUtil = jwtUtil;
+        this.database = new Database();
     }
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -30,8 +33,12 @@ public class AuthServer {
         System.out.println("scope: \n\t" + formData.getScope());
 
         if (formData.getClientID().equals(CLIENT_ID)) {
-            if (formData.getResponseType().equals("code")) {
-                String url = "https://developers.google.com/oauthplayground?code=" + jwtUtil.getCode(formData) + "&state=markOne";
+            if (formData.getResponseType().equals(RESPONSE_TYPE)) {
+                JWTAuthCode code = jwtUtil.getCode(formData);
+                database.addCode(code);
+                String url = "https://developers.google.com/oauthplayground?" +
+                        "code=" + jwtUtil.getCode(formData).getEncoded() + "&" +
+                        "state=markOne";
                 response.sendRedirect(url);
             }
         }
@@ -43,7 +50,7 @@ public class AuthServer {
                            @RequestParam(value = "client_secret") String client_secret,
                            @RequestParam(value = "grant_type") String grant_type,
                            @RequestParam(value = "code") String code,
-                           @RequestParam(value = "scope") String scope) {
+                           @RequestParam(value = "scope") String scope) throws IOException {
         System.out.println("\n--------------------get-token-invocation--------------------");
         System.out.println("client_id: \n\t" + client_id);
         System.out.println("client_secret: \n\t" + client_secret);
@@ -53,19 +60,30 @@ public class AuthServer {
 
         switch (grant_type) {
             case "authorization_code": {
-                if (database.isValidAuthCode(code)) {
-                    System.out.println("\nDecoded data:");
-                    System.out.println(jwtUtil.decodeAC(code));
-                    database.addToken("SlAV32hkKG");
-                    System.out.println("------------------------------------------------------------");
-                    System.out.println(jwtUtil.getToken(client_id,"username","read"));
-                    return "{\n" +
+                JWTAuthCode jwtAuthCode = jwtUtil.readCodeFromB64(code);
+                if (database.isCodeValid(jwtAuthCode)) {
+                    System.out.println("hell yeah!");
+                }
+//                if (database.isValidAuthCode(code)) {
+//                    System.out.println("\nDecoded data:");
+//                    System.out.println(jwtUtil.decodeAC(code));
+//
+//                    database.addToken("SlAV32hkKG");
+//                    System.out.println("------------------------------------------------------------");
+//                    System.out.println(jwtUtil.getToken(client_id,"username","read"));
+//                    return "{\n" +
+//                            "token_type: \"bearer\",\n" +
+//                            "access_token: \"SlAV32hkKG\",\n" +
+//                            "refresh_token: \"8xLOxBtZp8\",\n" +
+//                            "expires_in: 3600\n" +
+//                            "}";
+//                }
+                return "{\n" +
                             "token_type: \"bearer\",\n" +
                             "access_token: \"SlAV32hkKG\",\n" +
                             "refresh_token: \"8xLOxBtZp8\",\n" +
                             "expires_in: 3600\n" +
                             "}";
-                }
             }
             case "refresh_token": {
 

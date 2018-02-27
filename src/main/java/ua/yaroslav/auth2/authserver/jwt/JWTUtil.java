@@ -1,34 +1,36 @@
 package ua.yaroslav.auth2.authserver.jwt;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.authserver.FormData;
-import ua.yaroslav.auth2.authserver.jwt.entity.JWToken;
-import ua.yaroslav.auth2.datastore.Database;
+import ua.yaroslav.auth2.authserver.jwt.entity.JWTAbstract;
+import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
+import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
+
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
 
 @Component
 public class JWTUtil {
-    private final Database database;
-    public JWTUtil(Database database) { this.database = database; }
+    private ObjectMapper mapper;
 
-    public String getCode(FormData formData){
-        String json = "{\n" +
-                "  client_id: \"" + formData.getClientID() + "\",\n" +
-                "  username: \"" + formData.getUsername() + "\",\n" +
-                "  time: " + new Date().getTime()+ "\n" + //todo change to expiration time
-                "}";
-        //ObjectMapper
-        System.out.println(json);
-        String authCode = Base64.getEncoder().encodeToString(json.getBytes());
-        database.addAuthCode(authCode);
-        return authCode;
+    public JWTUtil(){
+        this.mapper = new ObjectMapper();
     }
 
-    public String decodeAC(String code) {
-        return new String(Base64.getDecoder().decode(code));
+    public JWTAuthCode getCode(FormData formData){
+        return new JWTAuthCode(formData.getClientID(),formData.getUsername(),new Date().getTime() + 3600);
     }
 
-    public JWToken getToken(String clientID, String username , String scope){
-        return new JWToken(clientID, username, new Date().getTime() + 3600, scope);
+    public JWTToken getToken(String clientID, String username , String scope){
+        return new JWTToken(clientID, username, new Date().getTime() + 3600, scope);
+    }
+
+    public JWTAuthCode readCodeFromB64(String code) throws IOException {
+        return mapper.readValue(new String(Base64.getDecoder().decode(code.getBytes())), JWTAuthCode.class);
+    }
+
+    public JWTToken readTokenFromB64(String token) throws IOException {
+        return mapper.readValue(new String(Base64.getDecoder().decode(token.getBytes())), JWTToken.class);
     }
 }
