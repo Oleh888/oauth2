@@ -38,7 +38,7 @@ public class ResourceServer {
         return builder.toString();
     }
 
-    @GetMapping(value = {"/private"})
+    @GetMapping(value = {"/codes"})
     public List<JWTAuthCode> getCodes(){
         return database.getCodes();
     }
