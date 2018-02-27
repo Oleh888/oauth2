@@ -46,6 +46,6 @@ public class ResourceServer{
             else System.out.println(key + " -> [" + value.substring(0, 100) + "...]");
         }
         System.out.println("--------------------------------------------------------------");
-        return "DATA";
+        return request.getHeader("Authorization");
     }
 }
