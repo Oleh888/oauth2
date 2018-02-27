@@ -1,12 +1,16 @@
 package ua.yaroslav.auth2.authserver.jwt.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class JWTAuthCode extends JWTAbstract{
     private String clientID;
     private String username;
     private long expiresIn;
 
     public JWTAuthCode(){}
-    public JWTAuthCode(String clientID, String username, long expiresIn) {
+    public JWTAuthCode(@JsonProperty("client_id") String clientID,
+                       @JsonProperty("username") String username,
+                       @JsonProperty("expires_in") long expiresIn) {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
