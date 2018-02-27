@@ -86,7 +86,7 @@ public class AuthServer {
                             "}";
             }
             case "refresh_token": {
-
+                System.out.println("RT");
             }
             default: {
                 return "{\"error\": \"invalid_grant_type_maafaka\"}";
