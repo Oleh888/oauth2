@@ -1,6 +1,7 @@
-package ua.yaroslav.auth2.authserver;
-import com.fasterxml.jackson.databind.ObjectMapper;
+package ua.yaroslav.auth2.authserver.jwt;
 import org.springframework.stereotype.Component;
+import ua.yaroslav.auth2.authserver.FormData;
+import ua.yaroslav.auth2.authserver.jwt.entity.JWToken;
 import ua.yaroslav.auth2.datastore.Database;
 import java.util.Base64;
 import java.util.Date;
@@ -25,5 +26,9 @@ public class JWTUtil {
 
     public String decodeAC(String code) {
         return new String(Base64.getDecoder().decode(code));
+    }
+
+    public JWToken getToken(String clientID, String username , String scope){
+        return new JWToken(clientID, username, new Date().getTime() + 3600, scope);
     }
 }

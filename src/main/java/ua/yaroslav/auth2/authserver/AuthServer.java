@@ -2,6 +2,7 @@ package ua.yaroslav.auth2.authserver;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import ua.yaroslav.auth2.authserver.jwt.JWTUtil;
 import ua.yaroslav.auth2.datastore.Database;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -41,12 +42,14 @@ public class AuthServer {
     public String getToken(@RequestParam(value = "client_id") String client_id,
                            @RequestParam(value = "client_secret") String client_secret,
                            @RequestParam(value = "grant_type") String grant_type,
-                           @RequestParam(value = "code") String code) {
+                           @RequestParam(value = "code") String code,
+                           @RequestParam(value = "scope") String scope) {
         System.out.println("\n--------------------get-token-invocation--------------------");
         System.out.println("client_id: \n\t" + client_id);
         System.out.println("client_secret: \n\t" + client_secret);
         System.out.println("grant_type: \n\t" + grant_type);
         System.out.println("code: \n\t" + code);
+        System.out.println("scope: \n\t" + scope);
 
         switch (grant_type) {
             case "authorization_code": {
@@ -55,6 +58,7 @@ public class AuthServer {
                     System.out.println(jwtUtil.decodeAC(code));
                     database.addToken("SlAV32hkKG");
                     System.out.println("------------------------------------------------------------");
+                    System.out.println(jwtUtil.getToken(client_id,"username","read"));
                     return "{\n" +
                             "token_type: \"bearer\",\n" +
                             "access_token: \"SlAV32hkKG\",\n" +
