@@ -27,7 +27,7 @@ public class ResourceServer{
         StringBuilder builder = new StringBuilder();
         if (request.getHeader("Authorization").length() > 8)
             builder.append("<h3>Access granted!</h3>");
-        else builder.append("<h3>Access not granted!</h3><br>");
+        else builder.append("<h3>Access not granted!</h3>\n");
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
             String value = request.getHeader(key);

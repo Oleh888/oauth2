@@ -51,9 +51,8 @@ public class AuthServer {
         switch (grant_type) {
             case "authorization_code": {
                 if (database.isValidAuthCode(code)) {
-                    String encoded = jwtUtil.decodeAC(code);
                     System.out.println("\nDecoded data:");
-                    System.out.println(encoded);
+                    System.out.println(jwtUtil.decodeAC(code));
                     database.addToken("SlAV32hkKG");
                     System.out.println("------------------------------------------------------------");
                     return "{\n" +
