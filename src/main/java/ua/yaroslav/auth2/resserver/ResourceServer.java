@@ -36,7 +36,7 @@ public class ResourceServer{
 //        }
 //        System.out.println("Header: [" + request.getHeader("Authorization") + "]");
 
-        System.out.println("--------------" + request.getHeader("Authorization") + "--------------");
+        System.out.println("------------------" + request.getHeader("Authorization") + "------------------");
         Enumeration headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
@@ -45,7 +45,6 @@ public class ResourceServer{
                 System.out.println(key + " -> [" + value + "]");
             else System.out.println(key + " -> [" + value.substring(0, 100) + "...]");
         }
-        System.out.println("--------------------------------------------------------------");
         return request.getHeader("Authorization");
     }
 }

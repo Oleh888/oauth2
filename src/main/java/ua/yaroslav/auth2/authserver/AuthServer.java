@@ -56,10 +56,10 @@ public class AuthServer {
                     System.out.println(encoded);
                     database.addToken("SlAV32hkKG");
                     return "{\n" +
-                            "  token_type: \"bearer\",\n" +
-                            "  access_token: \"SlAV32hkKG\",\n" +
-                            "  refresh_token: \"8xLOxBtZp8\",\n" +
-                            "  expires_in: 3600\n" +
+                            "token_type: \"bearer\",\n" +
+                            "access_token: \"SlAV32hkKG\",\n" +
+                            "refresh_token: \"8xLOxBtZp8\",\n" +
+                            "expires_in: 3600\n" +
                             "}";
                 }
             }
@@ -67,7 +67,7 @@ public class AuthServer {
 
             }
             default: {
-                return "{\"error\": \"invalid_grant_type\"}";
+                return "{\"error\": \"invalid_grant_type_maafaka\"}";
             }
         }
     }
