@@ -46,6 +46,7 @@ public class ResourceServer{
             else System.out.println(key + " -> [" + value.substring(0, 100) + "...]");
             map.put(key, value);
         }
+        System.out.println("--------------------------------------------------------------");
         return "DATA";
     }
 }
