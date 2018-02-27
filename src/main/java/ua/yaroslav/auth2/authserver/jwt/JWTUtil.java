@@ -27,6 +27,7 @@ public class JWTUtil {
     }
 
     public JWTAuthCode readCodeFromB64(String code) throws IOException {
+        System.out.println(code);
         return mapper.readValue(new String(Base64.getDecoder().decode(code.getBytes())), JWTAuthCode.class);
     }
 
