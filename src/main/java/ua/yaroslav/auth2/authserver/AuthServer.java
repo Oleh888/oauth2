@@ -8,6 +8,7 @@ import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 import ua.yaroslav.auth2.authserver.json.entity.TokenRefresh;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -17,11 +18,11 @@ public class AuthServer {
     private final String CLIENT_SECRET = "secret";
     private final String RESPONSE_TYPE = "code";
     private final JSONUtil jSONUtil;
-    private final InMemoryStore inMemoryStore;
+    private final InMemoryStore store;
 
-    public AuthServer(JSONUtil jSONUtil, InMemoryStore inMemoryStore) {
+    public AuthServer(JSONUtil jSONUtil, InMemoryStore store) {
         this.jSONUtil = jSONUtil;
-        this.inMemoryStore = new InMemoryStore();
+        this.store = new InMemoryStore();
     }
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -51,22 +52,24 @@ public class AuthServer {
                            @RequestParam(value = "grant_type") String grant_type,
                            @RequestParam(value = "code", required = false) String code,
                            @RequestParam(value = "scope", required = false) String scope,
-                           @RequestParam(value = "refresh_token", required = false) String refreshToken) throws IOException {
+                           @RequestParam(value = "refresh_token", required = false) String refreshToken,
+                           HttpServletRequest request) throws IOException {
         System.out.println("\n--------------------get-token-invocation[GT:" + grant_type + "]--------------------");
         System.out.println("client_id: \n\t" + client_id);
         System.out.println("client_secret: \n\t" + client_secret);
         System.out.println("grant_type: \n\t" + grant_type);
         System.out.println("code: \n\t" + code);
         System.out.println("scope: \n\t" + "[" + scope + "]\n");
+        System.out.println(request.getRequestURL().toString() + " ? " + request.getQueryString());
+        System.out.println();
 
         switch (grant_type) {
             case "authorization_code": {
                 AuthCode authCode = jSONUtil.readCodeFromB64(code);
-                if (inMemoryStore.isCodeValid(authCode)) {
+                if (store.isCodeValid(authCode)) {
                     TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
                     TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.hashCode());
 
-                    inMemoryStore.addToken(access);
                     return "{\n" +
                             "token_type: \"" + access.getType() +"\",\n" +
                             "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
@@ -83,14 +86,14 @@ public class AuthServer {
                 System.out.println("\t" + s);
 
                 System.out.println("===============" + refresh.getAccessTokenID() + "=============");
-                for (TokenAccess a: inMemoryStore.getTokens())
+                for (TokenAccess a: store.getTokens())
                     System.out.println(a.getTokenID());
-                System.out.println("==============" + inMemoryStore.getTokens().size() + "==============");
+                System.out.println("==============" + store.getTokens().size() + "==============");
                 TokenAccess access = jSONUtil.getAccessToken(
-                        inMemoryStore.getTokenByID(refresh.getAccessTokenID()).getClientID(),
-                        inMemoryStore.getTokenByID(refresh.getAccessTokenID()).getUsername(),
+                        store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
+                        store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
                         scope);
-                inMemoryStore.addToken(access);
+                store.addToken(access);
                 return "{\n" +
                         "token_type: \"" + access.getType() +"\",\n" +
                         "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
