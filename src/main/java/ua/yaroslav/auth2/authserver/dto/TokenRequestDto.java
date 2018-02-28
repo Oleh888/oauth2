@@ -1,6 +1,6 @@
 package ua.yaroslav.auth2.authserver.dto;
 
-public class TokenRequest {
+public class TokenRequestDto {
     private String client_id;
     private String client_secret;
     private String grant_type;
@@ -9,8 +9,8 @@ public class TokenRequest {
     private String refresh_token;
 
 
-    public TokenRequest(){}
-    public TokenRequest(String client_id, String client_secret, String grant_type, String code, String scope, String refresh_token) {
+    public TokenRequestDto(){}
+    public TokenRequestDto(String client_id, String client_secret, String grant_type, String code, String scope, String refresh_token) {
         this.client_id = client_id;
         this.client_secret = client_secret;
         this.grant_type = grant_type;

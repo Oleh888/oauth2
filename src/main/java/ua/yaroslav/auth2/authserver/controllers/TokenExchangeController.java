@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import ua.yaroslav.auth2.authserver.dto.TokenRequest;
+import ua.yaroslav.auth2.authserver.dto.TokenRequestDto;
 import ua.yaroslav.auth2.authserver.json.JSONUtil;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
@@ -32,7 +32,7 @@ public class TokenExchangeController {
 
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getToken(TokenRequest tokenRequest, HttpServletRequest request) throws IOException {
+    public String getToken(TokenRequestDto tokenRequest, HttpServletRequest request) throws IOException {
         switch (tokenRequest.getGrantType()) {
             case "authorization_code": {
                 System.out.println("--------------------get-token-invocation[GT:" +

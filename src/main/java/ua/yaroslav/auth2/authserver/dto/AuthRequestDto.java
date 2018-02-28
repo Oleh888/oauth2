@@ -1,22 +1,25 @@
 package ua.yaroslav.auth2.authserver.dto;
 
-public class AuthRequest {
+public class AuthRequestDto {
     private String username;
     private String password;
     private String client_id;
     private String response_type;
+    private String redirect_uri;
     private String scope;
 
 
-    public AuthRequest(){}
-    public AuthRequest(String username, String password, String client_id, String redirect_uri, String response_type, String scope) {
+    public AuthRequestDto() {
+    }
+
+    public AuthRequestDto(String username, String password, String client_id, String response_type, String redirect_uri, String scope) {
         this.username = username;
         this.password = password;
         this.client_id = client_id;
         this.response_type = response_type;
+        this.redirect_uri = redirect_uri;
         this.scope = scope;
     }
-
 
     public String getUsername() {
         return username;
@@ -56,5 +59,13 @@ public class AuthRequest {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public String getRedirectURI() {
+        return redirect_uri;
+    }
+
+    public void setRedirect_uri(String redirect_uri) {
+        this.redirect_uri = redirect_uri;
     }
 }

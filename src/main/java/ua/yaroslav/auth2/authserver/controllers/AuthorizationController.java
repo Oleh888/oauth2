@@ -7,7 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import ua.yaroslav.auth2.authserver.dto.AuthRequest;
+import ua.yaroslav.auth2.authserver.dto.AuthRequestDto;
+import ua.yaroslav.auth2.authserver.dto.LoginRequestDto;
 import ua.yaroslav.auth2.authserver.json.JSONUtil;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.store.InMemoryStore;
@@ -33,7 +34,7 @@ public class AuthorizationController {
 
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public void getCode(AuthRequest authRequest, HttpServletResponse response) throws IOException {
+    public void getCode(AuthRequestDto authRequest, HttpServletResponse response) throws IOException {
         System.out.println("\n--------------------get-code-invocation---------------------\n");
         System.out.println("client_id: \n\t" + authRequest.getClientID());
         System.out.println("response_type: \n\t" + authRequest.getResponseType());
@@ -60,8 +61,11 @@ public class AuthorizationController {
     }
 
     @GetMapping("/auth")
-    public String getLogin(Model model) {
-        model.addAttribute("redirect_uri", "redirect_uri");
+    public String getLogin(LoginRequestDto loginRequest, Model model) {
+        model.addAttribute("redirect_uri", loginRequest.getRedirectURI());
+        model.addAttribute("client_id", loginRequest.getClientID());
+        model.addAttribute("response_type", loginRequest.getResponseType());
+        model.addAttribute("access_type", loginRequest.getAccessType());
         return "login";
     }
 }

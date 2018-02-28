@@ -3,7 +3,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Component;
-import ua.yaroslav.auth2.authserver.dto.AuthRequest;
+import ua.yaroslav.auth2.authserver.dto.AuthRequestDto;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 import ua.yaroslav.auth2.authserver.json.entity.TokenRefresh;
@@ -26,7 +26,7 @@ public class JSONUtil {
     }
 
 
-    public AuthCode getCode(AuthRequest authRequest){
+    public AuthCode getCode(AuthRequestDto authRequest){
         AuthCode code = new AuthCode(authRequest.getClientID(), authRequest.getUsername(),new Date().getTime() + 15000);
         return code;
     }
