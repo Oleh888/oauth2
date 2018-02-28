@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 public class ResourceServer {
@@ -50,7 +51,7 @@ public class ResourceServer {
 
     @GetMapping(value = {"/tokens"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ArrayList<TokenAccess> getTokens(){
+    public CopyOnWriteArrayList<TokenAccess> getTokens(){
         return inMemoryStore.getTokens();
     }
 }

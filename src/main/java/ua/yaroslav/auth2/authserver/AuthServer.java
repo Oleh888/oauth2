@@ -85,7 +85,7 @@ public class AuthServer {
                 System.out.println("===============" + refresh.getAccessTokenID() + "=============");
                 for (TokenAccess a: inMemoryStore.getTokens())
                     System.out.println(a.getTokenID());
-                System.out.println("============================");
+                System.out.println("==============" + inMemoryStore.getTokens().size() + "==============");
                 TokenAccess access = jSONUtil.getAccessToken(
                         inMemoryStore.getTokenByHash(refresh.getAccessTokenID()).getClientID(),
                         inMemoryStore.getTokenByHash(refresh.getAccessTokenID()).getUsername(),

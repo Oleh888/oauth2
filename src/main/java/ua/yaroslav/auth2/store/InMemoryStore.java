@@ -5,14 +5,15 @@ import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 public class InMemoryStore {
-    private final ArrayList<TokenAccess> tokens;
+    private final CopyOnWriteArrayList<TokenAccess> tokens;
     private final ArrayList<AuthCode> codes;
 
     public InMemoryStore() {
-        this.tokens = new ArrayList<>();
+        this.tokens = new CopyOnWriteArrayList<>();
         this.codes = new ArrayList<>();
         this.tokens.add(new TokenAccess("client","user",9999,"grant_all","bearer", 9999));
         this.codes.add(new AuthCode("client","user", 9999));
@@ -37,7 +38,7 @@ public class InMemoryStore {
     public ArrayList<AuthCode> getCodes(){
         return codes;
     }
-    public ArrayList<TokenAccess> getTokens(){ return tokens; }
+    public CopyOnWriteArrayList<TokenAccess> getTokens(){ return tokens; }
 
     public TokenAccess getTokenByHash(int hash){
         for (TokenAccess ta: this.tokens){
