@@ -48,7 +48,7 @@ public class JSONUtil {
 
     public String objectToString(Object code){
         try {
-            return mapper.writeValueAsString(code);
+            return mapper.writeValueAsString(code) + "\n";
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
