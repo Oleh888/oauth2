@@ -1,8 +1,10 @@
-package ua.yaroslav.auth2.authserver;
+package ua.yaroslav.auth2.authserver.controllers;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import ua.yaroslav.auth2.authserver.dto.AuthRequest;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ua.yaroslav.auth2.authserver.dto.TokenRequest;
 import ua.yaroslav.auth2.authserver.json.JSONUtil;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
@@ -11,43 +13,21 @@ import ua.yaroslav.auth2.authserver.json.entity.TokenRefresh;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-public class AuthorizationServer {
-    private final String CLIENT_ID = "client";
-    private final String CLIENT_SECRET = "secret";
-    private final String RESPONSE_TYPE = "code";
+public class TokenExchangeController {
+    @Value("${client.id}")
+    private String CLIENT_ID;
+    @Value("${client.secret}")
+    private String CLIENT_SECRET;
+
     private final JSONUtil jsonUtil;
     private final InMemoryStore store;
 
-
-    public AuthorizationServer(JSONUtil jsonUtil, InMemoryStore store) {
+    public TokenExchangeController(JSONUtil jsonUtil, InMemoryStore store) {
         this.jsonUtil = jsonUtil;
-        this.store = new InMemoryStore();
-    }
-
-
-    @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public void getCode(AuthRequest authRequest, HttpServletResponse response) throws IOException {
-        System.out.println("\n--------------------get-code-invocation---------------------\n");
-        System.out.println("client_id: \n\t" + authRequest.getClientID());
-        System.out.println("response_type: \n\t" + authRequest.getResponseType());
-        System.out.println("username: \n\t" + authRequest.getUsername());
-        System.out.println("password: \n\t" + authRequest.getPassword());
-        System.out.println("scope: \n\t" + "[" + authRequest.getScope() + "]\n");
-
-        if (authRequest.getClientID().equals(CLIENT_ID)) {
-            if (authRequest.getResponseType().equals(RESPONSE_TYPE)) {
-                AuthCode code = jsonUtil.getCode(authRequest);
-                store.addCode(code);
-                String url = "https://developers.google.com/oauthplayground?" +
-                        "code=" + jsonUtil.encodeObject(code) + "&" +
-                        "state=markOne";
-                response.sendRedirect(url);
-            }
-        }
+        this.store = store;
     }
 
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,10 +54,10 @@ public class AuthorizationServer {
                 System.out.println(jsonUtil.objectToString(access));
 
                 return "{\n" +
-                        "token_type: \"" + access.getType() +"\",\n" +
+                        "token_type: \"" + access.getType() + "\",\n" +
                         "access_token: \"" + jsonUtil.encodeObject(access) + "\",\n" +
                         "refresh_token: \"" + jsonUtil.encodeObject(refresh) + "\",\n" +
-                        "expires_in: " + access.getExpiresIn() +"\n" +
+                        "expires_in: " + access.getExpiresIn() + "\n" +
                         "}";
             }
             case "refresh_token": {
@@ -96,25 +76,14 @@ public class AuthorizationServer {
                 store.addToken(access);
 
                 return "{\n" +
-                        "token_type: \"" + access.getType() +"\",\n" +
+                        "token_type: \"" + access.getType() + "\",\n" +
                         "access_token: \"" + jsonUtil.encodeObject(access) + "\",\n" +
-                        "expires_in: " + access.getExpiresIn() +"\n" +
+                        "expires_in: " + access.getExpiresIn() + "\n" +
                         "}";
             }
             default: {
                 return "{\"error\": \"invalid_grant_type\"}";
             }
         }
-    }
-
-    @GetMapping("/")
-    @ResponseBody
-    public String getHome() {
-        return "<h3>This is not the page you are looking for</h3>";
-    }
-
-    @GetMapping("/auth")
-    public String getLogin() {
-        return "login";
     }
 }
