@@ -48,8 +48,8 @@ public class AuthServer {
 
     @PostMapping("/token")
     @ResponseBody
-    public String getToken(@RequestParam(value = "client_id") String client_id,
-                           @RequestParam(value = "client_secret") String client_secret,
+    public String getToken(@RequestParam(value = "client_id", required = false) String client_id,
+                           @RequestParam(value = "client_secret", required = false) String client_secret,
                            @RequestParam(value = "grant_type") String grant_type,
                            @RequestParam(value = "code", required = false) String code,
                            @RequestParam(value = "scope", required = false) String scope,
