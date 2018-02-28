@@ -53,7 +53,10 @@ public class ResourceServer {
             }
             else builder.append("<h3>Access Token is no longer valid</h3>\n");
         }
-        else builder.append("<h3>Access not granted!</h3>\n");
+        else {
+            response.setStatus(403);
+            builder.append("<h3>Access not granted!</h3>\n");
+        }
 
         return builder.toString();
     }
