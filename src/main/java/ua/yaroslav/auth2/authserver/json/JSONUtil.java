@@ -1,39 +1,39 @@
-package ua.yaroslav.auth2.authserver.jwt;
+package ua.yaroslav.auth2.authserver.json;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.authserver.FormData;
-import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
-import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
+import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
+import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
 
 @Component
-public class JWTUtil {
+public class JSONUtil {
     private ObjectMapper mapper;
 
-    public JWTUtil(){
+    public JSONUtil(){
         this.mapper = new ObjectMapper();
     }
 
-    public JWTAuthCode getCode(FormData formData){
-        return new JWTAuthCode(formData.getClientID(),formData.getUsername(),new Date().getTime() + 3600);
+    public AuthCode getCode(FormData formData){
+        return new AuthCode(formData.getClientID(),formData.getUsername(),new Date().getTime() + 3600);
     }
 
-    public JWTToken getToken(String clientID, String username , String scope){
+    public TokenAccess getToken(String clientID, String username , String scope){
         if (scope == "") scope = "grant_all";
-        return new JWTToken(clientID, username, new Date().getTime() + 3600, scope, "bearer");
+        return new TokenAccess(clientID, username, new Date().getTime() + 3600, scope, "bearer");
     }
 
-    public JWTAuthCode readCodeFromB64(String code) throws IOException {
+    public AuthCode readCodeFromB64(String code) throws IOException {
         String s = new String(Base64.getDecoder().decode(code.getBytes()));
-        return mapper.readValue(s, JWTAuthCode.class);
+        return mapper.readValue(s, AuthCode.class);
     }
 
-    public JWTToken readTokenFromB64(String token) throws IOException {
-        return mapper.readValue(new String(Base64.getDecoder().decode(token.getBytes())), JWTToken.class);
+    public TokenAccess readTokenFromB64(String token) throws IOException {
+        return mapper.readValue(new String(Base64.getDecoder().decode(token.getBytes())), TokenAccess.class);
     }
 
     public String objectToString(Object code){

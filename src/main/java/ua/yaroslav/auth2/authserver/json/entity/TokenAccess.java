@@ -1,12 +1,9 @@
-package ua.yaroslav.auth2.authserver.jwt.entity;
+package ua.yaroslav.auth2.authserver.json.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Base64;
 import java.util.Objects;
 
-public class JWTToken {
+public class TokenAccess {
     private String clientID;
     private String username;
     private long expiresIn;
@@ -14,12 +11,12 @@ public class JWTToken {
     private String type;
 
 
-    public JWTToken(){}
-    public JWTToken(@JsonProperty("client_id") String clientID,
-                    @JsonProperty("username") String username,
-                    @JsonProperty("expires_in") long expiresIn,
-                    @JsonProperty("scope") String scope,
-                    @JsonProperty("type") String type) {
+    public TokenAccess(){}
+    public TokenAccess(@JsonProperty("client_id") String clientID,
+                       @JsonProperty("username") String username,
+                       @JsonProperty("expires_in") long expiresIn,
+                       @JsonProperty("scope") String scope,
+                       @JsonProperty("type") String type) {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
@@ -72,11 +69,11 @@ public class JWTToken {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        JWTToken jwtToken = (JWTToken) o;
-        return expiresIn == jwtToken.expiresIn &&
-                Objects.equals(clientID, jwtToken.clientID) &&
-                Objects.equals(username, jwtToken.username) &&
-                Objects.equals(scope, jwtToken.scope);
+        TokenAccess tokenAccess = (TokenAccess) o;
+        return expiresIn == tokenAccess.expiresIn &&
+                Objects.equals(clientID, tokenAccess.clientID) &&
+                Objects.equals(username, tokenAccess.username) &&
+                Objects.equals(scope, tokenAccess.scope);
     }
 
     @Override

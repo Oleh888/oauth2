@@ -1,21 +1,18 @@
-package ua.yaroslav.auth2.authserver.jwt.entity;
+package ua.yaroslav.auth2.authserver.json.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Base64;
 import java.util.Objects;
 
-public class JWTAuthCode {
+public class AuthCode {
     private String clientID;
     private String username;
     private long expiresIn;
 
-    public JWTAuthCode(){}
-    public JWTAuthCode(@JsonProperty("client_id") String clientID,
-                       @JsonProperty("username") String username,
-                       @JsonProperty("expires_in") long expiresIn) {
+    public AuthCode(){}
+    public AuthCode(@JsonProperty("client_id") String clientID,
+                    @JsonProperty("username") String username,
+                    @JsonProperty("expires_in") long expiresIn) {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
@@ -49,7 +46,7 @@ public class JWTAuthCode {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        JWTAuthCode that = (JWTAuthCode) o;
+        AuthCode that = (AuthCode) o;
         return expiresIn == that.expiresIn &&
                 Objects.equals(clientID, that.clientID) &&
                 Objects.equals(username, that.username);

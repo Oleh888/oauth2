@@ -1,41 +1,41 @@
 package ua.yaroslav.auth2.store;
 
 import org.springframework.stereotype.Component;
-import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
-import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
+import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
+import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 
 import java.util.ArrayList;
 
 @Component
 public class InMemoryStore {
-    private final ArrayList<JWTToken> tokens;
-    private final ArrayList<JWTAuthCode> codes;
+    private final ArrayList<TokenAccess> tokens;
+    private final ArrayList<AuthCode> codes;
 
     public InMemoryStore() {
         this.tokens = new ArrayList<>();
         this.codes = new ArrayList<>();
-        this.tokens.add(new JWTToken("client","user",9999,"grant_all","bearer"));
-        this.codes.add(new JWTAuthCode("client","user", 9999));
+        this.tokens.add(new TokenAccess("client","user",9999,"grant_all","bearer"));
+        this.codes.add(new AuthCode("client","user", 9999));
     }
 
-    public void addToken(JWTToken token){
+    public void addToken(TokenAccess token){
         this.tokens.add(token);
     }
 
-    public void addCode(JWTAuthCode code){
+    public void addCode(AuthCode code){
         this.codes.add(code);
     }
 
-    public boolean isTokenValid(JWTToken token){
+    public boolean isTokenValid(TokenAccess token){
         return this.tokens.contains(token);
     }
 
-    public boolean isCodeValid(JWTAuthCode code){
+    public boolean isCodeValid(AuthCode code){
         return this.codes.contains(code);
     }
 
-    public ArrayList<JWTAuthCode> getCodes(){
+    public ArrayList<AuthCode> getCodes(){
         return codes;
     }
-    public ArrayList<JWTToken> getTokens(){ return tokens; }
+    public ArrayList<TokenAccess> getTokens(){ return tokens; }
 }

@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
+import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
+import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,13 +44,13 @@ public class ResourceServer {
 
     @GetMapping(value = {"/codes"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ArrayList<JWTAuthCode> getCodes(){
+    public ArrayList<AuthCode> getCodes(){
         return inMemoryStore.getCodes();
     }
 
-    @GetMapping(value = {"/count"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = {"/tokens"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getInfo(){
-        return inMemoryStore.getCodes().size() + "; " + inMemoryStore.getTokens();
+    public ArrayList<TokenAccess> getTokens(){
+        return inMemoryStore.getTokens();
     }
 }

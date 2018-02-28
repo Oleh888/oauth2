@@ -2,25 +2,24 @@ package ua.yaroslav.auth2.authserver;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ua.yaroslav.auth2.authserver.jwt.JWTUtil;
-import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
-import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
+import ua.yaroslav.auth2.authserver.json.JSONUtil;
+import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
+import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Controller
 public class AuthServer {
     private final String CLIENT_ID = "client";
     private final String CLIENT_SECRET = "secret";
     private final String RESPONSE_TYPE = "code";
-    private final JWTUtil jwtUtil;
+    private final JSONUtil JSONUtil;
     private final InMemoryStore inMemoryStore;
 
-    public AuthServer(JWTUtil jwtUtil, InMemoryStore inMemoryStore) {
-        this.jwtUtil = jwtUtil;
+    public AuthServer(JSONUtil JSONUtil, InMemoryStore inMemoryStore) {
+        this.JSONUtil = JSONUtil;
         this.inMemoryStore = new InMemoryStore();
     }
 
@@ -35,10 +34,10 @@ public class AuthServer {
 
         if (formData.getClientID().equals(CLIENT_ID)) {
             if (formData.getResponseType().equals(RESPONSE_TYPE)) {
-                JWTAuthCode code = jwtUtil.getCode(formData);
+                AuthCode code = JSONUtil.getCode(formData);
                 inMemoryStore.addCode(code);
                 String url = "https://developers.google.com/oauthplayground?" +
-                        "code=" + jwtUtil.encodeObject(code) + "&" +
+                        "code=" + JSONUtil.encodeObject(code) + "&" +
                         "state=markOne";
                 response.sendRedirect(url);
             }
@@ -61,15 +60,15 @@ public class AuthServer {
 
         switch (grant_type) {
             case "authorization_code": {
-                JWTAuthCode jwtAuthCode = jwtUtil.readCodeFromB64(code);
-                if (inMemoryStore.isCodeValid(jwtAuthCode)) {
-                    JWTToken token = jwtUtil.getToken(jwtAuthCode.getClientID(), jwtAuthCode.getUsername(), scope);
-                    jwtUtil.encodeObject(token);
+                AuthCode authCode = JSONUtil.readCodeFromB64(code);
+                if (inMemoryStore.isCodeValid(authCode)) {
+                    TokenAccess token = JSONUtil.getToken(authCode.getClientID(), authCode.getUsername(), scope);
+                    JSONUtil.encodeObject(token);
 
                     return "{\n" +
                             "token_type: \"" + token.getType() +"\",\n" +
-                            "access_token: \"" + jwtUtil.encodeObject(token) + "\",\n" +
-                            "refresh_token: \"" + jwtUtil.encodeObject(jwtUtil.encodeObject(token)) + "\",\n" +
+                            "access_token: \"" + JSONUtil.encodeObject(token) + "\",\n" +
+                            "refresh_token: \"" + JSONUtil.encodeObject(JSONUtil.encodeObject(token)) + "\",\n" +
                             "expires_in: " + token.getExpiresIn() +"\n" +
                             "}";
                 }
@@ -78,7 +77,7 @@ public class AuthServer {
                 System.out.println("RT");
             }
             default: {
-                return "{\"error\": \"invalid_grant_type_maafaka\"}";
+                return "{\"error\": \"invalid_grant_type\"}";
             }
         }
     }
@@ -87,12 +86,6 @@ public class AuthServer {
     @ResponseBody
     public String getHome() {
         return "<h3>Hell Yeah</h3>";
-    }
-
-    @GetMapping(value = {"/tokens"}, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ArrayList<JWTToken> getTokens(){
-        return inMemoryStore.getTokens();
     }
 
     @GetMapping("/auth")
