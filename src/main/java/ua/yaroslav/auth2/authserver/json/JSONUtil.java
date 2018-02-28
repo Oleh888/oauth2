@@ -23,13 +23,17 @@ public class JSONUtil {
     }
 
     public AuthCode getCode(FormData formData){
-        return new AuthCode(formData.getClientID(),formData.getUsername(),new Date().getTime() + 3600);
+        AuthCode code = new AuthCode(formData.getClientID(),formData.getUsername(),new Date().getTime() + 3600);
+        store.addCode(code);
+        return code;
     }
 
     public TokenAccess getAccessToken(String clientID, String username , String scope){
         if (scope == "") scope = "grant_all";
-        return new TokenAccess(clientID, username, new Date().getTime() + 60000,
+        TokenAccess access = new TokenAccess(clientID, username, new Date().getTime() + 60000,
                 scope, "bearer", store.getTokens().size());
+        store.addToken(access);
+        return access;
     }
 
     public AuthCode readCodeFromB64(String code) throws IOException {
@@ -52,7 +56,7 @@ public class JSONUtil {
 
     public String encodeObject(Object code){
         String s = objectToString(code);
-        System.out.println("JSON object as string after encoding [" + code.getClass().getSimpleName() + "]:");
+        System.out.println("JSON object as string before encoding [" + code.getClass().getSimpleName() + "]:");
         System.out.println("\t" + s);
         return Base64.getEncoder().encodeToString(s.getBytes());
     }

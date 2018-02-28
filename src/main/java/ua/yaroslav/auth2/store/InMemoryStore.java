@@ -14,7 +14,7 @@ public class InMemoryStore {
     public InMemoryStore() {
         this.tokens = new ArrayList<>();
         this.codes = new ArrayList<>();
-        this.tokens.add(new TokenAccess("client","user",9999,"grant_all","bearer", 0));
+        this.tokens.add(new TokenAccess("client","user",9999,"grant_all","bearer", 9999));
         this.codes.add(new AuthCode("client","user", 9999));
     }
 

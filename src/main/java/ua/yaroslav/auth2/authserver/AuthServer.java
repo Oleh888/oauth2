@@ -36,7 +36,6 @@ public class AuthServer {
         if (formData.getClientID().equals(CLIENT_ID)) {
             if (formData.getResponseType().equals(RESPONSE_TYPE)) {
                 AuthCode code = jSONUtil.getCode(formData);
-                inMemoryStore.addCode(code);
                 String url = "https://developers.google.com/oauthplayground?" +
                         "code=" + jSONUtil.encodeObject(code) + "&" +
                         "state=markOne";
@@ -79,8 +78,9 @@ public class AuthServer {
             case "refresh_token": {
                 System.out.println("Refresh Token: " + refreshToken);
                 TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(refreshToken);
-                System.out.println("Mapped Object:");
-                System.out.println(jSONUtil.objectToString(refresh));
+                String s = jSONUtil.objectToString(refresh);
+                System.out.println("JSON object as string after decode [" + code.getClass().getSimpleName() + "]:");
+                System.out.println("\t" + s);
 
                 TokenAccess access = jSONUtil.getAccessToken(
                         inMemoryStore.getTokenByHash(refresh.getAccessTokenID()).getClientID(),
