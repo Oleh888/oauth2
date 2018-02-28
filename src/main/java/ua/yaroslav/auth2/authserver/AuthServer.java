@@ -51,6 +51,7 @@ public class AuthServer {
     @PostMapping("/token")
     @ResponseBody
     public String getToken(TokenRequest tokenRequest, HttpServletRequest request) throws IOException {
+        System.out.println("tokenRequest.getGrantType(): " + tokenRequest.getGrantType());
         switch (tokenRequest.getGrantType()) {
             case "authorization_code": {
                 synchronized (this){
