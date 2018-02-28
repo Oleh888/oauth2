@@ -55,12 +55,14 @@ public class AuthServer {
                            @RequestParam(value = "scope", required = false) String scope,
                            @RequestParam(value = "refresh_token", required = false) String refreshToken,
                            HttpServletRequest request) throws IOException {
-        System.out.println("\n--------------------get-token-invocation[GT:" + grant_type + "]--------------------");
-        System.out.println("client_id: \n\t" + client_id);
-        System.out.println("client_secret: \n\t" + client_secret);
-        System.out.println("grant_type: \n\t" + grant_type);
-        System.out.println("code: \n\t" + code);
-        System.out.println("scope: \n\t" + "[" + scope + "]\n");
+        synchronized (this){
+            System.out.println("\n--------------------get-token-invocation[GT:" + grant_type + "]--------------------");
+            System.out.println("client_id: \n\t" + client_id);
+            System.out.println("client_secret: \n\t" + client_secret);
+            System.out.println("grant_type: \n\t" + grant_type);
+            System.out.println("code: \n\t" + code);
+            System.out.println("scope: \n\t" + "[" + scope + "]\n");
+        }
 
         switch (grant_type) {
             case "authorization_code": {
@@ -84,10 +86,12 @@ public class AuthServer {
                 TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
                 store.addToken(access);
 
-                System.out.println("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
-                System.out.println("\t" + jSONUtil.objectToString(refresh));
-                System.out.println("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
-                System.out.println("\t" + jSONUtil.objectToString(access));
+                synchronized (this){
+                    System.out.println("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
+                    System.out.println("\t" + jSONUtil.objectToString(refresh));
+                    System.out.println("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
+                    System.out.println("\t" + jSONUtil.objectToString(access));
+                }
 
                 return "{\n" +
                         "token_type: \"" + access.getType() +"\",\n" +
@@ -102,10 +106,12 @@ public class AuthServer {
                 System.out.println("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
                 System.out.println("\t" + s);
 
-                System.out.println("\n============================");
-                for (TokenAccess a: store.getTokens())
-                    System.out.println(a.getTokenID());
-                System.out.println("=============================\n");
+                synchronized (this){
+                    System.out.println("\n============================");
+                    for (TokenAccess a: store.getTokens())
+                        System.out.println(a.getTokenID());
+                    System.out.println("=============================\n");
+                }
 
                 TokenAccess access = jSONUtil.getAccessToken(
                         store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
