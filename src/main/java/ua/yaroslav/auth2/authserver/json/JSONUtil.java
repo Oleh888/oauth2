@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.authserver.FormData;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
+import ua.yaroslav.auth2.authserver.json.entity.TokenRefresh;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -22,9 +23,9 @@ public class JSONUtil {
         return new AuthCode(formData.getClientID(),formData.getUsername(),new Date().getTime() + 3600);
     }
 
-    public TokenAccess getToken(String clientID, String username , String scope){
+    public TokenAccess getAccessToken(String clientID, String username , String scope){
         if (scope == "") scope = "grant_all";
-        return new TokenAccess(clientID, username, new Date().getTime() + 3600, scope, "bearer");
+        return new TokenAccess(clientID, username, new Date().getTime() + 60000, scope, "bearer");
     }
 
     public AuthCode readCodeFromB64(String code) throws IOException {
@@ -50,5 +51,15 @@ public class JSONUtil {
         System.out.println("JSON object as string after encoding:");
         System.out.println("\t" + s);
         return Base64.getEncoder().encodeToString(s.getBytes());
+    }
+
+    public TokenRefresh getRefreshToken(String clientID, String username, int ath){
+        TokenRefresh refresh = new TokenRefresh(clientID, username, new Date().getTime() + 60000 * 30);
+        refresh.setAccessTokenHash(ath);
+        return refresh;
+    }
+
+    public TokenRefresh readRefreshTokenFromB64(String token) throws IOException {
+        return mapper.readValue(new String(Base64.getDecoder().decode(token.getBytes())), TokenRefresh.class);
     }
 }

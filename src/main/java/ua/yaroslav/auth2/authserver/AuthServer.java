@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.yaroslav.auth2.authserver.json.JSONUtil;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
+import ua.yaroslav.auth2.authserver.json.entity.TokenRefresh;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,11 +16,11 @@ public class AuthServer {
     private final String CLIENT_ID = "client";
     private final String CLIENT_SECRET = "secret";
     private final String RESPONSE_TYPE = "code";
-    private final JSONUtil JSONUtil;
+    private final JSONUtil jSONUtil;
     private final InMemoryStore inMemoryStore;
 
-    public AuthServer(JSONUtil JSONUtil, InMemoryStore inMemoryStore) {
-        this.JSONUtil = JSONUtil;
+    public AuthServer(JSONUtil jSONUtil, InMemoryStore inMemoryStore) {
+        this.jSONUtil = jSONUtil;
         this.inMemoryStore = new InMemoryStore();
     }
 
@@ -34,10 +35,10 @@ public class AuthServer {
 
         if (formData.getClientID().equals(CLIENT_ID)) {
             if (formData.getResponseType().equals(RESPONSE_TYPE)) {
-                AuthCode code = JSONUtil.getCode(formData);
+                AuthCode code = jSONUtil.getCode(formData);
                 inMemoryStore.addCode(code);
                 String url = "https://developers.google.com/oauthplayground?" +
-                        "code=" + JSONUtil.encodeObject(code) + "&" +
+                        "code=" + jSONUtil.encodeObject(code) + "&" +
                         "state=markOne";
                 response.sendRedirect(url);
             }
@@ -50,7 +51,8 @@ public class AuthServer {
                            @RequestParam(value = "client_secret") String client_secret,
                            @RequestParam(value = "grant_type") String grant_type,
                            @RequestParam(value = "code") String code,
-                           @RequestParam(value = "scope") String scope) throws IOException {
+                           @RequestParam(value = "scope") String scope,
+                           @RequestParam(value = "refresh_token", required = false) String refreshToken) throws IOException {
         System.out.println("\n--------------------get-token-invocation--------------------");
         System.out.println("client_id: \n\t" + client_id);
         System.out.println("client_secret: \n\t" + client_secret);
@@ -60,21 +62,25 @@ public class AuthServer {
 
         switch (grant_type) {
             case "authorization_code": {
-                AuthCode authCode = JSONUtil.readCodeFromB64(code);
+                AuthCode authCode = jSONUtil.readCodeFromB64(code);
                 if (inMemoryStore.isCodeValid(authCode)) {
-                    TokenAccess token = JSONUtil.getToken(authCode.getClientID(), authCode.getUsername(), scope);
-                    JSONUtil.encodeObject(token);
+                    TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
+                    TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.hashCode());
 
                     return "{\n" +
-                            "token_type: \"" + token.getType() +"\",\n" +
-                            "access_token: \"" + JSONUtil.encodeObject(token) + "\",\n" +
-                            "refresh_token: \"" + JSONUtil.encodeObject(JSONUtil.encodeObject(token)) + "\",\n" +
-                            "expires_in: " + token.getExpiresIn() +"\n" +
+                            "token_type: \"" + access.getType() +"\",\n" +
+                            "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
+                            "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
+                            "expires_in: " + access.getExpiresIn() +"\n" +
                             "}";
                 }
             }
             case "refresh_token": {
-                System.out.println("RT");
+                System.out.println("Refresh Token: " + refreshToken);
+                TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(refreshToken);
+                System.out.println("Mapped Object:");
+                System.out.println(refresh);
+
             }
             default: {
                 return "{\"error\": \"invalid_grant_type\"}";

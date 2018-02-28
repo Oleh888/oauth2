@@ -1,23 +1,21 @@
 package ua.yaroslav.auth2.authserver.json.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
 public class TokenRefresh {
     private String clientID;
     private String username;
     private long expiresIn;
-    private String type;
+    private int accessTokenHash;
 
 
     public TokenRefresh(){}
     public TokenRefresh(@JsonProperty("client_id") String clientID,
                         @JsonProperty("username") String username,
-                        @JsonProperty("expires_in") long expiresIn,
-                        @JsonProperty("scope") String scope,
-                        @JsonProperty("type") String type) {
+                        @JsonProperty("expires_in") long expiresIn) {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
-        this.type = type;
     }
 
 
@@ -45,11 +43,22 @@ public class TokenRefresh {
         this.expiresIn = expiresIn;
     }
 
-    public String getType() {
-        return type;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TokenRefresh refresh = (TokenRefresh) o;
+        return expiresIn == refresh.expiresIn &&
+                Objects.equals(clientID, refresh.clientID) &&
+                Objects.equals(username, refresh.username);
     }
 
-    public void setType(String type) {
-        this.type = type;
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientID, username, expiresIn);
+    }
+
+    public void setAccessTokenHash(int accessTokenHash) {
+        this.accessTokenHash = accessTokenHash;
     }
 }
