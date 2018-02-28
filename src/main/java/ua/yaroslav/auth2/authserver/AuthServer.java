@@ -53,7 +53,7 @@ public class AuthServer {
                            @RequestParam(value = "code", required = false) String code,
                            @RequestParam(value = "scope", required = false) String scope,
                            @RequestParam(value = "refresh_token", required = false) String refreshToken) throws IOException {
-        System.out.println("\n--------------------get-token-invocation--------------------");
+        System.out.println("\n--------------------get-token-invocation[GT:" + grant_type + "]--------------------");
         System.out.println("client_id: \n\t" + client_id);
         System.out.println("client_secret: \n\t" + client_secret);
         System.out.println("grant_type: \n\t" + grant_type);
