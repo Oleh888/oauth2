@@ -67,6 +67,7 @@ public class AuthServer {
                     TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
                     TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.hashCode());
 
+                    inMemoryStore.addToken(access);
                     return "{\n" +
                             "token_type: \"" + access.getType() +"\",\n" +
                             "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
@@ -79,8 +80,19 @@ public class AuthServer {
                 System.out.println("Refresh Token: " + refreshToken);
                 TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(refreshToken);
                 System.out.println("Mapped Object:");
-                System.out.println(refresh);
+                System.out.println(jSONUtil.objectToString(refresh));
 
+                TokenAccess access = jSONUtil.getAccessToken(
+                        inMemoryStore.getTokenByHash(refresh.getAccessTokenHash()).getClientID(),
+                        inMemoryStore.getTokenByHash(refresh.getAccessTokenHash()).getUsername(),
+                        scope);
+                inMemoryStore.addToken(access);
+                return "{\n" +
+                        "token_type: \"" + access.getType() +"\",\n" +
+                        "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
+                        "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
+                        "expires_in: " + access.getExpiresIn() +"\n" +
+                        "}";
             }
             default: {
                 return "{\"error\": \"invalid_grant_type\"}";

@@ -38,4 +38,11 @@ public class InMemoryStore {
         return codes;
     }
     public ArrayList<TokenAccess> getTokens(){ return tokens; }
+
+    public TokenAccess getTokenByHash(int hash){
+        for (TokenAccess ta: this.tokens){
+            if (ta.hashCode() == hash) return ta;
+        }
+        return null;
+    }
 }

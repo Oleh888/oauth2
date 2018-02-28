@@ -61,4 +61,8 @@ public class TokenRefresh {
     public void setAccessTokenHash(int accessTokenHash) {
         this.accessTokenHash = accessTokenHash;
     }
+
+    public int getAccessTokenHash() {
+        return accessTokenHash;
+    }
 }
