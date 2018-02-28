@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-public class AuthServer {
+public class AuthorizationServer {
     private final String CLIENT_ID = "client";
     private final String CLIENT_SECRET = "secret";
     private final String RESPONSE_TYPE = "code";
     private final JSONUtil jsonUtil;
     private final InMemoryStore store;
 
-    public AuthServer(JSONUtil jsonUtil, InMemoryStore store) {
+    public AuthorizationServer(JSONUtil jsonUtil, InMemoryStore store) {
         this.jsonUtil = jsonUtil;
         this.store = new InMemoryStore();
     }
@@ -53,7 +53,7 @@ public class AuthServer {
     public String getToken(TokenRequest tokenRequest, HttpServletRequest request) throws IOException {
         switch (tokenRequest.getGrantType()) {
             case "authorization_code": {
-                System.out.println("\n--------------------get-token-invocation[GT:" +
+                System.out.println("--------------------get-token-invocation[GT:" +
                         tokenRequest.getGrantType() + "]--------------------\n");
                 System.out.println("client_id: \n\t" + tokenRequest.getClientID());
                 System.out.println("client_secret: \n\t" + tokenRequest.getClientSecret());
@@ -83,11 +83,6 @@ public class AuthServer {
                 String s = jsonUtil.objectToString(refresh);
                 System.out.println("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
                 System.out.println("\t" + s);
-
-                System.out.println("\n==============================");
-                for (TokenAccess a: store.getTokens())
-                    System.out.println(a.getTokenID());
-                System.out.println("===============" + store.getTokens().size() + "==============\n");
 
                 TokenAccess access = jsonUtil.getAccessToken(
                         store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
