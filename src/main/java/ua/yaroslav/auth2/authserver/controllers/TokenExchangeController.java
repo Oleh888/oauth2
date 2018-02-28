@@ -12,7 +12,6 @@ import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 import ua.yaroslav.auth2.authserver.json.entity.TokenRefresh;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Controller
