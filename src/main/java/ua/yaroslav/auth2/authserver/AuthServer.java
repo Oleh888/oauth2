@@ -79,7 +79,7 @@ public class AuthServer {
                 System.out.println("Refresh Token: " + refreshToken);
                 TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(refreshToken);
                 String s = jSONUtil.objectToString(refresh);
-                System.out.println("JSON object as string after decode [" + code.getClass().getSimpleName() + "]:");
+                System.out.println("JSON object as string after decode [" + refresh.getClass().getSimpleName() + "]:");
                 System.out.println("\t" + s);
 
                 TokenAccess access = jSONUtil.getAccessToken(

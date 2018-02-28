@@ -23,7 +23,7 @@ public class JSONUtil {
     }
 
     public AuthCode getCode(FormData formData){
-        AuthCode code = new AuthCode(formData.getClientID(),formData.getUsername(),new Date().getTime() + 3600);
+        AuthCode code = new AuthCode(formData.getClientID(),formData.getUsername(),new Date().getTime() + 15000);
         store.addCode(code);
         return code;
     }
