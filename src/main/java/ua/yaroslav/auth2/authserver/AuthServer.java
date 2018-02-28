@@ -68,8 +68,11 @@ public class AuthServer {
                 AuthCode authCode = jSONUtil.readCodeFromB64(code);
                 if (store.isCodeValid(authCode)) {
                     TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
-                    TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.hashCode());
+                    TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
 
+                    String s = jSONUtil.objectToString(refresh);
+                    System.out.println("refresh token as string after decode [" + refresh.getClass().getSimpleName() + "]:");
+                    System.out.println("\t" + s);
                     return "{\n" +
                             "token_type: \"" + access.getType() +"\",\n" +
                             "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
