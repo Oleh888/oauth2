@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import ua.yaroslav.auth2.authserver.json.JSONUtil;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 import ua.yaroslav.auth2.store.InMemoryStore;
@@ -12,24 +13,30 @@ import ua.yaroslav.auth2.store.InMemoryStore;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 public class ResourceServer {
     private final InMemoryStore inMemoryStore;
+    private final JSONUtil jsonUtil;
 
-    public ResourceServer(InMemoryStore inMemoryStore) {
+
+    public ResourceServer(InMemoryStore inMemoryStore, JSONUtil jsonUtil) {
         this.inMemoryStore = inMemoryStore;
+        this.jsonUtil = jsonUtil;
     }
+
 
     @GetMapping(value = {"/private"})
     public String getPrivateData(HttpServletRequest request, HttpServletResponse response,
                                  @RequestParam(value = "token", required = false) String token) throws IOException {
-        String tokenFromRequest = request.getHeader("Authorization").substring(6,
-                request.getHeader("Authorization").length());
+        String tokenFromRequest = request.getHeader("Authorization");
+        tokenFromRequest = tokenFromRequest.substring(7, tokenFromRequest.length());
         System.out.println("\nAccess Token -> [" + tokenFromRequest + "]");
+
+        System.out.println(jsonUtil.objectToString(jsonUtil.readTokenFromB64(tokenFromRequest)));
+
         Enumeration headerNames = request.getHeaderNames();
         StringBuilder builder = new StringBuilder();
         if (request.getHeader("Authorization").length() > 8)
