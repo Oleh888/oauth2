@@ -43,11 +43,4 @@ public class InMemoryStore {
     }
 
     public CopyOnWriteArrayList<TokenAccess> getTokens(){ return tokens; }
-
-    public TokenAccess getTokenByID(int id){
-        for (TokenAccess ta: this.tokens){
-            if (ta.getTokenID() == id) return ta;
-        }
-        return this.tokens.get(0);
-    }
 }

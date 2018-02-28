@@ -41,6 +41,10 @@ public class AuthRequestDto {
         return scope;
     }
 
+    public String getRedirectURI() {
+        return redirect_uri;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -59,10 +63,6 @@ public class AuthRequestDto {
 
     public void setScope(String scope) {
         this.scope = scope;
-    }
-
-    public String getRedirectURI() {
-        return redirect_uri;
     }
 
     public void setRedirect_uri(String redirect_uri) {

@@ -1,4 +1,5 @@
 package ua.yaroslav.auth2.authserver.json.entity;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
@@ -9,22 +10,21 @@ public class TokenAccess {
     private long expiresIn;
     private String scope;
     private String type;
-    private int tokenID;
 
 
-    public TokenAccess(){}
+    public TokenAccess() {
+    }
+
     public TokenAccess(@JsonProperty("client_id") String clientID,
                        @JsonProperty("username") String username,
                        @JsonProperty("expires_in") long expiresIn,
                        @JsonProperty("scope") String scope,
-                       @JsonProperty("type") String type,
-                       @JsonProperty(value = "id", required = false) int id) {
+                       @JsonProperty("type") String type) {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
         this.scope = scope;
         this.type = type;
-        this.tokenID = id;
     }
 
 
@@ -66,14 +66,6 @@ public class TokenAccess {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public int getTokenID() {
-        return tokenID;
-    }
-
-    public void setTokenID(int tokenID) {
-        this.tokenID = tokenID;
     }
 
     @Override

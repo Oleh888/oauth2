@@ -1,5 +1,7 @@
 package ua.yaroslav.auth2.authserver.json.entity;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class TokenRefresh {
@@ -9,7 +11,9 @@ public class TokenRefresh {
     private int accessTokenID;
 
 
-    public TokenRefresh(){}
+    public TokenRefresh() {
+    }
+
     public TokenRefresh(@JsonProperty("client_id") String clientID,
                         @JsonProperty("username") String username,
                         @JsonProperty("expires_in") long expiresIn) {

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import ua.yaroslav.auth2.authserver.dto.AuthRequestDto;
 import ua.yaroslav.auth2.authserver.dto.LoginRequestDto;
 import ua.yaroslav.auth2.authserver.json.JSONUtil;
@@ -23,13 +22,11 @@ public class AuthorizationController {
     @Value("${client.secret}")
     private String CLIENT_SECRET;
 
-    private final JSONUtil jsonUtil;
     private final InMemoryStore store;
 
 
-    public AuthorizationController(JSONUtil jsonUtil, InMemoryStore store) {
-        this.jsonUtil = jsonUtil;
-        this.store = new InMemoryStore();
+    public AuthorizationController(InMemoryStore store) {
+        this.store = store;
     }
 
 
@@ -44,20 +41,14 @@ public class AuthorizationController {
 
         if (authRequest.getClientID().equals(CLIENT_ID)) {
             if (authRequest.getResponseType().equals("code")) {
-                AuthCode code = jsonUtil.getCode(authRequest);
+                AuthCode code = JSONUtil.getCode(authRequest);
                 store.addCode(code);
-                String url = "https://developers.google.com/oauthplayground?" +
-                        "code=" + jsonUtil.encodeObject(code) + "&" +
-                        "state=markOne";
+                String url = authRequest.getRedirectURI() + "?" +
+                        "code=" + JSONUtil.encodeObject(code) + "&" +
+                        "state=awesome";
                 response.sendRedirect(url);
             }
         }
-    }
-
-    @GetMapping("/")
-    @ResponseBody
-    public String getHome() {
-        return "<h3>This is not the page you are looking for</h3>";
     }
 
     @GetMapping("/auth")
@@ -66,6 +57,7 @@ public class AuthorizationController {
         model.addAttribute("client_id", loginRequest.getClientID());
         model.addAttribute("response_type", loginRequest.getResponseType());
         model.addAttribute("access_type", loginRequest.getAccessType());
+        model.addAttribute("scope", loginRequest.getScope());
         return "login";
     }
 }

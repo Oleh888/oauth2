@@ -22,17 +22,15 @@ public class TokenExchangeController {
     @Value("${client.secret}")
     private String CLIENT_SECRET;
 
-    private final JSONUtil jsonUtil;
     private final InMemoryStore store;
 
-    public TokenExchangeController(JSONUtil jsonUtil, InMemoryStore store) {
-        this.jsonUtil = jsonUtil;
+    public TokenExchangeController(InMemoryStore store) {
         this.store = store;
     }
 
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getToken(TokenRequestDto tokenRequest, HttpServletRequest request) throws IOException {
+    public String getToken(TokenRequestDto tokenRequest) throws IOException {
         switch (tokenRequest.getGrantType()) {
             case "authorization_code": {
                 System.out.println("--------------------get-token-invocation[GT:" +
@@ -43,41 +41,37 @@ public class TokenExchangeController {
                 System.out.println("code: \n\t" + tokenRequest.getCode());
                 System.out.println("scope: \n\t" + "[" + tokenRequest.getScope() + "]\n");
 
-                AuthCode authCode = jsonUtil.readCodeFromB64(tokenRequest.getCode());
-                TokenAccess access = jsonUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
-                TokenRefresh refresh = jsonUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
+                AuthCode authCode = JSONUtil.readCodeFromB64(tokenRequest.getCode());
+                TokenAccess access = JSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
+                TokenRefresh refresh = JSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername());
                 store.addToken(access);
 
                 System.out.println("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
-                System.out.println(jsonUtil.objectToString(refresh));
+                System.out.println(JSONUtil.objectToString(refresh));
                 System.out.println("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
-                System.out.println(jsonUtil.objectToString(access));
+                System.out.println(JSONUtil.objectToString(access));
 
                 return "{\n" +
                         "token_type: \"" + access.getType() + "\",\n" +
-                        "access_token: \"" + jsonUtil.encodeObject(access) + "\",\n" +
-                        "refresh_token: \"" + jsonUtil.encodeObject(refresh) + "\",\n" +
+                        "access_token: \"" + JSONUtil.encodeObject(access) + "\",\n" +
+                        "refresh_token: \"" + JSONUtil.encodeObject(refresh) + "\",\n" +
                         "expires_in: " + access.getExpiresIn() + "\n" +
                         "}";
             }
             case "refresh_token": {
                 System.out.println("--------------------get-token-invocation[GT:" +
                         tokenRequest.getGrantType() + "]--------------------\n");
-                TokenRefresh refresh = jsonUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
-                String s = jsonUtil.objectToString(refresh);
+                TokenRefresh refresh = JSONUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
+                String s = JSONUtil.objectToString(refresh);
                 System.out.println("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
                 System.out.println("\t" + s);
 
-                TokenAccess access = jsonUtil.getAccessToken(
-                        store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
-                        store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
-                        tokenRequest.getScope());
-                access.setTokenID(store.getTokens().size());
+                TokenAccess access = JSONUtil.getAccessToken(refresh.getClientID(), refresh.getUsername(), tokenRequest.getScope());
                 store.addToken(access);
 
                 return "{\n" +
                         "token_type: \"" + access.getType() + "\",\n" +
-                        "access_token: \"" + jsonUtil.encodeObject(access) + "\",\n" +
+                        "access_token: \"" + JSONUtil.encodeObject(access) + "\",\n" +
                         "expires_in: " + access.getExpiresIn() + "\n" +
                         "}";
             }

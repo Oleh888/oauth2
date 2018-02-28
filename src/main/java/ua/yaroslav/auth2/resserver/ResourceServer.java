@@ -72,4 +72,10 @@ public class ResourceServer {
     public CopyOnWriteArrayList<TokenAccess> getTokens(){
         return inMemoryStore.getTokens();
     }
+
+    @GetMapping("/")
+    @ResponseBody
+    public String getHome() {
+        return "<h3>This is not the page you are looking for</h3>";
+    }
 }

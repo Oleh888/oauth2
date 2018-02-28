@@ -15,10 +15,11 @@
             <label for="username">Username:</label><input id="username" class="column" name="username" value="login"/><br/>
             <label for="password">Password:</label><input id="password" class="column" name="password" value="pass"/><br/>
 
-            <input id="redirect_uri"  name="redirect_uri"  th:value="${redirect_uri}"/>
-            <input id="response_type" name="response_type" th:value="${response_type}"/>
-            <input id="client_id"     name="client_id"     th:value="${client_id}"/>
-            <input id="access_type"   name="access_type"   th:value="${access_type}"/>
+            <input id="scope"  name="scope"  th:value="${scope}" type="hidden"/>
+            <input id="redirect_uri"  name="redirect_uri"  th:value="${redirect_uri}" type="hidden"/>
+            <input id="response_type" name="response_type" th:value="${response_type}" type="hidden"/>
+            <input id="client_id"     name="client_id"     th:value="${client_id}" type="hidden"/>
+            <input id="access_type"   name="access_type"   th:value="${access_type}" type="hidden"/>
 
             <button type="submit">Login</button>
         </div>
