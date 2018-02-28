@@ -60,7 +60,6 @@ public class AuthServer {
         System.out.println("grant_type: \n\t" + grant_type);
         System.out.println("code: \n\t" + code);
         System.out.println("scope: \n\t" + "[" + scope + "]\n");
-        System.out.println(request.getServletPath() + "\n");
 
         switch (grant_type) {
             case "authorization_code": {
@@ -114,7 +113,6 @@ public class AuthServer {
                 return "{\n" +
                         "token_type: \"" + access.getType() +"\",\n" +
                         "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
-                        "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
                         "expires_in: " + access.getExpiresIn() +"\n" +
                         "}";
             }
