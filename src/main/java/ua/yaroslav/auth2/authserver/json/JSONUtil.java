@@ -31,6 +31,7 @@ public class JSONUtil {
         if (scope == "") scope = "grant_all";
         TokenAccess access = new TokenAccess(clientID, username, new Date().getTime() + 60000,
                 scope, "bearer", store.getTokens().size());
+        access.setTokenID(store.getTokens().size());
         return access;
     }
 
