@@ -67,6 +67,14 @@ public class TokenAccess {
         this.type = type;
     }
 
+    public int getTokenID() {
+        return tokenID;
+    }
+
+    public void setTokenID(int tokenID) {
+        this.tokenID = tokenID;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
