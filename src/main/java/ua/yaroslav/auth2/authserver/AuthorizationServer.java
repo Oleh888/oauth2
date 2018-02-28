@@ -110,7 +110,7 @@ public class AuthorizationServer {
     @GetMapping("/")
     @ResponseBody
     public String getHome() {
-        return "<h3>Hell Yeah</h3>";
+        return "<h3>This is not the page you are looking for</h3>";
     }
 
     @GetMapping("/auth")
