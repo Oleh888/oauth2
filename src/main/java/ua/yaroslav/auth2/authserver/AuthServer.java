@@ -87,8 +87,8 @@ public class AuthServer {
                     System.out.println(a.getTokenID());
                 System.out.println("==============" + inMemoryStore.getTokens().size() + "==============");
                 TokenAccess access = jSONUtil.getAccessToken(
-                        inMemoryStore.getTokenByHash(refresh.getAccessTokenID()).getClientID(),
-                        inMemoryStore.getTokenByHash(refresh.getAccessTokenID()).getUsername(),
+                        inMemoryStore.getTokenByID(refresh.getAccessTokenID()).getClientID(),
+                        inMemoryStore.getTokenByID(refresh.getAccessTokenID()).getUsername(),
                         scope);
                 inMemoryStore.addToken(access);
                 return "{\n" +

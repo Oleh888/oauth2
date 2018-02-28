@@ -40,9 +40,9 @@ public class InMemoryStore {
     }
     public CopyOnWriteArrayList<TokenAccess> getTokens(){ return tokens; }
 
-    public TokenAccess getTokenByHash(int hash){
+    public TokenAccess getTokenByID(int id){
         for (TokenAccess ta: this.tokens){
-            if (ta.hashCode() == hash) return ta;
+            if (ta.getTokenID() == id) return ta;
         }
         return null;
     }
