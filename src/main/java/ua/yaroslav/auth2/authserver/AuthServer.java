@@ -48,10 +48,10 @@ public class AuthServer {
     @PostMapping("/token")
     @ResponseBody
     public String getToken(@RequestParam(value = "client_id") String client_id,
-                           @RequestParam(value = "client_secret", required = false) String client_secret,
+                           @RequestParam(value = "client_secret") String client_secret,
                            @RequestParam(value = "grant_type") String grant_type,
                            @RequestParam(value = "code", required = false) String code,
-                           @RequestParam(value = "scope") String scope,
+                           @RequestParam(value = "scope", required = false) String scope,
                            @RequestParam(value = "refresh_token", required = false) String refreshToken) throws IOException {
         System.out.println("\n--------------------get-token-invocation--------------------");
         System.out.println("client_id: \n\t" + client_id);
