@@ -19,17 +19,17 @@ public class AuthServer {
     private final String CLIENT_ID = "client";
     private final String CLIENT_SECRET = "secret";
     private final String RESPONSE_TYPE = "code";
-    private final JSONUtil jSONUtil;
+    private final JSONUtil jsonUtil;
     private final InMemoryStore store;
 
-    public AuthServer(JSONUtil jSONUtil, InMemoryStore store) {
-        this.jSONUtil = jSONUtil;
+    public AuthServer(JSONUtil jsonUtil, InMemoryStore store) {
+        this.jsonUtil = jsonUtil;
         this.store = new InMemoryStore();
     }
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void getCode(AuthRequest authRequest, HttpServletResponse response) throws IOException {
-        System.out.println("\n--------------------get-code-invocation---------------------");
+        System.out.println("\n--------------------get-code-invocation---------------------\n");
         System.out.println("client_id: \n\t" + authRequest.getClientID());
         System.out.println("response_type: \n\t" + authRequest.getResponseType());
         System.out.println("username: \n\t" + authRequest.getUsername());
@@ -38,10 +38,10 @@ public class AuthServer {
 
         if (authRequest.getClientID().equals(CLIENT_ID)) {
             if (authRequest.getResponseType().equals(RESPONSE_TYPE)) {
-                AuthCode code = jSONUtil.getCode(authRequest);
+                AuthCode code = jsonUtil.getCode(authRequest);
                 store.addCode(code);
                 String url = "https://developers.google.com/oauthplayground?" +
-                        "code=" + jSONUtil.encodeObject(code) + "&" +
+                        "code=" + jsonUtil.encodeObject(code) + "&" +
                         "state=markOne";
                 response.sendRedirect(url);
             }
@@ -53,33 +53,34 @@ public class AuthServer {
     public String getToken(TokenRequest tokenRequest, HttpServletRequest request) throws IOException {
         switch (tokenRequest.getGrantType()) {
             case "authorization_code": {
-                System.out.println("\n--------------------get-token-invocation[GT:" + tokenRequest.getGrantType() + "]--------------------");
+                System.out.println("\n--------------------get-token-invocation[GT:" +
+                        tokenRequest.getGrantType() + "]--------------------\n");
                 System.out.println("client_id: \n\t" + tokenRequest.getClientID());
                 System.out.println("client_secret: \n\t" + tokenRequest.getClientSecret());
                 System.out.println("grant_type: \n\t" + tokenRequest.getGrantType());
                 System.out.println("code: \n\t" + tokenRequest.getCode());
                 System.out.println("scope: \n\t" + "[" + tokenRequest.getScope() + "]\n");
 
-                AuthCode authCode = jSONUtil.readCodeFromB64(tokenRequest.getCode());
-                TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
-                TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
+                AuthCode authCode = jsonUtil.readCodeFromB64(tokenRequest.getCode());
+                TokenAccess access = jsonUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
+                TokenRefresh refresh = jsonUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
                 store.addToken(access);
 
                 System.out.println("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
-                System.out.println(jSONUtil.objectToString(refresh));
+                System.out.println(jsonUtil.objectToString(refresh));
                 System.out.println("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
-                System.out.println(jSONUtil.objectToString(access));
+                System.out.println(jsonUtil.objectToString(access));
 
                 return "{\n" +
                         "token_type: \"" + access.getType() +"\",\n" +
-                        "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
-                        "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
+                        "access_token: \"" + jsonUtil.encodeObject(access) + "\",\n" +
+                        "refresh_token: \"" + jsonUtil.encodeObject(refresh) + "\",\n" +
                         "expires_in: " + access.getExpiresIn() +"\n" +
                         "}";
             }
             case "refresh_token": {
-                TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
-                String s = jSONUtil.objectToString(refresh);
+                TokenRefresh refresh = jsonUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
+                String s = jsonUtil.objectToString(refresh);
                 System.out.println("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
                 System.out.println("\t" + s);
 
@@ -88,15 +89,16 @@ public class AuthServer {
                     System.out.println(a.getTokenID());
                 System.out.println("===============" + store.getTokens().size() + "==============\n");
 
-                TokenAccess access = jSONUtil.getAccessToken(
+                TokenAccess access = jsonUtil.getAccessToken(
                         store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
                         store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
                         tokenRequest.getScope());
                 access.setTokenID(store.getTokens().size());
                 store.addToken(access);
+
                 return "{\n" +
                         "token_type: \"" + access.getType() +"\",\n" +
-                        "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
+                        "access_token: \"" + jsonUtil.encodeObject(access) + "\",\n" +
                         "expires_in: " + access.getExpiresIn() +"\n" +
                         "}";
             }
