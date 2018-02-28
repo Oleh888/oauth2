@@ -17,8 +17,6 @@ public class InMemoryStore {
     public InMemoryStore() {
         this.tokens = new CopyOnWriteArrayList<>();
         this.codes = new CopyOnWriteArrayList<>();
-        //this.tokens.add(new TokenAccess("client","user",9999,"grant_all","bearer", 9999));
-        //this.codes.add(new AuthCode("client","user", 9999));
     }
 
 

@@ -9,6 +9,7 @@ public class AuthCode {
     private String username;
     private long expiresIn;
 
+
     public AuthCode(){}
     public AuthCode(@JsonProperty("client_id") String clientID,
                     @JsonProperty("username") String username,
@@ -17,6 +18,7 @@ public class AuthCode {
         this.username = username;
         this.expiresIn = expiresIn;
     }
+
 
     public String getClientID() {
         return clientID;

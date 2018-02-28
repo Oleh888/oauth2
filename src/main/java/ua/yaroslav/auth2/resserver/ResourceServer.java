@@ -51,7 +51,7 @@ public class ResourceServer {
                     else builder.append(key + " -> [" + value.substring(0, 110) + "...]").append("<br>\n");
                 }
             }
-            else builder.append("<h3>The duration of AT has expired</h3>\n");
+            else builder.append("<h3>Access Token is no longer valid</h3>\n");
         }
         else builder.append("<h3>Access not granted!</h3>\n");
 

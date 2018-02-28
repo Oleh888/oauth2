@@ -18,11 +18,13 @@ public class JSONUtil {
     private final ObjectMapper mapper;
     private final InMemoryStore store;
 
+
     public JSONUtil(InMemoryStore store){
         this.store = store;
         this.mapper = new ObjectMapper();
         this.mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
+
 
     public AuthCode getCode(AuthRequest authRequest){
         AuthCode code = new AuthCode(authRequest.getClientID(), authRequest.getUsername(),new Date().getTime() + 15000);

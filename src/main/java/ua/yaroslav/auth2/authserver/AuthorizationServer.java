@@ -22,10 +22,12 @@ public class AuthorizationServer {
     private final JSONUtil jsonUtil;
     private final InMemoryStore store;
 
+
     public AuthorizationServer(JSONUtil jsonUtil, InMemoryStore store) {
         this.jsonUtil = jsonUtil;
         this.store = new InMemoryStore();
     }
+
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void getCode(AuthRequest authRequest, HttpServletResponse response) throws IOException {
