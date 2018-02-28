@@ -73,9 +73,9 @@ public class AuthServer {
 
                 synchronized (this){
                     System.out.println("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
-                    System.out.println("\t" + jSONUtil.objectToString(refresh));
+                    System.out.println(jSONUtil.objectToString(refresh));
                     System.out.println("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
-                    System.out.println("\t" + jSONUtil.objectToString(access));
+                    System.out.println(jSONUtil.objectToString(access));
                 }
 
                 return "{\n" +

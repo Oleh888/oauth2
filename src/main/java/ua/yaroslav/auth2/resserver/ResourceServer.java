@@ -33,7 +33,7 @@ public class ResourceServer {
     public String getPrivateData(HttpServletRequest request, HttpServletResponse response,
                                  @RequestParam(value = "token", required = false) String token) throws IOException {
         StringBuilder builder = new StringBuilder();
-        if (request.getHeader("Authorization") != null){
+        if (request.getHeader("Authorization") != null && request.getHeader("Authorization").length() > 7){
             String tokenFromRequest = request.getHeader("Authorization");
             tokenFromRequest = tokenFromRequest.substring(7, tokenFromRequest.length());
             System.out.println("\nAccess Token -> [" + tokenFromRequest + "]");
@@ -53,7 +53,6 @@ public class ResourceServer {
             else builder.append("<h3>The duration of AT has expired</h3>\n");
         }
         else builder.append("<h3>Access not granted!</h3>\n");
-
 
         return builder.toString();
     }
