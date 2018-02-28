@@ -83,9 +83,11 @@ public class AuthServer {
                 TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
                 store.addToken(access);
 
-                String s = jSONUtil.objectToString(refresh);
-                System.out.println("refresh token as string after decode [" + refresh.getClass().getSimpleName() + "]:");
-                System.out.println("\t" + s);
+                System.out.println("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
+                System.out.println("\t" + jSONUtil.objectToString(refresh));
+                System.out.println("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
+                System.out.println("\t" + jSONUtil.objectToString(access));
+
                 return "{\n" +
                         "token_type: \"" + access.getType() +"\",\n" +
                         "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
@@ -96,7 +98,7 @@ public class AuthServer {
             case "refresh_token": {
                 TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(refreshToken);
                 String s = jSONUtil.objectToString(refresh);
-                System.out.println("Refresh token as string after decode [" + refresh.getClass().getSimpleName() + "]:");
+                System.out.println("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
                 System.out.println("\t" + s);
 
                 System.out.println("===============" + refresh.getAccessTokenID() + "=============");
