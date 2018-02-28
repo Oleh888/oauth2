@@ -1,6 +1,7 @@
 package ua.yaroslav.auth2.authserver.json;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.authserver.FormData;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
@@ -20,6 +21,7 @@ public class JSONUtil {
     public JSONUtil(InMemoryStore store){
         this.store = store;
         this.mapper = new ObjectMapper();
+        this.mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     public AuthCode getCode(FormData formData){
@@ -46,7 +48,7 @@ public class JSONUtil {
 
     public String objectToString(Object code){
         try {
-            return new ObjectMapper().writeValueAsString(code);
+            return mapper.writeValueAsString(code);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
