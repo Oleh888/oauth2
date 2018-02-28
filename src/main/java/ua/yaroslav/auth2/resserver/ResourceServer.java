@@ -30,6 +30,7 @@ public class ResourceServer {
         System.out.println("Auth Header -> " + request.getHeader("Authorization"));
         Enumeration headerNames = request.getHeaderNames();
         StringBuilder builder = new StringBuilder();
+        System.out.println(request.getHeader("Authorization"));
         if (request.getHeader("Authorization").length() > 8)
             builder.append("<h3>Access granted!</h3>");
         else builder.append("<h3>Access not granted!</h3>\n");

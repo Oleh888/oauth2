@@ -55,17 +55,16 @@ public class AuthServer {
                            @RequestParam(value = "scope", required = false) String scope,
                            @RequestParam(value = "refresh_token", required = false) String refreshToken,
                            HttpServletRequest request) throws IOException {
-        synchronized (this){
-            System.out.println("\n--------------------get-token-invocation[GT:" + grant_type + "]--------------------");
-            System.out.println("client_id: \n\t" + client_id);
-            System.out.println("client_secret: \n\t" + client_secret);
-            System.out.println("grant_type: \n\t" + grant_type);
-            System.out.println("code: \n\t" + code);
-            System.out.println("scope: \n\t" + "[" + scope + "]\n");
-        }
-
         switch (grant_type) {
             case "authorization_code": {
+                synchronized (this){
+                    System.out.println("\n--------------------get-token-invocation[GT:" + grant_type + "]--------------------");
+                    System.out.println("client_id: \n\t" + client_id);
+                    System.out.println("client_secret: \n\t" + client_secret);
+                    System.out.println("grant_type: \n\t" + grant_type);
+                    System.out.println("code: \n\t" + code);
+                    System.out.println("scope: \n\t" + "[" + scope + "]\n");
+                }
                 AuthCode authCode = jSONUtil.readCodeFromB64(code);
 //                if (store.isCodeValid(authCode)) {
 //                    TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
