@@ -2,6 +2,8 @@ package ua.yaroslav.auth2.authserver;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import ua.yaroslav.auth2.authserver.dto.AuthRequest;
+import ua.yaroslav.auth2.authserver.dto.TokenRequest;
 import ua.yaroslav.auth2.authserver.json.JSONUtil;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
@@ -26,17 +28,17 @@ public class AuthServer {
     }
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public void getCode(FormData formData, HttpServletResponse response) throws IOException {
+    public void getCode(AuthRequest authRequest, HttpServletResponse response) throws IOException {
         System.out.println("\n--------------------get-code-invocation---------------------");
-        System.out.println("client_id: \n\t" + formData.getClientID());
-        System.out.println("response_type: \n\t" + formData.getResponseType());
-        System.out.println("username: \n\t" + formData.getUsername());
-        System.out.println("password: \n\t" + formData.getPassword());
-        System.out.println("scope: \n\t" + "[" + formData.getScope() + "]\n");
+        System.out.println("client_id: \n\t" + authRequest.getClientID());
+        System.out.println("response_type: \n\t" + authRequest.getResponseType());
+        System.out.println("username: \n\t" + authRequest.getUsername());
+        System.out.println("password: \n\t" + authRequest.getPassword());
+        System.out.println("scope: \n\t" + "[" + authRequest.getScope() + "]\n");
 
-        if (formData.getClientID().equals(CLIENT_ID)) {
-            if (formData.getResponseType().equals(RESPONSE_TYPE)) {
-                AuthCode code = jSONUtil.getCode(formData);
+        if (authRequest.getClientID().equals(CLIENT_ID)) {
+            if (authRequest.getResponseType().equals(RESPONSE_TYPE)) {
+                AuthCode code = jSONUtil.getCode(authRequest);
                 store.addCode(code);
                 String url = "https://developers.google.com/oauthplayground?" +
                         "code=" + jSONUtil.encodeObject(code) + "&" +
@@ -48,26 +50,19 @@ public class AuthServer {
 
     @PostMapping("/token")
     @ResponseBody
-    public String getToken(@RequestParam(value = "client_id", required = false) String client_id,
-                           @RequestParam(value = "client_secret", required = false) String client_secret,
-                           @RequestParam(value = "grant_type") String grant_type,
-                           @RequestParam(value = "code", required = false) String code,
-                           @RequestParam(value = "scope", required = false) String scope,
-                           @RequestParam(value = "refresh_token", required = false) String refreshToken,
-                           HttpServletRequest request) throws IOException {
-        switch (grant_type) {
+    public String getToken(TokenRequest tokenRequest, HttpServletRequest request) throws IOException {
+        switch (tokenRequest.getGrantType()) {
             case "authorization_code": {
                 synchronized (this){
-                    System.out.println("\n--------------------get-token-invocation[GT:" + grant_type + "]--------------------");
-                    System.out.println("client_id: \n\t" + client_id);
-                    System.out.println("client_secret: \n\t" + client_secret);
-                    System.out.println("grant_type: \n\t" + grant_type);
-                    System.out.println("code: \n\t" + code);
-                    System.out.println("scope: \n\t" + "[" + scope + "]\n");
+                    System.out.println("\n--------------------get-token-invocation[GT:" + tokenRequest.getGrantType() + "]--------------------");
+                    System.out.println("client_id: \n\t" + tokenRequest.getClientID());
+                    System.out.println("client_secret: \n\t" + tokenRequest.getClientSecret());
+                    System.out.println("grant_type: \n\t" + tokenRequest.getGrantType());
+                    System.out.println("code: \n\t" + tokenRequest.getCode());
+                    System.out.println("scope: \n\t" + "[" + tokenRequest.getScope() + "]\n");
                 }
-                AuthCode authCode = jSONUtil.readCodeFromB64(code);
-                TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
-                System.out.println("ID of AT: " + access.getTokenID());
+                AuthCode authCode = jSONUtil.readCodeFromB64(tokenRequest.getCode());
+                TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
                 TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
                 store.addToken(access);
 
@@ -86,7 +81,7 @@ public class AuthServer {
                         "}";
             }
             case "refresh_token": {
-                TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(refreshToken);
+                TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
                 String s = jSONUtil.objectToString(refresh);
                 System.out.println("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
                 System.out.println("\t" + s);
@@ -101,7 +96,7 @@ public class AuthServer {
                 TokenAccess access = jSONUtil.getAccessToken(
                         store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
                         store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
-                        scope);
+                        tokenRequest.getScope());
                 access.setTokenID(store.getTokens().size());
                 store.addToken(access);
                 return "{\n" +
