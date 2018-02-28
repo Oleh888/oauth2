@@ -27,10 +27,9 @@ public class ResourceServer {
     @GetMapping(value = {"/private"})
     public String getPrivateData(HttpServletRequest request, HttpServletResponse response,
                                  @RequestParam(value = "token", required = false) String token) throws IOException {
-        System.out.println("Auth Header -> " + request.getHeader("Authorization"));
+        System.out.println("\nAuth Header -> " + request.getHeader("Authorization"));
         Enumeration headerNames = request.getHeaderNames();
         StringBuilder builder = new StringBuilder();
-        System.out.println(request.getHeader("Authorization"));
         if (request.getHeader("Authorization").length() > 8)
             builder.append("<h3>Access granted!</h3>");
         else builder.append("<h3>Access not granted!</h3>\n");

@@ -66,21 +66,6 @@ public class AuthServer {
                     System.out.println("scope: \n\t" + "[" + scope + "]\n");
                 }
                 AuthCode authCode = jSONUtil.readCodeFromB64(code);
-//                if (store.isCodeValid(authCode)) {
-//                    TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
-//                    TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
-//
-//                    String s = jSONUtil.objectToString(refresh);
-//                    System.out.println("refresh token as string after decode [" + refresh.getClass().getSimpleName() + "]:");
-//                    System.out.println("\t" + s);
-//                    return "{\n" +
-//                            "token_type: \"" + access.getType() +"\",\n" +
-//                            "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
-//                            "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
-//                            "expires_in: " + access.getExpiresIn() +"\n" +
-//                            "}";
-//                }
-//                break;
                 TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
                 TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
                 store.addToken(access);
@@ -109,7 +94,7 @@ public class AuthServer {
                     System.out.println("\n============================");
                     for (TokenAccess a: store.getTokens())
                         System.out.println(a.getTokenID());
-                    System.out.println("=============================\n");
+                    System.out.println("===============" + store.getTokens().size() + "==============\n");
                 }
 
                 TokenAccess access = jSONUtil.getAccessToken(
