@@ -94,16 +94,16 @@ public class AuthServer {
                         "}";
             }
             case "refresh_token": {
-                System.out.println("Refresh Token: " + refreshToken);
                 TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(refreshToken);
                 String s = jSONUtil.objectToString(refresh);
-                System.out.println("JSON object as string after decode [" + refresh.getClass().getSimpleName() + "]:");
+                System.out.println("Refresh token as string after decode [" + refresh.getClass().getSimpleName() + "]:");
                 System.out.println("\t" + s);
 
                 System.out.println("===============" + refresh.getAccessTokenID() + "=============");
                 for (TokenAccess a: store.getTokens())
                     System.out.println(a.getTokenID());
                 System.out.println("==============" + store.getTokens().size() + "==============");
+
                 TokenAccess access = jSONUtil.getAccessToken(
                         store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
                         store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
