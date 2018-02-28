@@ -88,7 +88,7 @@ public class AuthServer {
                 System.out.println("\t" + s);
 
                 synchronized (this){
-                    System.out.println("\n============================");
+                    System.out.println("\n==============================");
                     for (TokenAccess a: store.getTokens())
                         System.out.println(a.getTokenID());
                     System.out.println("===============" + store.getTokens().size() + "==============\n");
