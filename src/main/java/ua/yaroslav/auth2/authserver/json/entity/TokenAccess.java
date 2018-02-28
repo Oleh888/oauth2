@@ -17,7 +17,8 @@ public class TokenAccess {
                        @JsonProperty("username") String username,
                        @JsonProperty("expires_in") long expiresIn,
                        @JsonProperty("scope") String scope,
-                       @JsonProperty("type") String type, int id) {
+                       @JsonProperty("type") String type,
+                       @JsonProperty(value = "id", required = false) int id) {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
