@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.yaroslav.auth2.authserver.jwt.JWTUtil;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
-import ua.yaroslav.auth2.datastore.Database;
+import ua.yaroslav.auth2.store.InMemoryStore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,11 +17,11 @@ public class AuthServer {
     private final String CLIENT_SECRET = "secret";
     private final String RESPONSE_TYPE = "code";
     private final JWTUtil jwtUtil;
-    private final Database database;
+    private final InMemoryStore inMemoryStore;
 
-    public AuthServer(JWTUtil jwtUtil, Database database) {
+    public AuthServer(JWTUtil jwtUtil, InMemoryStore inMemoryStore) {
         this.jwtUtil = jwtUtil;
-        this.database = new Database();
+        this.inMemoryStore = new InMemoryStore();
     }
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -36,7 +36,7 @@ public class AuthServer {
         if (formData.getClientID().equals(CLIENT_ID)) {
             if (formData.getResponseType().equals(RESPONSE_TYPE)) {
                 JWTAuthCode code = jwtUtil.getCode(formData);
-                database.addCode(code);
+                inMemoryStore.addCode(code);
                 String url = "https://developers.google.com/oauthplayground?" +
                         "code=" + jwtUtil.encodeObject(code) + "&" +
                         "state=markOne";
@@ -62,7 +62,7 @@ public class AuthServer {
         switch (grant_type) {
             case "authorization_code": {
                 JWTAuthCode jwtAuthCode = jwtUtil.readCodeFromB64(code);
-                if (database.isCodeValid(jwtAuthCode)) {
+                if (inMemoryStore.isCodeValid(jwtAuthCode)) {
                     JWTToken token = jwtUtil.getToken(jwtAuthCode.getClientID(), jwtAuthCode.getUsername(), scope);
                     jwtUtil.encodeObject(token);
 
@@ -92,7 +92,7 @@ public class AuthServer {
     @GetMapping(value = {"/tokens"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ArrayList<JWTToken> getTokens(){
-        return database.getTokens();
+        return inMemoryStore.getTokens();
     }
 
     @GetMapping("/auth")

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
-import ua.yaroslav.auth2.datastore.Database;
+import ua.yaroslav.auth2.store.InMemoryStore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,10 +16,10 @@ import java.util.Enumeration;
 
 @RestController
 public class ResourceServer {
-    private final Database database;
+    private final InMemoryStore inMemoryStore;
 
-    public ResourceServer(Database database) {
-        this.database = database;
+    public ResourceServer(InMemoryStore inMemoryStore) {
+        this.inMemoryStore = inMemoryStore;
     }
 
     @GetMapping(value = {"/private"})
@@ -44,6 +44,6 @@ public class ResourceServer {
     @GetMapping(value = {"/codes"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ArrayList<JWTAuthCode> getCodes(){
-        return database.getCodes();
+        return inMemoryStore.getCodes();
     }
 }

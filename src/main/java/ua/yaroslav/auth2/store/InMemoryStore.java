@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.datastore;
+package ua.yaroslav.auth2.store;
 
 import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.authserver.jwt.entity.JWTAuthCode;
@@ -7,11 +7,11 @@ import ua.yaroslav.auth2.authserver.jwt.entity.JWTToken;
 import java.util.ArrayList;
 
 @Component
-public class Database {
+public class InMemoryStore {
     private final ArrayList<JWTToken> tokens;
     private final ArrayList<JWTAuthCode> codes;
 
-    public Database() {
+    public InMemoryStore() {
         this.tokens = new ArrayList<>();
         this.codes = new ArrayList<>();
     }
