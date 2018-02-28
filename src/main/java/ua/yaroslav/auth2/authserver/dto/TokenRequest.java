@@ -52,7 +52,7 @@ public class TokenRequest {
         this.client_secret = client_secret;
     }
 
-    public void setGrantType(String grant_type) {
+    public void setgrant_type(String grant_type) {
         this.grant_type = grant_type;
     }
 
