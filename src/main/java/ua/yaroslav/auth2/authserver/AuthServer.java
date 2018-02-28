@@ -81,6 +81,7 @@ public class AuthServer {
 //                break;
                 TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
                 TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
+                store.addToken(access);
 
                 String s = jSONUtil.objectToString(refresh);
                 System.out.println("refresh token as string after decode [" + refresh.getClass().getSimpleName() + "]:");
@@ -107,7 +108,6 @@ public class AuthServer {
                         store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
                         store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
                         scope);
-                store.addToken(access);
                 return "{\n" +
                         "token_type: \"" + access.getType() +"\",\n" +
                         "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +

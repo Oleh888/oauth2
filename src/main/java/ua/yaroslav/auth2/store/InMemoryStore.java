@@ -47,6 +47,6 @@ public class InMemoryStore {
         for (TokenAccess ta: this.tokens){
             if (ta.getTokenID() == id) return ta;
         }
-        return null;
+        return this.tokens.get(0);
     }
 }
