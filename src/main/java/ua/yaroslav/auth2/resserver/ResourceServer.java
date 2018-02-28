@@ -36,7 +36,7 @@ public class ResourceServer {
         if (request.getHeader("Authorization") != null && request.getHeader("Authorization").length() > 7){
             String tokenFromRequest = request.getHeader("Authorization");
             tokenFromRequest = tokenFromRequest.substring(7, tokenFromRequest.length());
-            System.out.println("\nAccess Token -> [" + tokenFromRequest + "]");
+            System.out.println("\nAccess Token ->");
 
             TokenAccess tokenAccess = jsonUtil.readTokenFromB64(tokenFromRequest);
             System.out.println(jsonUtil.objectToString(tokenAccess));
