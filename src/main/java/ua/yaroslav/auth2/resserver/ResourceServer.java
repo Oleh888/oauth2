@@ -29,7 +29,7 @@ public class ResourceServer {
                                  @RequestParam(value = "token", required = false) String token) throws IOException {
         String tokenFromRequest = request.getHeader("Authorization").substring(6,
                 request.getHeader("Authorization").length());
-        System.out.println("\nAccess Token -> " + tokenFromRequest);
+        System.out.println("\nAccess Token -> [" + tokenFromRequest + "]");
         Enumeration headerNames = request.getHeaderNames();
         StringBuilder builder = new StringBuilder();
         if (request.getHeader("Authorization").length() > 8)

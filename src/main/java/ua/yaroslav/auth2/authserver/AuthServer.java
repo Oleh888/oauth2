@@ -67,6 +67,7 @@ public class AuthServer {
                 }
                 AuthCode authCode = jSONUtil.readCodeFromB64(code);
                 TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
+                System.out.println("ID of AT: " + access.getTokenID());
                 TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
                 store.addToken(access);
 
