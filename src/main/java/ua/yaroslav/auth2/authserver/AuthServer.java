@@ -37,6 +37,7 @@ public class AuthServer {
         if (formData.getClientID().equals(CLIENT_ID)) {
             if (formData.getResponseType().equals(RESPONSE_TYPE)) {
                 AuthCode code = jSONUtil.getCode(formData);
+                store.addCode(code);
                 String url = "https://developers.google.com/oauthplayground?" +
                         "code=" + jSONUtil.encodeObject(code) + "&" +
                         "state=markOne";
@@ -110,6 +111,7 @@ public class AuthServer {
                         store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
                         store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
                         scope);
+                store.addToken(access);
                 return "{\n" +
                         "token_type: \"" + access.getType() +"\",\n" +
                         "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +

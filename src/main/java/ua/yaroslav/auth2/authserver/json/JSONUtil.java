@@ -24,7 +24,6 @@ public class JSONUtil {
 
     public AuthCode getCode(FormData formData){
         AuthCode code = new AuthCode(formData.getClientID(),formData.getUsername(),new Date().getTime() + 15000);
-        store.addCode(code);
         return code;
     }
 
@@ -32,7 +31,6 @@ public class JSONUtil {
         if (scope == "") scope = "grant_all";
         TokenAccess access = new TokenAccess(clientID, username, new Date().getTime() + 60000,
                 scope, "bearer", store.getTokens().size());
-        store.addToken(access);
         return access;
     }
 
