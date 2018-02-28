@@ -46,4 +46,10 @@ public class ResourceServer {
     public ArrayList<JWTAuthCode> getCodes(){
         return inMemoryStore.getCodes();
     }
+
+    @GetMapping(value = {"/count"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getInfo(){
+        return inMemoryStore.getCodes().size() + "; " + inMemoryStore.getTokens();
+    }
 }

@@ -14,6 +14,8 @@ public class InMemoryStore {
     public InMemoryStore() {
         this.tokens = new ArrayList<>();
         this.codes = new ArrayList<>();
+        this.tokens.add(new JWTToken("client","user",9999,"grant_all","bearer"));
+        this.codes.add(new JWTAuthCode("client","user", 9999));
     }
 
     public void addToken(JWTToken token){
