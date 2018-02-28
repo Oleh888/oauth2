@@ -60,6 +60,7 @@ public class AuthServer {
         System.out.println("grant_type: \n\t" + grant_type);
         System.out.println("code: \n\t" + code);
         System.out.println("scope: \n\t" + "[" + scope + "]\n");
+        System.out.println(request.getServletPath() + "\n");
 
         switch (grant_type) {
             case "authorization_code": {
@@ -101,10 +102,10 @@ public class AuthServer {
                 System.out.println("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
                 System.out.println("\t" + s);
 
-                System.out.println("===============" + refresh.getAccessTokenID() + "=============");
+                System.out.println("\n============================");
                 for (TokenAccess a: store.getTokens())
                     System.out.println(a.getTokenID());
-                System.out.println("==============" + store.getTokens().size() + "==============");
+                System.out.println("=============================\n");
 
                 TokenAccess access = jSONUtil.getAccessToken(
                         store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
