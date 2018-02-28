@@ -79,6 +79,8 @@ public class AuthorizationServer {
                         "}";
             }
             case "refresh_token": {
+                System.out.println("--------------------get-token-invocation[GT:" +
+                        tokenRequest.getGrantType() + "]--------------------\n");
                 TokenRefresh refresh = jsonUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
                 String s = jsonUtil.objectToString(refresh);
                 System.out.println("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
