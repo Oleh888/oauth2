@@ -10,11 +10,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class InMemoryStore {
     private final CopyOnWriteArrayList<TokenAccess> tokens;
-    private final ArrayList<AuthCode> codes;
+    private final CopyOnWriteArrayList<AuthCode> codes;
 
     public InMemoryStore() {
         this.tokens = new CopyOnWriteArrayList<>();
-        this.codes = new ArrayList<>();
+        this.codes = new CopyOnWriteArrayList<>();
         this.tokens.add(new TokenAccess("client","user",9999,"grant_all","bearer", 9999));
         this.codes.add(new AuthCode("client","user", 9999));
     }
@@ -35,7 +35,7 @@ public class InMemoryStore {
         return this.codes.contains(code);
     }
 
-    public ArrayList<AuthCode> getCodes(){
+    public CopyOnWriteArrayList<AuthCode> getCodes(){
         return codes;
     }
     public CopyOnWriteArrayList<TokenAccess> getTokens(){ return tokens; }

@@ -80,34 +80,36 @@ public class AuthServer {
                             "expires_in: " + access.getExpiresIn() +"\n" +
                             "}";
                 }
+                break;
             }
             case "refresh_token": {
                 System.out.println("Refresh Token: " + refreshToken);
-//                TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(refreshToken);
-//                String s = jSONUtil.objectToString(refresh);
-//                System.out.println("JSON object as string after decode [" + refresh.getClass().getSimpleName() + "]:");
-//                System.out.println("\t" + s);
-//
-//                System.out.println("===============" + refresh.getAccessTokenID() + "=============");
-//                for (TokenAccess a: store.getTokens())
-//                    System.out.println(a.getTokenID());
-//                System.out.println("==============" + store.getTokens().size() + "==============");
-//                TokenAccess access = jSONUtil.getAccessToken(
-//                        store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
-//                        store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
-//                        scope);
-//                store.addToken(access);
-//                return "{\n" +
-//                        "token_type: \"" + access.getType() +"\",\n" +
-//                        "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
-//                        "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
-//                        "expires_in: " + access.getExpiresIn() +"\n" +
-//                        "}";
+                TokenRefresh refresh = jSONUtil.readRefreshTokenFromB64(refreshToken);
+                String s = jSONUtil.objectToString(refresh);
+                System.out.println("JSON object as string after decode [" + refresh.getClass().getSimpleName() + "]:");
+                System.out.println("\t" + s);
+
+                System.out.println("===============" + refresh.getAccessTokenID() + "=============");
+                for (TokenAccess a: store.getTokens())
+                    System.out.println(a.getTokenID());
+                System.out.println("==============" + store.getTokens().size() + "==============");
+                TokenAccess access = jSONUtil.getAccessToken(
+                        store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
+                        store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
+                        scope);
+                store.addToken(access);
+                return "{\n" +
+                        "token_type: \"" + access.getType() +"\",\n" +
+                        "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
+                        "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
+                        "expires_in: " + access.getExpiresIn() +"\n" +
+                        "}";
             }
             default: {
                 return "{\"error\": \"invalid_grant_type\"}";
             }
         }
+        return "{\"error\": \"invalid_grant_type\"}";
     }
 
     @GetMapping("/")

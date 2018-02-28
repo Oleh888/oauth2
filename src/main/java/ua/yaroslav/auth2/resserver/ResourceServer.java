@@ -45,7 +45,7 @@ public class ResourceServer {
 
     @GetMapping(value = {"/codes"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ArrayList<AuthCode> getCodes(){
+    public CopyOnWriteArrayList<AuthCode> getCodes(){
         return inMemoryStore.getCodes();
     }
 
