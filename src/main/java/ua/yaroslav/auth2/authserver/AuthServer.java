@@ -66,21 +66,33 @@ public class AuthServer {
         switch (grant_type) {
             case "authorization_code": {
                 AuthCode authCode = jSONUtil.readCodeFromB64(code);
-                if (store.isCodeValid(authCode)) {
-                    TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
-                    TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
+//                if (store.isCodeValid(authCode)) {
+//                    TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
+//                    TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
+//
+//                    String s = jSONUtil.objectToString(refresh);
+//                    System.out.println("refresh token as string after decode [" + refresh.getClass().getSimpleName() + "]:");
+//                    System.out.println("\t" + s);
+//                    return "{\n" +
+//                            "token_type: \"" + access.getType() +"\",\n" +
+//                            "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
+//                            "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
+//                            "expires_in: " + access.getExpiresIn() +"\n" +
+//                            "}";
+//                }
+//                break;
+                TokenAccess access = jSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), scope);
+                TokenRefresh refresh = jSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), access.getTokenID());
 
-                    String s = jSONUtil.objectToString(refresh);
-                    System.out.println("refresh token as string after decode [" + refresh.getClass().getSimpleName() + "]:");
-                    System.out.println("\t" + s);
-                    return "{\n" +
-                            "token_type: \"" + access.getType() +"\",\n" +
-                            "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
-                            "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
-                            "expires_in: " + access.getExpiresIn() +"\n" +
-                            "}";
-                }
-                break;
+                String s = jSONUtil.objectToString(refresh);
+                System.out.println("refresh token as string after decode [" + refresh.getClass().getSimpleName() + "]:");
+                System.out.println("\t" + s);
+                return "{\n" +
+                        "token_type: \"" + access.getType() +"\",\n" +
+                        "access_token: \"" + jSONUtil.encodeObject(access) + "\",\n" +
+                        "refresh_token: \"" + jSONUtil.encodeObject(refresh) + "\",\n" +
+                        "expires_in: " + access.getExpiresIn() +"\n" +
+                        "}";
             }
             case "refresh_token": {
                 System.out.println("Refresh Token: " + refreshToken);
@@ -109,7 +121,6 @@ public class AuthServer {
                 return "{\"error\": \"invalid_grant_type\"}";
             }
         }
-        return "{\"error\": \"invalid_grant_type\"}";
     }
 
     @GetMapping("/")
