@@ -27,7 +27,9 @@ public class ResourceServer {
     @GetMapping(value = {"/private"})
     public String getPrivateData(HttpServletRequest request, HttpServletResponse response,
                                  @RequestParam(value = "token", required = false) String token) throws IOException {
-        System.out.println("\nAuth Header -> " + request.getHeader("Authorization"));
+        String tokenFromRequest = request.getHeader("Authorization").substring(6,
+                request.getHeader("Authorization").length());
+        System.out.println("\nAccess Token -> " + tokenFromRequest);
         Enumeration headerNames = request.getHeaderNames();
         StringBuilder builder = new StringBuilder();
         if (request.getHeader("Authorization").length() > 8)

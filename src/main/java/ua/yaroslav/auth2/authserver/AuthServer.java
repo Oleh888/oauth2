@@ -101,6 +101,7 @@ public class AuthServer {
                         store.getTokenByID(refresh.getAccessTokenID()).getClientID(),
                         store.getTokenByID(refresh.getAccessTokenID()).getUsername(),
                         scope);
+                access.setTokenID(store.getTokens().size());
                 store.addToken(access);
                 return "{\n" +
                         "token_type: \"" + access.getType() +"\",\n" +
