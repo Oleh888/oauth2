@@ -6,7 +6,7 @@ public class TokenRefresh {
     private String clientID;
     private String username;
     private long expiresIn;
-    private int accessTokenHash;
+    private int accessTokenID;
 
 
     public TokenRefresh(){}
@@ -58,11 +58,11 @@ public class TokenRefresh {
         return Objects.hash(clientID, username, expiresIn);
     }
 
-    public void setAccessTokenHash(int accessTokenHash) {
-        this.accessTokenHash = accessTokenHash;
+    public void setAccessTokenID(int accessTokenID) {
+        this.accessTokenID = accessTokenID;
     }
 
-    public int getAccessTokenHash() {
-        return accessTokenHash;
+    public int getAccessTokenID() {
+        return accessTokenID;
     }
 }

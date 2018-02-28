@@ -6,6 +6,7 @@ import ua.yaroslav.auth2.authserver.FormData;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
 import ua.yaroslav.auth2.authserver.json.entity.TokenRefresh;
+import ua.yaroslav.auth2.store.InMemoryStore;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -13,9 +14,11 @@ import java.util.Date;
 
 @Component
 public class JSONUtil {
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
+    private final InMemoryStore store;
 
-    public JSONUtil(){
+    public JSONUtil(InMemoryStore store){
+        this.store = store;
         this.mapper = new ObjectMapper();
     }
 
@@ -25,7 +28,8 @@ public class JSONUtil {
 
     public TokenAccess getAccessToken(String clientID, String username , String scope){
         if (scope == "") scope = "grant_all";
-        return new TokenAccess(clientID, username, new Date().getTime() + 60000, scope, "bearer");
+        return new TokenAccess(clientID, username, new Date().getTime() + 60000,
+                scope, "bearer", store.getTokens().size());
     }
 
     public AuthCode readCodeFromB64(String code) throws IOException {
@@ -55,7 +59,7 @@ public class JSONUtil {
 
     public TokenRefresh getRefreshToken(String clientID, String username, int ath){
         TokenRefresh refresh = new TokenRefresh(clientID, username, new Date().getTime() + 60000 * 30);
-        refresh.setAccessTokenHash(ath);
+        refresh.setAccessTokenID(ath);
         return refresh;
     }
 
