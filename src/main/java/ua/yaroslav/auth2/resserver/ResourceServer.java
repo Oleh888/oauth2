@@ -32,12 +32,12 @@ public class ResourceServer {
     @GetMapping(value = {"/private"})
     public String getPrivateData(HttpServletRequest request, HttpServletResponse response,
                                  @RequestParam(value = "token", required = false) String token) throws IOException {
-        System.out.println("-----------------request-for-a-protected-resource---------------\n");
+        System.out.println("-------------------request-for-a-protected-resource----------------\n");
         StringBuilder builder = new StringBuilder();
         if (request.getHeader("Authorization") != null && request.getHeader("Authorization").length() > 7){
             String tokenFromRequest = request.getHeader("Authorization");
             tokenFromRequest = tokenFromRequest.substring(7, tokenFromRequest.length());
-            System.out.println("\nAccess Token ->");
+            System.out.println("Access Token ->");
 
             TokenAccess tokenAccess = jsonUtil.readTokenFromB64(tokenFromRequest);
             System.out.println(jsonUtil.objectToString(tokenAccess));

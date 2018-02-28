@@ -13,12 +13,14 @@ public class InMemoryStore {
     private final CopyOnWriteArrayList<TokenAccess> tokens;
     private final CopyOnWriteArrayList<AuthCode> codes;
 
+
     public InMemoryStore() {
         this.tokens = new CopyOnWriteArrayList<>();
         this.codes = new CopyOnWriteArrayList<>();
-        this.tokens.add(new TokenAccess("client","user",9999,"grant_all","bearer", 9999));
-        this.codes.add(new AuthCode("client","user", 9999));
+        //this.tokens.add(new TokenAccess("client","user",9999,"grant_all","bearer", 9999));
+        //this.codes.add(new AuthCode("client","user", 9999));
     }
+
 
     public void addToken(TokenAccess token){
         synchronized (this){
@@ -41,6 +43,7 @@ public class InMemoryStore {
     public CopyOnWriteArrayList<AuthCode> getCodes(){
         return codes;
     }
+
     public CopyOnWriteArrayList<TokenAccess> getTokens(){ return tokens; }
 
     public TokenAccess getTokenByID(int id){

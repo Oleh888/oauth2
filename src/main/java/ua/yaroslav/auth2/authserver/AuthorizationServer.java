@@ -48,7 +48,7 @@ public class AuthorizationServer {
         }
     }
 
-    @PostMapping("/token")
+    @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getToken(TokenRequest tokenRequest, HttpServletRequest request) throws IOException {
         switch (tokenRequest.getGrantType()) {
