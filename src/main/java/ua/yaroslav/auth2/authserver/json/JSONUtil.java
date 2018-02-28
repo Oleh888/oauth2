@@ -48,7 +48,7 @@ public class JSONUtil {
 
     public String encodeObject(Object code){
         String s = objectToString(code);
-        System.out.println("JSON object as string after encoding:");
+        System.out.println("JSON object as string after encoding [" + code.getClass().getSimpleName() + "]:");
         System.out.println("\t" + s);
         return Base64.getEncoder().encodeToString(s.getBytes());
     }
