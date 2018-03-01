@@ -59,8 +59,8 @@ public class JSONUtil {
         return Base64.getEncoder().encodeToString(Objects.requireNonNull(objectToString(code)).getBytes());
     }
 
-    public static RefreshToken getRefreshToken(String clientID, String username) {
-        return new RefreshToken(clientID, username, new Date().getTime() + 60000 * 30);
+    public static RefreshToken getRefreshToken(String clientID, String username, String scope) {
+        return new RefreshToken(clientID, username, new Date().getTime() + 60000 * 30, scope);
     }
 
     public static RefreshToken readRefreshTokenFromB64(String token) throws IOException {

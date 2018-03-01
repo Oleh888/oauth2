@@ -9,6 +9,7 @@ public class RefreshToken {
     private String username;
     private long expiresIn;
     private int accessTokenID;
+    private String scope;
 
 
     public RefreshToken() {
@@ -16,10 +17,12 @@ public class RefreshToken {
 
     public RefreshToken(@JsonProperty("client_id") String clientID,
                         @JsonProperty("username") String username,
-                        @JsonProperty("expires_in") long expiresIn) {
+                        @JsonProperty("expires_in") long expiresIn,
+                        @JsonProperty("scope") String scope) {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
+        this.scope = scope;
     }
 
 
@@ -53,6 +56,14 @@ public class RefreshToken {
 
     public int getAccessTokenID() {
         return accessTokenID;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
     @Override

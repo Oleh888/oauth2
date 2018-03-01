@@ -38,12 +38,17 @@ public class TokenExchangeController {
             case "authorization_code": {
                 logger.info(tokenRequest.toString());
 
-                AuthCode authCode = JSONUtil.readCodeFromB64(tokenRequest.getCode());
-                AccessToken access = JSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
-                RefreshToken refresh = JSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername());
+                AuthCode authCode =
+                        JSONUtil.readCodeFromB64(tokenRequest.getCode());
+                AccessToken access =
+                        JSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
+                RefreshToken refresh =
+                        JSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
                 store.addToken(access);
 
+                logger.info("New Refresh Token:");
                 logger.info(JSONUtil.objectToString(refresh));
+                logger.info("New Access Token:");
                 logger.info(JSONUtil.objectToString(access));
 
                 return "{\n" +
