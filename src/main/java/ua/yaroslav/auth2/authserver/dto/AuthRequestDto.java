@@ -71,9 +71,9 @@ public class AuthRequestDto {
 
     public String toString(){
         return  "\n\nAuthRequest: \n\tclient_id: \n\t\t" + client_id +
-                "\n\tresponse_type: \n\t\t" + response_type +
-                "\n\tusername: \n\t\t" + username +
-                "\n\tpassword: \n\t\t" + password +
-                "\n\tscope: \n\t\t" + "[" + scope + "]\n" ;
+                "\n\tresponse_type: \n\t" + response_type +
+                "\n\tusername: \n\t" + username +
+                "\n\tpassword: \n\t" + password +
+                "\n\tscope: \n\t" + "[" + scope + "]\n" ;
     }
 }
