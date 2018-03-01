@@ -68,4 +68,12 @@ public class AuthRequestDto {
     public void setRedirect_uri(String redirect_uri) {
         this.redirect_uri = redirect_uri;
     }
+
+    public String toString(){
+        return  "client_id: \n\t" + client_id +
+                "response_type: \n\t" + response_type +
+                "username: \n\t" + username +
+                "password: \n\t" + password +
+                "scope: \n\t" + "[" + scope + "]\n" ;
+    }
 }
