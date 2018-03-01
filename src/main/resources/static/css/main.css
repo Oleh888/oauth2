@@ -1,6 +1,6 @@
 .main-container {
     margin: auto;
-    padding: 18% 20% 20% 40%;
+    padding: 17% 10% 20% 38%;
 }
 
 input {
@@ -10,8 +10,11 @@ input {
 }
 
 button {
-    margin-left: 80px;
+    margin-left: 40px;
     margin-top: 5px;
-    width: 120px;
-    border-radius: 2px;
+    width: 160px;
+}
+
+a:hover {
+    text-decoration: none;
 }

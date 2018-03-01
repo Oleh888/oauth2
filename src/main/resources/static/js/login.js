@@ -15,7 +15,8 @@ var login = function(){
 
     var request = new XMLHttpRequest;
     request.onload = function() {
-
+        console.log("done!");
+        console.log(request.responseText);
     };
     request.open("POST", "/auth");
     request.send(data);

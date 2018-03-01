@@ -1,5 +1,7 @@
 package ua.yaroslav.auth2.authserver.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -21,9 +23,8 @@ public class AuthorizationController {
     private String CLIENT_ID;
     @Value("${client.secret}")
     private String CLIENT_SECRET;
-
     private final InMemoryStore store;
-
+    private static final Logger logger = LoggerFactory.getLogger(AuthorizationController.class);
 
     public AuthorizationController(InMemoryStore store) {
         this.store = store;
@@ -32,12 +33,12 @@ public class AuthorizationController {
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void getCode(AuthRequestDto authRequest, HttpServletResponse response) throws IOException {
-        System.out.println("\n--------------------get-code-invocation---------------------\n");
-        System.out.println("client_id: \n\t" + authRequest.getClientID());
-        System.out.println("response_type: \n\t" + authRequest.getResponseType());
-        System.out.println("username: \n\t" + authRequest.getUsername());
-        System.out.println("password: \n\t" + authRequest.getPassword());
-        System.out.println("scope: \n\t" + "[" + authRequest.getScope() + "]\n");
+        logger.info("\n--------------------get-code-invocation---------------------\n");
+        logger.info("client_id: \n\t" + authRequest.getClientID());
+        logger.info("response_type: \n\t" + authRequest.getResponseType());
+        logger.info("username: \n\t" + authRequest.getUsername());
+        logger.info("password: \n\t" + authRequest.getPassword());
+        logger.info("scope: \n\t" + "[" + authRequest.getScope() + "]\n");
 
         if (authRequest.getClientID().equals(CLIENT_ID)) {
             if (authRequest.getResponseType().equals("code")) {
@@ -52,7 +53,8 @@ public class AuthorizationController {
     }
 
     @GetMapping("/auth")
-    public String getLogin(LoginRequestDto loginRequest, Model model) {
+    public String getLogin(LoginRequestDto loginRequest, Model model, HttpServletResponse response) {
+        response.setHeader("Cache-Control", "max-age=1");
         model.addAttribute("redirect_uri", loginRequest.getRedirectURI());
         model.addAttribute("client_id", loginRequest.getClientID());
         model.addAttribute("response_type", loginRequest.getResponseType());

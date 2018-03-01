@@ -1,5 +1,7 @@
 package ua.yaroslav.auth2.authserver.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -20,8 +22,8 @@ public class TokenExchangeController {
     private String CLIENT_ID;
     @Value("${client.secret}")
     private String CLIENT_SECRET;
-
     private final InMemoryStore store;
+    private static final Logger logger = LoggerFactory.getLogger(TokenExchangeController.class);
 
     public TokenExchangeController(InMemoryStore store) {
         this.store = store;
@@ -32,23 +34,22 @@ public class TokenExchangeController {
     public String getToken(TokenRequestDto tokenRequest) throws IOException {
         switch (tokenRequest.getGrantType()) {
             case "authorization_code": {
-                System.out.println("--------------------get-token-invocation[GT:" +
-                        tokenRequest.getGrantType() + "]--------------------\n");
-                System.out.println("client_id: \n\t" + tokenRequest.getClientID());
-                System.out.println("client_secret: \n\t" + tokenRequest.getClientSecret());
-                System.out.println("grant_type: \n\t" + tokenRequest.getGrantType());
-                System.out.println("code: \n\t" + tokenRequest.getCode());
-                System.out.println("scope: \n\t" + "[" + tokenRequest.getScope() + "]\n");
+                logger.info("--------------------get-token-invocation[GT:" + tokenRequest.getGrantType() + "]--------------------\n");
+                logger.info("client_id: \n\t" + tokenRequest.getClientID());
+                logger.info("client_secret: \n\t" + tokenRequest.getClientSecret());
+                logger.info("grant_type: \n\t" + tokenRequest.getGrantType());
+                logger.info("code: \n\t" + tokenRequest.getCode());
+                logger.info("scope: \n\t" + "[" + tokenRequest.getScope() + "]\n");
 
                 AuthCode authCode = JSONUtil.readCodeFromB64(tokenRequest.getCode());
                 TokenAccess access = JSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
                 TokenRefresh refresh = JSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername());
                 store.addToken(access);
 
-                System.out.println("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
-                System.out.println(JSONUtil.objectToString(refresh));
-                System.out.println("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
-                System.out.println(JSONUtil.objectToString(access));
+                logger.info("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
+                logger.info(JSONUtil.objectToString(refresh));
+                logger.info("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
+                logger.info(JSONUtil.objectToString(access));
 
                 return "{\n" +
                         "token_type: \"" + access.getType() + "\",\n" +
@@ -58,12 +59,12 @@ public class TokenExchangeController {
                         "}";
             }
             case "refresh_token": {
-                System.out.println("--------------------get-token-invocation[GT:" +
-                        tokenRequest.getGrantType() + "]--------------------\n");
+                logger.info("--------------------get-token-invocation[GT:" + tokenRequest.getGrantType() + "]--------------------\n");
+
                 TokenRefresh refresh = JSONUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
-                String s = JSONUtil.objectToString(refresh);
-                System.out.println("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
-                System.out.println("\t" + s);
+
+                logger.info("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
+                logger.info("\t" + JSONUtil.objectToString(refresh));
 
                 TokenAccess access = JSONUtil.getAccessToken(refresh.getClientID(), refresh.getUsername(), tokenRequest.getScope());
                 store.addToken(access);
