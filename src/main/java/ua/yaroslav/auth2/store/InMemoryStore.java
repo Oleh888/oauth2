@@ -1,8 +1,8 @@
 package ua.yaroslav.auth2.store;
 
 import org.springframework.stereotype.Repository;
-import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.AccessToken;
+import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

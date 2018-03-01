@@ -21,6 +21,7 @@ public class AuthRequestDto {
         this.scope = scope;
     }
 
+
     public String getUsername() {
         return username;
     }
@@ -69,12 +70,12 @@ public class AuthRequestDto {
         this.redirect_uri = redirect_uri;
     }
 
-    public String toString(){
-        return  "\n" + this.getClass().getSimpleName() + ": " +
+    public String toString() {
+        return "\n" + this.getClass().getSimpleName() + ": " +
                 "\n   client_id:     \n\t\t" + client_id +
                 "\n   response_type: \n\t\t" + response_type +
                 "\n   username:      \n\t\t" + username +
                 "\n   password:      \n\t\t" + password +
-                "\n   scope:         \n\t\t" + "[" + scope + "]\n" ;
+                "\n   scope:         \n\t\t" + "[" + scope + "]\n";
     }
 }

@@ -10,7 +10,9 @@ public class AuthCode {
     private long expiresIn;
 
 
-    public AuthCode(){}
+    public AuthCode() {
+    }
+
     public AuthCode(@JsonProperty("client_id") String clientID,
                     @JsonProperty("username") String username,
                     @JsonProperty("expires_in") long expiresIn) {

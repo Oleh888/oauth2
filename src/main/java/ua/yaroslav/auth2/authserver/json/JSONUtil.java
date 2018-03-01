@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
 import ua.yaroslav.auth2.authserver.dto.AuthRequestDto;
-import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.AccessToken;
+import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.RefreshToken;
 
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class JSONUtil {
 
     public static String objectToString(Object code) {
         try {
-            return mapper.writeValueAsString(code) + "\n";
+            return "\n" + mapper.writeValueAsString(code) + "\n";
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

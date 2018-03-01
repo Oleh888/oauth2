@@ -9,7 +9,9 @@ public class TokenRequestDto {
     private String refresh_token;
 
 
-    public TokenRequestDto(){}
+    public TokenRequestDto() {
+    }
+
     public TokenRequestDto(String client_id, String client_secret, String grant_type, String code, String scope, String refresh_token) {
         this.client_id = client_id;
         this.client_secret = client_secret;
@@ -68,17 +70,17 @@ public class TokenRequestDto {
         this.refresh_token = refresh_token;
     }
 
-    public String toString(){
+    public String toString() {
         String rf = null;
         String cd = null;
-        if(refresh_token != null) rf = refresh_token.substring(0,30) + "...";
-        if(code != null) cd = code.substring(0,30) + "...";
-        return  "\n" + this.getClass().getSimpleName() + ": " +
+        if (refresh_token != null) rf = refresh_token.substring(0, 30) + "...";
+        if (code != null) cd = code.substring(0, 30) + "...";
+        return "\n" + this.getClass().getSimpleName() + ": " +
                 "\n   client_id:     \n\t\t" + client_id +
                 "\n   client_secret: \n\t\t" + client_secret +
                 "\n   grant_type:    \n\t\t" + grant_type +
                 "\n   code:          \n\t\t" + cd +
                 "\n   refresh_token: \n\t\t" + rf +
-                "\n   scope:         \n\t\t" + "[" + scope + "]\n" ;
+                "\n   scope:         \n\t\t" + "[" + scope + "]\n";
     }
 }

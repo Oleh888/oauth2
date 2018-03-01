@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ua.yaroslav.auth2.authserver.dto.TokenRequestDto;
 import ua.yaroslav.auth2.authserver.json.JSONUtil;
-import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.AccessToken;
+import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.RefreshToken;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
@@ -25,9 +25,11 @@ public class TokenExchangeController {
     private final InMemoryStore store;
     private static final Logger logger = LoggerFactory.getLogger(TokenExchangeController.class);
 
+
     public TokenExchangeController(InMemoryStore store) {
         this.store = store;
     }
+
 
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

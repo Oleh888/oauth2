@@ -1,13 +1,14 @@
-package ua.yaroslav.auth2.resserver;
+package ua.yaroslav.auth2.resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.authserver.json.JSONUtil;
-import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.authserver.json.entity.AccessToken;
+import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,26 +19,29 @@ import java.util.Enumeration;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
-public class ResourceServer {
+public class ResourceController {
     private final InMemoryStore inMemoryStore;
+    private final static Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
-    public ResourceServer(InMemoryStore inMemoryStore) {
+
+    public ResourceController(InMemoryStore inMemoryStore) {
         this.inMemoryStore = inMemoryStore;
     }
 
 
     @GetMapping(value = {"/private"})
-    public String getPrivateData(HttpServletRequest request, HttpServletResponse response,
-                                 @RequestParam(value = "token", required = false) String token) throws IOException {
-        System.out.println("-------------------request-for-a-protected-resource----------------\n");
+    public String getPrivateData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        logger.info("Private Resource was requested");
         StringBuilder builder = new StringBuilder();
+
         if (request.getHeader("Authorization") != null && request.getHeader("Authorization").length() > 7) {
             String tokenFromRequest = request.getHeader("Authorization");
-            tokenFromRequest = tokenFromRequest.substring(7, tokenFromRequest.length());
-            System.out.println("Access Token ->");
 
+            tokenFromRequest = tokenFromRequest.substring(7, tokenFromRequest.length());
             AccessToken accessToken = JSONUtil.readTokenFromB64(tokenFromRequest);
-            System.out.println(JSONUtil.objectToString(accessToken));
+            logger.info("Access Token ->");
+            logger.info(JSONUtil.objectToString(accessToken));
+
             if (accessToken.getExpiresIn() < new Date().getTime()) {
                 Enumeration headerNames = request.getHeaderNames();
                 while (headerNames.hasMoreElements()) {

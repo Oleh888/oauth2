@@ -26,6 +26,7 @@ public class AuthorizationController {
     private final InMemoryStore store;
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationController.class);
 
+
     public AuthorizationController(InMemoryStore store) {
         this.store = store;
     }

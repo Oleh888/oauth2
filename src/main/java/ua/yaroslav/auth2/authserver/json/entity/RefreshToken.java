@@ -47,6 +47,14 @@ public class RefreshToken {
         this.expiresIn = expiresIn;
     }
 
+    public void setAccessTokenID(int accessTokenID) {
+        this.accessTokenID = accessTokenID;
+    }
+
+    public int getAccessTokenID() {
+        return accessTokenID;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,13 +68,5 @@ public class RefreshToken {
     @Override
     public int hashCode() {
         return Objects.hash(clientID, username, expiresIn);
-    }
-
-    public void setAccessTokenID(int accessTokenID) {
-        this.accessTokenID = accessTokenID;
-    }
-
-    public int getAccessTokenID() {
-        return accessTokenID;
     }
 }

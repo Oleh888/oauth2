@@ -7,6 +7,7 @@ public class LoginRequestDto {
     private String access_type;
     private String scope;
 
+
     public LoginRequestDto() {
 
     }
