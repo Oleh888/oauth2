@@ -14,7 +14,6 @@ import ua.yaroslav.auth2.store.InMemoryStore;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -42,7 +41,7 @@ public class ResourceController {
             logger.info("Access Token ->");
             logger.info(JSONUtil.objectToString(accessToken));
 
-            if (accessToken.getExpiresIn() < new Date().getTime()) {
+            if (accessToken.getExpiresIn() > System.currentTimeMillis()) {
                 Enumeration headerNames = request.getHeaderNames();
                 while (headerNames.hasMoreElements()) {
                     String key = (String) headerNames.nextElement();

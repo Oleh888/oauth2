@@ -12,7 +12,6 @@ import ua.yaroslav.auth2.authserver.json.entity.RefreshToken;
 
 import java.io.IOException;
 import java.util.Base64;
-import java.util.Date;
 import java.util.Objects;
 
 @Component
@@ -29,12 +28,12 @@ public class JSONUtil {
 
 
     public static AuthCode getCode(AuthRequestDto authRequest) {
-        return new AuthCode(authRequest.getClientID(), authRequest.getUsername(), new Date().getTime() + 15000);
+        return new AuthCode(authRequest.getClientID(), authRequest.getUsername(), System.currentTimeMillis() + 15*1000*5);
     }
 
     public static AccessToken getAccessToken(String clientID, String username, String scope) {
         if (StringUtils.isEmpty(scope)) scope = "grant_all";
-        return new AccessToken(clientID, username, new Date().getTime() + 60000, scope, "bearer");
+        return new AccessToken(clientID, username, System.currentTimeMillis() + 60*1000*5, scope, "bearer");
     }
 
     public static AuthCode readCodeFromB64(String code) throws IOException {
@@ -60,7 +59,7 @@ public class JSONUtil {
     }
 
     public static RefreshToken getRefreshToken(String clientID, String username, String scope) {
-        return new RefreshToken(clientID, username, new Date().getTime() + 60000 * 30, scope);
+        return new RefreshToken(clientID, username, System.currentTimeMillis() + 60000 * 30, scope);
     }
 
     public static RefreshToken readRefreshTokenFromB64(String token) throws IOException {
