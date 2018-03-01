@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.authserver.json.JSONUtil;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
-import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
+import ua.yaroslav.auth2.authserver.json.entity.AccessToken;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,9 +36,9 @@ public class ResourceServer {
             tokenFromRequest = tokenFromRequest.substring(7, tokenFromRequest.length());
             System.out.println("Access Token ->");
 
-            TokenAccess tokenAccess = JSONUtil.readTokenFromB64(tokenFromRequest);
-            System.out.println(JSONUtil.objectToString(tokenAccess));
-            if (tokenAccess.getExpiresIn() < new Date().getTime()) {
+            AccessToken accessToken = JSONUtil.readTokenFromB64(tokenFromRequest);
+            System.out.println(JSONUtil.objectToString(accessToken));
+            if (accessToken.getExpiresIn() < new Date().getTime()) {
                 Enumeration headerNames = request.getHeaderNames();
                 while (headerNames.hasMoreElements()) {
                     String key = (String) headerNames.nextElement();
@@ -65,7 +65,7 @@ public class ResourceServer {
 
     @GetMapping(value = {"/tokens"}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public CopyOnWriteArrayList<TokenAccess> getTokens() {
+    public CopyOnWriteArrayList<AccessToken> getTokens() {
         return inMemoryStore.getTokens();
     }
 

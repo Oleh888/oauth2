@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
-public class TokenAccess {
+public class AccessToken {
     private String clientID;
     private String username;
     private long expiresIn;
@@ -12,10 +12,10 @@ public class TokenAccess {
     private String type;
 
 
-    public TokenAccess() {
+    public AccessToken() {
     }
 
-    public TokenAccess(@JsonProperty("client_id") String clientID,
+    public AccessToken(@JsonProperty("client_id") String clientID,
                        @JsonProperty("username") String username,
                        @JsonProperty("expires_in") long expiresIn,
                        @JsonProperty("scope") String scope,
@@ -72,11 +72,11 @@ public class TokenAccess {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TokenAccess tokenAccess = (TokenAccess) o;
-        return expiresIn == tokenAccess.expiresIn &&
-                Objects.equals(clientID, tokenAccess.clientID) &&
-                Objects.equals(username, tokenAccess.username) &&
-                Objects.equals(scope, tokenAccess.scope);
+        AccessToken accessToken = (AccessToken) o;
+        return expiresIn == accessToken.expiresIn &&
+                Objects.equals(clientID, accessToken.clientID) &&
+                Objects.equals(username, accessToken.username) &&
+                Objects.equals(scope, accessToken.scope);
     }
 
     @Override

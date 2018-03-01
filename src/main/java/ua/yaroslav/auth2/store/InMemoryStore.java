@@ -2,13 +2,13 @@ package ua.yaroslav.auth2.store;
 
 import org.springframework.stereotype.Repository;
 import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
-import ua.yaroslav.auth2.authserver.json.entity.TokenAccess;
+import ua.yaroslav.auth2.authserver.json.entity.AccessToken;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Repository
 public class InMemoryStore {
-    private final CopyOnWriteArrayList<TokenAccess> tokens;
+    private final CopyOnWriteArrayList<AccessToken> tokens;
     private final CopyOnWriteArrayList<AuthCode> codes;
 
 
@@ -18,7 +18,7 @@ public class InMemoryStore {
     }
 
 
-    public void addToken(TokenAccess token) {
+    public void addToken(AccessToken token) {
         synchronized (this) {
             this.tokens.add(token);
         }
@@ -28,7 +28,7 @@ public class InMemoryStore {
         this.codes.add(code);
     }
 
-    public boolean isTokenValid(TokenAccess token) {
+    public boolean isTokenValid(AccessToken token) {
         return this.tokens.contains(token);
     }
 
@@ -40,7 +40,7 @@ public class InMemoryStore {
         return codes;
     }
 
-    public CopyOnWriteArrayList<TokenAccess> getTokens() {
+    public CopyOnWriteArrayList<AccessToken> getTokens() {
         return tokens;
     }
 }
