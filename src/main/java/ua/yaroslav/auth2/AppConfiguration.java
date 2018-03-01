@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.WebContentInterceptor;
 
 @Configuration
 @EnableWebMvc
-public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
+public class AppConfiguration extends WebMvcConfigurerAdapter {
     private final String[] CLASSPATH_RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
             "classpath:/static/", "classpath:/public/"

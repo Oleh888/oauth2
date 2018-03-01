@@ -54,7 +54,6 @@ public class AuthorizationController {
 
     @GetMapping("/auth")
     public String getLogin(LoginRequestDto loginRequest, Model model, HttpServletResponse response) {
-        response.setHeader("Cache-Control", "max-age=1");
         model.addAttribute("redirect_uri", loginRequest.getRedirectURI());
         model.addAttribute("client_id", loginRequest.getClientID());
         model.addAttribute("response_type", loginRequest.getResponseType());

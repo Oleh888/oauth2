@@ -19,10 +19,14 @@ import java.util.Objects;
 public class JSONUtil {
     private static ObjectMapper mapper;
 
-
-    public JSONUtil() {
+    static {
         JSONUtil.mapper = new ObjectMapper();
         JSONUtil.mapper.enable(SerializationFeature.INDENT_OUTPUT);
+    }
+
+    public JSONUtil() {
+//        JSONUtil.mapper = new ObjectMapper();
+//        JSONUtil.mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
 
