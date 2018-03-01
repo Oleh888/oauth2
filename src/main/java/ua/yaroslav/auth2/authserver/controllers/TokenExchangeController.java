@@ -41,9 +41,7 @@ public class TokenExchangeController {
                 TokenRefresh refresh = JSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername());
                 store.addToken(access);
 
-                logger.info("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
                 logger.info(JSONUtil.objectToString(refresh));
-                logger.info("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
                 logger.info(JSONUtil.objectToString(access));
 
                 return "{\n" +
@@ -54,7 +52,7 @@ public class TokenExchangeController {
                         "}";
             }
             case "refresh_token": {
-                logger.info("--------------------get-token-[GT:" + tokenRequest.getGrantType() + "]--------------------\n");
+                logger.info(tokenRequest.toString());
 
                 TokenRefresh refresh = JSONUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
 

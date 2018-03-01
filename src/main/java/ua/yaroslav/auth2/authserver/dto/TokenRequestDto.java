@@ -69,7 +69,7 @@ public class TokenRequestDto {
     }
 
     public String toString(){
-        return  "\n\nTokenRequest: " +
+        return  "\n\n" + this.getClass().getSimpleName() + ": " +
                 "\n   client_id:     \n\t\t" + client_id +
                 "\n   client_secret: \n\t\t" + client_secret +
                 "\n   grant_type:    \n\t\t" + grant_type +
