@@ -50,7 +50,7 @@ public class JSONUtil {
 
     public static String objectToString(Object code) {
         try {
-            return "\n" + code.getClass().getSimpleName() + ":\n" + mapper.writeValueAsString(code) + "\n";
+            return mapper.writeValueAsString(code) + "\n";
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
