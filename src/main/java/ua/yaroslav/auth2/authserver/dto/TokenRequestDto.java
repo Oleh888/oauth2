@@ -69,12 +69,14 @@ public class TokenRequestDto {
     }
 
     public String toString(){
+        String rf = null;
+        if(refresh_token != null) rf = refresh_token.substring(0,100);
         return  "\n" + this.getClass().getSimpleName() + ": " +
                 "\n   client_id:     \n\t\t" + client_id +
                 "\n   client_secret: \n\t\t" + client_secret +
                 "\n   grant_type:    \n\t\t" + grant_type +
                 "\n   code:          \n\t\t" + code +
-                "\n   refresh_token: \n\t\t" + refresh_token.substring(0,100) +
+                "\n   refresh_token: \n\t\t" + rf +
                 "\n   scope:         \n\t\t" + "[" + scope + "]\n" ;
     }
 }
