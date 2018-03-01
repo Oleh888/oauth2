@@ -34,22 +34,17 @@ public class TokenExchangeController {
     public String getToken(TokenRequestDto tokenRequest) throws IOException {
         switch (tokenRequest.getGrantType()) {
             case "authorization_code": {
-                logger.debug("--------------------get-token-[GT:" + tokenRequest.getGrantType() + "]--------------------\n");
-                logger.debug("client_id: \n\t" + tokenRequest.getClientID());
-                logger.debug("client_secret: \n\t" + tokenRequest.getClientSecret());
-                logger.debug("grant_type: \n\t" + tokenRequest.getGrantType());
-                logger.debug("code: \n\t" + tokenRequest.getCode());
-                logger.debug("scope: \n\t" + "[" + tokenRequest.getScope() + "]\n");
+                logger.info(tokenRequest.toString());
 
                 AuthCode authCode = JSONUtil.readCodeFromB64(tokenRequest.getCode());
                 TokenAccess access = JSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
                 TokenRefresh refresh = JSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername());
                 store.addToken(access);
 
-                logger.debug("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
-                logger.debug(JSONUtil.objectToString(refresh));
-                logger.debug("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
-                logger.debug(JSONUtil.objectToString(access));
+                logger.info("Refresh token as string after decode [AC] [" + refresh.getClass().getSimpleName() + "]:");
+                logger.info(JSONUtil.objectToString(refresh));
+                logger.info("Access token as string after decode [AC] [" + access.getClass().getSimpleName() + "]:");
+                logger.info(JSONUtil.objectToString(access));
 
                 return "{\n" +
                         "token_type: \"" + access.getType() + "\",\n" +
@@ -59,12 +54,12 @@ public class TokenExchangeController {
                         "}";
             }
             case "refresh_token": {
-                logger.debug("--------------------get-token-[GT:" + tokenRequest.getGrantType() + "]--------------------\n");
+                logger.info("--------------------get-token-[GT:" + tokenRequest.getGrantType() + "]--------------------\n");
 
                 TokenRefresh refresh = JSONUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
 
-                logger.debug("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
-                logger.debug("\t" + JSONUtil.objectToString(refresh));
+                logger.info("Refresh token as string after decode [RT] [" + refresh.getClass().getSimpleName() + "]:");
+                logger.info("\t" + JSONUtil.objectToString(refresh));
 
                 TokenAccess access = JSONUtil.getAccessToken(refresh.getClientID(), refresh.getUsername(), tokenRequest.getScope());
                 store.addToken(access);

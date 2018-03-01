@@ -67,4 +67,14 @@ public class TokenRequestDto {
     public void setRefresh_token(String refresh_token) {
         this.refresh_token = refresh_token;
     }
+
+    public String toString(){
+        return  "\n\nTokenRequest: " +
+                "\n   client_id:     \n\t\t" + client_id +
+                "\n   client_secret: \n\t\t" + client_secret +
+                "\n   grant_type:    \n\t\t" + grant_type +
+                "\n   code:          \n\t\t" + code +
+                "\n   refresh_token: \n\t\t" + refresh_token +
+                "\n   scope:         \n\t\t" + "[" + scope + "]\n" ;
+    }
 }
