@@ -33,7 +33,7 @@ public class AuthorizationController {
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void getCode(AuthRequestDto authRequest, HttpServletResponse response) throws IOException {
-        logger.info("\nAuthRequest:\n" + authRequest);
+        logger.info(authRequest.toString());
 
         if (authRequest.getClientID().equals(CLIENT_ID)) {
             if (authRequest.getResponseType().equals("code")) {
