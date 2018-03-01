@@ -67,13 +67,11 @@ public class ResourceController {
     }
 
     @GetMapping(value = {"/tokens"}, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public CopyOnWriteArrayList<AccessToken> getTokens() {
         return inMemoryStore.getTokens();
     }
 
     @GetMapping("/")
-    @ResponseBody
     public String homePage() {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
