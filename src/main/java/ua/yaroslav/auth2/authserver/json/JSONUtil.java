@@ -25,8 +25,6 @@ public class JSONUtil {
     }
 
     public JSONUtil() {
-//        JSONUtil.mapper = new ObjectMapper();
-//        JSONUtil.mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
 

@@ -19,9 +19,7 @@ public class InMemoryStore {
 
 
     public void addToken(AccessToken token) {
-        synchronized (this) {
-            this.tokens.add(token);
-        }
+        this.tokens.add(token);
     }
 
     public void addCode(AuthCode code) {
