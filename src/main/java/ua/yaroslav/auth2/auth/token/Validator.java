@@ -34,6 +34,6 @@ public class Validator {
     }
 
     public boolean validate(TokenRequestDto tokenRequest) {
-        return true;
+        return store.checkUser(tokenRequest.getClientID(), tokenRequest.getClientSecret());
     }
 }

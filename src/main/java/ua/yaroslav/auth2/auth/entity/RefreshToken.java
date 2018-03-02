@@ -7,7 +7,6 @@ import java.util.Objects;
 public class RefreshToken {
     private String clientID;
     private String username;
-    private long expiresIn;
     private int accessTokenID;
     private String scope;
 
@@ -17,11 +16,9 @@ public class RefreshToken {
 
     public RefreshToken(@JsonProperty("client_id") String clientID,
                         @JsonProperty("username") String username,
-                        @JsonProperty("expires_in") long expiresIn,
                         @JsonProperty("scope") String scope) {
         this.clientID = clientID;
         this.username = username;
-        this.expiresIn = expiresIn;
         this.scope = scope;
     }
 
@@ -40,14 +37,6 @@ public class RefreshToken {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public long getExpiresIn() {
-        return expiresIn;
-    }
-
-    public void setExpiresIn(long expiresIn) {
-        this.expiresIn = expiresIn;
     }
 
     public void setAccessTokenID(int accessTokenID) {
@@ -70,14 +59,16 @@ public class RefreshToken {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RefreshToken refresh = (RefreshToken) o;
-        return expiresIn == refresh.expiresIn &&
-                Objects.equals(clientID, refresh.clientID) &&
-                Objects.equals(username, refresh.username);
+        RefreshToken that = (RefreshToken) o;
+        return accessTokenID == that.accessTokenID &&
+                Objects.equals(clientID, that.clientID) &&
+                Objects.equals(username, that.username) &&
+                Objects.equals(scope, that.scope);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientID, username, expiresIn);
+
+        return Objects.hash(clientID, username, accessTokenID, scope);
     }
 }

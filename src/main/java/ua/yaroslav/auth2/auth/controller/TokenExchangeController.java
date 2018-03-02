@@ -2,83 +2,44 @@ package ua.yaroslav.auth2.auth.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
-import ua.yaroslav.auth2.auth.entity.AccessToken;
-import ua.yaroslav.auth2.auth.entity.AuthCode;
-import ua.yaroslav.auth2.auth.entity.RefreshToken;
-import ua.yaroslav.auth2.auth.json.JSONUtil;
-import ua.yaroslav.auth2.store.InMemoryStore;
+import ua.yaroslav.auth2.auth.token.Generator;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class TokenExchangeController {
-    @Value("${client.id}")
-    private String CLIENT_ID;
-    @Value("${client.secret}")
-    private String CLIENT_SECRET;
-    private final InMemoryStore store;
+    private final Generator generator;
     private static final Logger logger = LoggerFactory.getLogger(TokenExchangeController.class);
 
 
-    public TokenExchangeController(InMemoryStore store) {
-        this.store = store;
+    public TokenExchangeController(Generator generator) {
+        this.generator = generator;
     }
 
 
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getToken(TokenRequestDto tokenRequest) throws IOException {
-        switch (tokenRequest.getGrantType()) {
-            case "authorization_code": {
-                logger.info(tokenRequest.toString());
+    public ResponseEntity<Map<String, String>> getToken(TokenRequestDto tokenRequest) throws IOException {
 
-                AuthCode authCode =
-                        JSONUtil.readCodeFromB64(tokenRequest.getCode());
-                AccessToken access =
-                        JSONUtil.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
-                RefreshToken refresh =
-                        JSONUtil.getRefreshToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
-                store.addToken(access);
-
-                logger.info("New Refresh Token:");
-                logger.info(JSONUtil.objectToString(refresh));
-                logger.info("New Access Token:");
-                logger.info(JSONUtil.objectToString(access));
-
-                return "{\n" +
-                        "token_type: \"" + access.getType() + "\",\n" +
-                        "access_token: \"" + JSONUtil.encodeObject(access) + "\",\n" +
-                        "refresh_token: \"" + JSONUtil.encodeObject(refresh) + "\",\n" +
-                        "expires_in: " + access.getExpiresIn() + "\n" +
-                        "}";
-            }
-            case "refresh_token": {
-                logger.info(tokenRequest.toString());
-
-                RefreshToken refresh = JSONUtil.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
-                logger.info("Refresh Token after decode:");
-                logger.info(JSONUtil.objectToString(refresh));
-
-                AccessToken access = JSONUtil.getAccessToken(refresh.getClientID(), refresh.getUsername(), tokenRequest.getScope());
-                store.addToken(access);
-                logger.info("Refreshed Access Token:");
-                logger.info(JSONUtil.objectToString(access));
-
-                return "{\n" +
-                        "token_type: \"" + access.getType() + "\",\n" +
-                        "access_token: \"" + JSONUtil.encodeObject(access) + "\",\n" +
-                        "expires_in: " + access.getExpiresIn() + "\n" +
-                        "}";
-            }
-            default: {
-                return "{\"error\": \"invalid_grant_type\"}";
-            }
+        if (tokenRequest.getGrantType().equals("authorization_code")) {
+            logger.info(tokenRequest.toString());
+            return new ResponseEntity<>(generator.createTokensAndGetJSON(tokenRequest), HttpStatus.OK);
+        } else if (tokenRequest.getGrantType().equals("refresh_token")) {
+            logger.info(tokenRequest.toString());
+            return new ResponseEntity<>(generator.refreshTokenAndGetJSON(tokenRequest), HttpStatus.OK);
+        } else {
+            Map<String, String> json = new HashMap<>();
+            json.put("error", "invalid_grant_type");
+            return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
         }
     }
 }
