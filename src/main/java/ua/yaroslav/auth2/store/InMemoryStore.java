@@ -1,20 +1,24 @@
 package ua.yaroslav.auth2.store;
 
 import org.springframework.stereotype.Repository;
-import ua.yaroslav.auth2.authserver.json.entity.AccessToken;
-import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
+import ua.yaroslav.auth2.auth.entity.AccessToken;
+import ua.yaroslav.auth2.auth.entity.AuthCode;
+import ua.yaroslav.auth2.auth.entity.Client;
 
+import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Repository
 public class InMemoryStore {
     private final CopyOnWriteArrayList<AccessToken> tokens;
     private final CopyOnWriteArrayList<AuthCode> codes;
+    private final HashMap<String, Client> clients;
 
 
     public InMemoryStore() {
         this.tokens = new CopyOnWriteArrayList<>();
         this.codes = new CopyOnWriteArrayList<>();
+        this.clients = new HashMap<>();
     }
 
 
@@ -40,5 +44,17 @@ public class InMemoryStore {
 
     public CopyOnWriteArrayList<AccessToken> getTokens() {
         return tokens;
+    }
+
+    public void addClient(Client client) {
+        this.clients.put(client.getName(), client);
+    }
+
+    public boolean checkUser(String name) {
+        return this.clients.containsKey(name);
+    }
+
+    public boolean checkUser(String name, String secret) {
+        return checkUser(name) && this.clients.get(name).getSecret().equals(secret);
     }
 }

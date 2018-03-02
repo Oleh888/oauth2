@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.authserver.controllers;
+package ua.yaroslav.auth2.auth.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,11 +7,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import ua.yaroslav.auth2.authserver.dto.TokenRequestDto;
-import ua.yaroslav.auth2.authserver.json.JSONUtil;
-import ua.yaroslav.auth2.authserver.json.entity.AccessToken;
-import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
-import ua.yaroslav.auth2.authserver.json.entity.RefreshToken;
+import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
+import ua.yaroslav.auth2.auth.entity.AccessToken;
+import ua.yaroslav.auth2.auth.entity.AuthCode;
+import ua.yaroslav.auth2.auth.entity.RefreshToken;
+import ua.yaroslav.auth2.auth.json.JSONUtil;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
 import java.io.IOException;

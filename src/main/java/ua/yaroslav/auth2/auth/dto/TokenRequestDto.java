@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.authserver.dto;
+package ua.yaroslav.auth2.auth.dto;
 
 public class TokenRequestDto {
     private String client_id;

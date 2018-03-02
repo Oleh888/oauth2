@@ -6,9 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import ua.yaroslav.auth2.authserver.json.JSONUtil;
-import ua.yaroslav.auth2.authserver.json.entity.AccessToken;
-import ua.yaroslav.auth2.authserver.json.entity.AuthCode;
+import ua.yaroslav.auth2.auth.json.JSONUtil;
+import ua.yaroslav.auth2.auth.entity.AccessToken;
+import ua.yaroslav.auth2.auth.entity.AuthCode;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
 import javax.servlet.http.HttpServletRequest;

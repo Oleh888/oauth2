@@ -1,28 +1,30 @@
-package ua.yaroslav.auth2.authserver.json.entity;
+package ua.yaroslav.auth2.auth.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
-public class RefreshToken {
+public class AccessToken {
     private String clientID;
     private String username;
     private long expiresIn;
-    private int accessTokenID;
     private String scope;
+    private String type;
 
 
-    public RefreshToken() {
+    public AccessToken() {
     }
 
-    public RefreshToken(@JsonProperty("client_id") String clientID,
-                        @JsonProperty("username") String username,
-                        @JsonProperty("expires_in") long expiresIn,
-                        @JsonProperty("scope") String scope) {
+    public AccessToken(@JsonProperty("client_id") String clientID,
+                       @JsonProperty("username") String username,
+                       @JsonProperty("expires_in") long expiresIn,
+                       @JsonProperty("scope") String scope,
+                       @JsonProperty("type") String type) {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
         this.scope = scope;
+        this.type = type;
     }
 
 
@@ -50,14 +52,6 @@ public class RefreshToken {
         this.expiresIn = expiresIn;
     }
 
-    public void setAccessTokenID(int accessTokenID) {
-        this.accessTokenID = accessTokenID;
-    }
-
-    public int getAccessTokenID() {
-        return accessTokenID;
-    }
-
     public String getScope() {
         return scope;
     }
@@ -66,18 +60,27 @@ public class RefreshToken {
         this.scope = scope;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RefreshToken refresh = (RefreshToken) o;
-        return expiresIn == refresh.expiresIn &&
-                Objects.equals(clientID, refresh.clientID) &&
-                Objects.equals(username, refresh.username);
+        AccessToken accessToken = (AccessToken) o;
+        return expiresIn == accessToken.expiresIn &&
+                Objects.equals(clientID, accessToken.clientID) &&
+                Objects.equals(username, accessToken.username) &&
+                Objects.equals(scope, accessToken.scope);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientID, username, expiresIn);
+        return Objects.hash(clientID, username, expiresIn, scope);
     }
 }
