@@ -29,10 +29,11 @@ public class ResourceController {
         StringBuilder builder = new StringBuilder();
 
         if (request.getHeader("Authorization") != null) {
-            String tokenFromRequest = request.getHeader("Authorization");
+            String header = request.getHeader("Authorization");
 
-            tokenFromRequest = tokenFromRequest.substring(7, tokenFromRequest.length());
-            AccessToken accessToken = util.readTokenFromB64(tokenFromRequest);
+            logger.info("Header: " + header);
+            header = header.substring(7, header.length());
+            AccessToken accessToken = util.readTokenFromB64(header);
             logger.info("Access Token ->");
             logger.info(util.objectToString(accessToken));
 
