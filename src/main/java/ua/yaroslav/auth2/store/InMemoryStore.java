@@ -19,6 +19,7 @@ public class InMemoryStore {
         this.tokens = new CopyOnWriteArrayList<>();
         this.codes = new CopyOnWriteArrayList<>();
         this.clients = new HashMap<>();
+        this.clients.put("client", new Client("client","secret"));
     }
 
 
