@@ -5,9 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
 import ua.yaroslav.auth2.auth.token.Generator;
 
@@ -15,7 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 public class TokenExchangeController {
     private final Generator generator;
     private static final Logger logger = LoggerFactory.getLogger(TokenExchangeController.class);
@@ -27,7 +26,6 @@ public class TokenExchangeController {
 
 
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<Map<String, String>> getToken(TokenRequestDto tokenRequest) throws IOException {
         if (tokenRequest.getGrantType().equals("authorization_code")) {
             logger.info(tokenRequest.toString());
@@ -43,7 +41,6 @@ public class TokenExchangeController {
     }
 
     @PostMapping(value = "/astext", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public String getJSON(TokenRequestDto tokenRequest) throws IOException {
         logger.info(tokenRequest.toString());
         String s = generator.createTokensAndGetText(tokenRequest);
