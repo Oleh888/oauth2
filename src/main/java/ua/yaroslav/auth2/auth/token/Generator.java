@@ -85,10 +85,10 @@ public class Generator {
             logger.info("New Access Token:");
             logger.info(util.objectToString(access));
 
-            builder.append("{" + "\"token_type\":\"").append(access.getType()).append(",\n");
+            builder.append("{\n" + "\"token_type\":\"").append(access.getType()).append(",\n");
             builder.append("\"access_token:\"").append(util.encodeObject(access)).append(",\n");
             builder.append("\"refresh_token:\"").append(util.encodeObject(refresh)).append(",\n");
-            builder.append("\"expires_in:\"").append(String.valueOf(access.getExpiresIn()));
+            builder.append("\"expires_in:\"").append(String.valueOf(access.getExpiresIn())).append("\n}");
 
         } else {
             builder.append("{\"error:\"").append("\"bad_request\"").append("}");
