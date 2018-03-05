@@ -47,8 +47,8 @@ public class TokenExchangeController {
     @ResponseBody
     public ResponseEntity<Map<String, String>> getJSON(){
         Map<String, String> json = new HashMap<>();
-        json.put("token_type", "token_maafaka");
-        json.put("access_token", "access_maafaka");
+        json.put("token_type", "token");
+        json.put("access_token", "access");
         return new ResponseEntity<>(json, HttpStatus.OK);
     }
 }
