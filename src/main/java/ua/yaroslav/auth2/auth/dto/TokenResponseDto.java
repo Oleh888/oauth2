@@ -15,6 +15,13 @@ public class TokenResponseDto {
 
     }
 
+    public TokenResponseDto(String access_token, String token_type, long expires_in, String scope) {
+        this.access_token = access_token;
+        this.token_type = token_type;
+        this.expires_in = expires_in;
+        this.scope = scope;
+    }
+
     public TokenResponseDto(String access_token, String token_type, long expires_in, String refresh_token, String scope) {
         this.access_token = access_token;
         this.token_type = token_type;
@@ -64,7 +71,7 @@ public class TokenResponseDto {
         return scope;
     }
 
-    public String toString(){
+    public String toString() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writeValueAsString(this);

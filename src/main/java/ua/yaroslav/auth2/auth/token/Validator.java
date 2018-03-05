@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.LoginRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
+import ua.yaroslav.auth2.auth.exception.InvalidClientAuthCodeException;
+import ua.yaroslav.auth2.auth.exception.InvalidClientIDException;
+import ua.yaroslav.auth2.auth.exception.InvalidClientSecretException;
 import ua.yaroslav.auth2.store.InMemoryStore;
 
 @Component
@@ -17,15 +20,23 @@ public class Validator {
         this.store = store;
     }
 
-    public boolean validate(LoginRequestDto loginRequest) {
-        return store.checkClient(loginRequest.getClientID());
+    public boolean validate(LoginRequestDto loginRequest) throws InvalidClientIDException {
+        if (store.checkClient(loginRequest.getClientID()))
+            return true;
+        throw new InvalidClientIDException();
     }
 
-    public boolean validate(AuthRequestDto authRequest) {
-        return store.checkClient(authRequest.getClientID()) && authRequest.getResponseType().equals("code");
+    public boolean validate(AuthRequestDto authRequest) throws InvalidClientAuthCodeException {
+        if (store.checkClient(authRequest.getClientID()) && authRequest.getResponseType().equals("code"))
+            return true;
+        throw new InvalidClientAuthCodeException();
+
     }
 
-    public boolean validate(TokenRequestDto tokenRequest) {
-        return store.checkClient(tokenRequest.getClientID(), tokenRequest.getClientSecret());
+    public boolean validate(TokenRequestDto tokenRequest) throws InvalidClientSecretException {
+        if(store.checkClient(tokenRequest.getClientID(), tokenRequest.getClientSecret()))
+            return true;
+        throw new InvalidClientSecretException();
+
     }
 }

@@ -8,7 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
-import ua.yaroslav.auth2.auth.dto.TokenResponseDto;
+import ua.yaroslav.auth2.auth.exception.InvalidClientGrantType;
+import ua.yaroslav.auth2.auth.exception.InvalidClientSecretException;
 import ua.yaroslav.auth2.auth.token.Generator;
 
 import java.io.IOException;
@@ -25,15 +26,24 @@ public class TokenExchangeController {
 
 
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TokenResponseDto> getToken(TokenRequestDto tokenRequest) throws IOException {
+    public ResponseEntity<?> getToken(TokenRequestDto tokenRequest) throws IOException {
+        logger.info(tokenRequest.toString());
         if (tokenRequest.getGrantType().equals("authorization_code")) {
-            logger.info(tokenRequest.toString());
-            return new ResponseEntity<>(generator.createTokensAndGetJSON(tokenRequest), HttpStatus.OK);
+            try {
+                return new ResponseEntity<>(generator.getTokensAsJSON(tokenRequest), HttpStatus.OK);
+            } catch (InvalidClientSecretException e) {
+                logger.error(e.toString());
+                return ResponseEntity.badRequest().body(e.toJSON());
+            }
         } else if (tokenRequest.getGrantType().equals("refresh_token")) {
-            logger.info(tokenRequest.toString());
-            return new ResponseEntity<>(generator.refreshTokenAndGetJSON(tokenRequest), HttpStatus.OK);
+            try {
+                return new ResponseEntity<>(generator.getRefreshedTokenAsJSON(tokenRequest), HttpStatus.OK);
+            } catch (InvalidClientSecretException e) {
+                logger.error(e.toString());
+                return ResponseEntity.badRequest().body(e.toJSON());
+            }
         } else {
-            return ResponseEntity.badRequest().body(new TokenResponseDto());
+            return ResponseEntity.badRequest().body(new InvalidClientGrantType().toJSON());
         }
     }
 }
