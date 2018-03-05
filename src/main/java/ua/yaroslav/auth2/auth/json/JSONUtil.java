@@ -30,12 +30,12 @@ public class JSONUtil {
     }
 
     public AuthCode getCode(AuthRequestDto authRequest) {
-        return new AuthCode(authRequest.getClientID(), authRequest.getUsername(), System.currentTimeMillis() + 15 * 1000 * 5);
+        return new AuthCode(authRequest.getClientID(), authRequest.getUsername(), 15 * 1000 * 5);
     }
 
     public AccessToken getAccessToken(String clientID, String username, String scope) {
         if (StringUtils.isEmpty(scope)) scope = "grant_all";
-        return new AccessToken(clientID, username, System.currentTimeMillis() + 60 * 1000 * 5, scope, "bearer");
+        return new AccessToken(clientID, username, 60 * 1000 * 5, scope, "bearer");
     }
 
     public AuthCode readCodeFromB64(String code) throws IOException {
