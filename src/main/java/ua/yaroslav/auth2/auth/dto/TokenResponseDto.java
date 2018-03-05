@@ -67,7 +67,7 @@ public class TokenResponseDto {
     public String toString(){
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return "\n" + mapper.writeValueAsString(this) + "\n";
+            return mapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
