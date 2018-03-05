@@ -71,7 +71,7 @@ public class AuthRequestDto {
     }
 
     public String toString() {
-        return "\n" + this.getClass().getSimpleName() + ": " +
+        return "\n\n" + this.getClass().getSimpleName() + ": " +
                 "\n   client_id:     \n\t\t" + client_id +
                 "\n   response_type: \n\t\t" + response_type +
                 "\n   username:      \n\t\t" + username +

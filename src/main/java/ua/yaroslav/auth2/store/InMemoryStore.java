@@ -52,7 +52,6 @@ public class InMemoryStore {
     }
 
     public boolean checkClient(String name) {
-        System.out.println("name in checker: " + name);
         return this.clients.containsKey(name);
     }
 
