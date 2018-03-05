@@ -29,7 +29,6 @@ public class TokenExchangeController {
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Map<String, String>> getToken(TokenRequestDto tokenRequest) throws IOException {
-
         if (tokenRequest.getGrantType().equals("authorization_code")) {
             logger.info(tokenRequest.toString());
             return new ResponseEntity<>(generator.createTokensAndGetJSON(tokenRequest), HttpStatus.OK);
@@ -41,5 +40,14 @@ public class TokenExchangeController {
             json.put("error", "invalid_grant_type");
             return new ResponseEntity<>(json, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping(value = "/ckeck", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> getJSON(){
+        Map<String, String> json = new HashMap<>();
+        json.put("token_type", "token_maafaka");
+        json.put("access_token", "access_maafaka");
+        return new ResponseEntity<>(json, HttpStatus.OK);
     }
 }
