@@ -51,12 +51,17 @@ public class InMemoryStore {
         this.clients.put(client.getName(), client);
     }
 
-    public boolean checkUser(String name) {
+    public boolean checkClient(String name) {
+        System.out.println("name in checker: " + name);
         return this.clients.containsKey(name);
     }
 
-    public boolean checkUser(String name, String secret) {
-        return checkUser(name) && this.clients.get(name).getSecret().equals(secret);
+    public boolean checkClient(String name, String secret) {
+        return checkClient(name) && this.clients.get(name).getSecret().equals(secret);
+    }
+
+    public HashMap<String, Client> getClients() {
+        return clients;
     }
 
     @PostConstruct
