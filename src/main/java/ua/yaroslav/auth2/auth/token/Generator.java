@@ -72,6 +72,30 @@ public class Generator {
         return json;
     }
 
+    public String createTokensAndGetText(TokenRequestDto tokenRequest) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        if (validator.validate(tokenRequest)) {
+            AuthCode authCode = util.readCodeFromB64(tokenRequest.getCode());
+            AccessToken access = util.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
+            RefreshToken refresh = util.getRefreshToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
+            store.addToken(access);
+
+            logger.info("New Refresh Token:");
+            logger.info(util.objectToString(refresh));
+            logger.info("New Access Token:");
+            logger.info(util.objectToString(access));
+
+            builder.append("{\n" + "\"token_type\":\"").append(access.getType()).append(",");
+            builder.append("\"access_token:\"").append(util.encodeObject(access)).append(",");
+            builder.append("\"refresh_token:\"").append(util.encodeObject(refresh)).append(",");
+            builder.append("\"expires_in:\"").append(String.valueOf(access.getExpiresIn()));
+
+        } else {
+            builder.append("{\"error:\"").append("\"bad_request\"").append("}");
+        }
+        return builder.toString();
+    }
+
     public Map<String, String> refreshTokenAndGetJSON(TokenRequestDto tokenRequest) throws IOException {
         Map<String, String> json = new HashMap<>();
         if (validator.validate(tokenRequest)) {

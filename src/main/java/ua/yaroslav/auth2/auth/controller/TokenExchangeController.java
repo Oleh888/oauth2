@@ -45,10 +45,10 @@ public class TokenExchangeController {
 
     @GetMapping(value = "/token2", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Map<String, String>> getJSON(){
-        Map<String, String> json = new HashMap<>();
-        json.put("token_type", "token");
-        json.put("access_token", "access");
-        return new ResponseEntity<>(json, HttpStatus.OK);
+    public String getJSON(TokenRequestDto tokenRequest) throws IOException {
+        logger.info(tokenRequest.toString());
+        String s = generator.createTokensAndGetText(tokenRequest);
+        System.out.println(s);
+        return s;
     }
 }
