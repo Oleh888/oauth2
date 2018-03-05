@@ -62,10 +62,11 @@ public class Generator {
             logger.info("New Access Token:");
             logger.info(util.objectToString(access));
 
-            json.put("token_type", access.getType());
             json.put("access_token", util.encodeObject(access));
-            json.put("refresh_token", util.encodeObject(refresh));
+            json.put("token_type", access.getType());
             json.put("expires_in", String.valueOf(access.getExpiresIn()));
+            json.put("refresh_token", util.encodeObject(refresh));
+            json.put("scope", access.getScope());
         } else {
             json.put("error", "bad_request");
         }
