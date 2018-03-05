@@ -100,7 +100,7 @@ public class Generator {
         Map<String, String> json = new HashMap<>();
         if (validator.validate(tokenRequest)) {
             RefreshToken refresh = util.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
-            logger.info("Refresh Token after decode:");
+            logger.info("Refresh Token [from request]:");
             logger.info(util.objectToString(refresh));
 
             AccessToken access = util.getAccessToken(refresh.getClientID(), refresh.getUsername(), tokenRequest.getScope());
