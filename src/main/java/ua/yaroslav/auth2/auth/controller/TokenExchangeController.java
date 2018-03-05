@@ -43,10 +43,8 @@ public class TokenExchangeController {
     @PostMapping(value = "/astext", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getJSON(TokenRequestDto tokenRequest) throws IOException {
         logger.info(tokenRequest.toString());
-        String s = generator.createTokensAndGetText(tokenRequest);
-        System.out.println("\n\n");
-        System.out.println(s);
-        System.out.println("\n\n");
-        return s;
+        String text = generator.createTokensAndGetText(tokenRequest);
+        logger.info("Token as Text: " + text);
+        return text;
     }
 }

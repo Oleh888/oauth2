@@ -26,7 +26,7 @@ public class ResourceController {
     @GetMapping(value = {"/private"})
     public String getPrivateData(HttpServletRequest request, HttpServletResponse response) throws IOException {
         logger.info("Private Resource was requested");
-        logger.info("Header: " + request.getHeader("Authorization"));
+        logger.info("Header: [" + request.getHeader("Authorization") + "]");
         StringBuilder builder = new StringBuilder();
 
         if (request.getHeader("Authorization") != null) {
