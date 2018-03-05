@@ -42,7 +42,7 @@ public class TokenExchangeController {
         }
     }
 
-    @PostMapping(value = "/token2", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/astext", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getJSON(TokenRequestDto tokenRequest) throws IOException {
         logger.info(tokenRequest.toString());
