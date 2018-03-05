@@ -20,6 +20,7 @@ public class Validator {
 
     public boolean validate(LoginRequestDto loginRequest) {
         try {
+            System.out.println("Validation");
             HttpURLConnection connection = (HttpURLConnection) new URL(loginRequest.getRedirectURI()).openConnection();
             connection.setRequestMethod("HEAD");
             return store.checkUser(loginRequest.getClientID()) && connection.getResponseCode() == 200;
