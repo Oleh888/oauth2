@@ -1,5 +1,9 @@
 package ua.yaroslav.auth2.auth.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 public class TokenResponseDto {
     private String access_token;
     private String token_type;
@@ -59,5 +63,16 @@ public class TokenResponseDto {
 
     public String getScope() {
         return scope;
+    }
+
+    public String toString(){
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        try {
+            return "\n" + mapper.writeValueAsString(this) + "\n";
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
