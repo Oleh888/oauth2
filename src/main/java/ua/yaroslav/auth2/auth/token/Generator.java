@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
+import ua.yaroslav.auth2.auth.dto.TokenResponseDto;
 import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.entity.AuthCode;
 import ua.yaroslav.auth2.auth.entity.RefreshToken;
@@ -49,8 +50,9 @@ public class Generator {
         return null;
     }
 
-    public Map<String, String> createTokensAndGetJSON(TokenRequestDto tokenRequest) throws IOException {
-        Map<String, String> json = new HashMap<>();
+    public TokenResponseDto createTokensAndGetJSON(TokenRequestDto tokenRequest) throws IOException {
+        TokenResponseDto tokenResponse = null;
+
         if (validator.validate(tokenRequest)) {
             AuthCode authCode = util.readCodeFromB64(tokenRequest.getCode());
             AccessToken access = util.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
@@ -62,49 +64,19 @@ public class Generator {
             logger.info("New Access Token:");
             logger.info(util.objectToString(access));
 
-            json.put("access_token", util.encodeObject(access));
-            json.put("token_type", access.getType());
-            json.put("expires_in", String.valueOf(access.getExpiresIn()));
-            json.put("refresh_token", util.encodeObject(refresh));
-            json.put("scope", access.getScope());
-        } else {
-            json.put("error", "bad_request");
+            tokenResponse = new TokenResponseDto(
+                    util.encodeObject(access),
+                    access.getType(),
+                    access.getExpiresIn(),
+                    util.encodeObject(refresh),
+                    access.getScope()
+            );
         }
 
-        System.out.println("BEST JSON:");
-        System.out.println(util.getMapper().writeValueAsString(json));
-
-        return json;
+        return tokenResponse;
     }
 
-    public String createTokensAndGetText(TokenRequestDto tokenRequest) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        if (validator.validate(tokenRequest)) {
-            AuthCode authCode = util.readCodeFromB64(tokenRequest.getCode());
-            AccessToken access = util.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
-            RefreshToken refresh = util.getRefreshToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
-            store.addToken(access);
-
-            logger.info("New Refresh Token:");
-            logger.info(util.objectToString(refresh));
-            logger.info("New Access Token:");
-            logger.info(util.objectToString(access));
-
-            builder.append("{\n");
-            builder.append("\"access_token\":\"").append(util.encodeObject(access)).append("\",\n");
-            builder.append("\"token_type\":\"").append(access.getType()).append("\",\n");
-            builder.append("\"expires_in\":").append(String.valueOf(access.getExpiresIn())).append(",\n");
-            builder.append("\"refresh_token\":\"").append(util.encodeObject(refresh)).append("\",\n");
-            builder.append("\"scope\":\"").append(access.getScope()).append("\",\n");
-            builder.append("\"\n}");
-
-        } else {
-            builder.append("{\"error:\"").append("\"bad_request\"").append("}");
-        }
-        return builder.toString();
-    }
-
-    public Map<String, String> refreshTokenAndGetJSON(TokenRequestDto tokenRequest) throws IOException {
+    public TokenResponseDto refreshTokenAndGetJSON(TokenRequestDto tokenRequest) throws IOException {
         Map<String, String> json = new HashMap<>();
         if (validator.validate(tokenRequest)) {
             RefreshToken refresh = util.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
@@ -122,7 +94,7 @@ public class Generator {
         } else {
             json.put("error", "bad_request");
         }
-        return json;
+        return new TokenResponseDto();
     }
 
     class URLBuilder {
