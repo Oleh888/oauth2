@@ -25,6 +25,10 @@ public class JSONUtil {
     }
 
 
+    public ObjectMapper getMapper() {
+        return mapper;
+    }
+
     public AuthCode getCode(AuthRequestDto authRequest) {
         return new AuthCode(authRequest.getClientID(), authRequest.getUsername(), System.currentTimeMillis() + 15 * 1000 * 5);
     }

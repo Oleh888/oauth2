@@ -70,6 +70,10 @@ public class Generator {
         } else {
             json.put("error", "bad_request");
         }
+
+        System.out.println("BEST JSON:");
+        System.out.println(util.getMapper().writeValueAsString(json));
+
         return json;
     }
 
