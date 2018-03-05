@@ -23,19 +23,21 @@ public class Validator {
     }
 
     public boolean validate(LoginRequestDto loginRequest) {
-        try {
-            System.out.println("Stored Client: " + store.getClients().size());
-            if (StringUtils.isEmpty(loginRequest.getRedirectURI())) {
-                logger.error("URL is not correct!");
-            } else {
-                HttpURLConnection connection = (HttpURLConnection) new URL(loginRequest.getRedirectURI()).openConnection();
-                connection.setRequestMethod("HEAD");
-                return store.checkClient(loginRequest.getClientID()) && connection.getResponseCode() == 200;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+//        try {
+//            System.out.println("Stored Client: " + store.getClients().size());
+//            if (StringUtils.isEmpty(loginRequest.getRedirectURI())) {
+//                logger.error("URL is not correct!");
+//            } else {
+//                HttpURLConnection connection = (HttpURLConnection) new URL(loginRequest.getRedirectURI()).openConnection();
+//                connection.setRequestMethod("HEAD");
+//                return store.checkClient(loginRequest.getClientID()) && connection.getResponseCode() == 200;
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+        System.out.println("Stored Client: " + store.getClients().size());
+        return store.checkClient(loginRequest.getClientID());
     }
 
     public boolean validate(AuthRequestDto authRequest) {
