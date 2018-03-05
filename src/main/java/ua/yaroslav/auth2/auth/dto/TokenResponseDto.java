@@ -40,4 +40,24 @@ public class TokenResponseDto {
     public void setScope(String scope) {
         this.scope = scope;
     }
+
+    public String getAccess_token() {
+        return access_token;
+    }
+
+    public String getToken_type() {
+        return token_type;
+    }
+
+    public long getExpires_in() {
+        return expires_in;
+    }
+
+    public String getRefresh_token() {
+        return refresh_token;
+    }
+
+    public String getScope() {
+        return scope;
+    }
 }
