@@ -2,7 +2,6 @@ package ua.yaroslav.auth2.auth.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,14 +29,14 @@ public class TokenExchangeController {
         logger.info(tokenRequest.toString());
         if (tokenRequest.getGrantType().equals("authorization_code")) {
             try {
-                return new ResponseEntity<>(generator.getTokensAsJSON(tokenRequest), HttpStatus.OK);
+                return ResponseEntity.ok().body(generator.getTokensAsJSON(tokenRequest));
             } catch (InvalidClientSecretException e) {
                 logger.error(e.toString());
                 return ResponseEntity.badRequest().body(e.toJSON());
             }
         } else if (tokenRequest.getGrantType().equals("refresh_token")) {
             try {
-                return new ResponseEntity<>(generator.getRefreshedTokenAsJSON(tokenRequest), HttpStatus.OK);
+                return ResponseEntity.ok().body(generator.getRefreshedTokenAsJSON(tokenRequest));
             } catch (InvalidClientSecretException e) {
                 logger.error(e.toString());
                 return ResponseEntity.badRequest().body(e.toJSON());

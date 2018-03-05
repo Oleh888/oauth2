@@ -1,7 +1,6 @@
 package ua.yaroslav.auth2.auth.dto;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import ua.yaroslav.auth2.auth.json.JSONUtil;
 
 public class TokenResponseDto {
     private String access_token;
@@ -72,12 +71,6 @@ public class TokenResponseDto {
     }
 
     public String toString() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return JSONUtil.responseToString(this);
     }
 }

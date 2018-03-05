@@ -16,12 +16,12 @@ import java.util.Objects;
 
 @Component
 public class JSONUtil {
-    private ObjectMapper mapper;
+    private static ObjectMapper mapper;
 
 
     public JSONUtil() {
-        this.mapper = new ObjectMapper();
-        this.mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
 
@@ -66,5 +66,14 @@ public class JSONUtil {
 
     public RefreshToken readRefreshTokenFromB64(String token) throws IOException {
         return mapper.readValue(new String(Base64.getDecoder().decode(token.getBytes())), RefreshToken.class);
+    }
+
+    public static String responseToString(Object code){
+        try {
+            return "\n" + mapper.writeValueAsString(code) + "\n";
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
