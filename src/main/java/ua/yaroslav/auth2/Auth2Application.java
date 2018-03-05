@@ -7,7 +7,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 @SpringBootApplication
 public class Auth2Application extends SpringBootServletInitializer {
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(Auth2Application.class);
-        app.run(args);
+        SpringApplication.run(Auth2Application.class, args);
     }
 }
