@@ -28,7 +28,7 @@ public class ResourceController {
         logger.info("Private Resource was requested");
         StringBuilder builder = new StringBuilder();
 
-        if (request.getHeader("Authorization") != null && request.getHeader("Authorization").length() > 7) {
+        if (request.getHeader("Authorization") != null) {
             String tokenFromRequest = request.getHeader("Authorization");
 
             tokenFromRequest = tokenFromRequest.substring(7, tokenFromRequest.length());
