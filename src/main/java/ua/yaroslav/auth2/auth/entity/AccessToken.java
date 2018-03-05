@@ -1,15 +1,18 @@
 package ua.yaroslav.auth2.auth.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
+@JsonIgnoreProperties
 public class AccessToken {
     private String clientID;
     private String username;
     private long expiresIn;
     private String scope;
     private String type;
+    private long time;
 
 
     public AccessToken() {
@@ -23,6 +26,7 @@ public class AccessToken {
         this.clientID = clientID;
         this.username = username;
         this.expiresIn = expiresIn;
+        this.time = System.currentTimeMillis() + expiresIn;
         this.scope = scope;
         this.type = type;
     }
@@ -66,6 +70,10 @@ public class AccessToken {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public long getTime() {
+        return time;
     }
 
     @Override

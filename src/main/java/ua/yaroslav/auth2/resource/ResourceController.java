@@ -27,8 +27,8 @@ public class ResourceController {
     public String getPrivateData(HttpServletRequest request, HttpServletResponse response) throws IOException {
         logger.info("Private Resource was requested");
         logger.info("Header: [" + request.getHeader("Authorization") + "]");
-        StringBuilder builder = new StringBuilder();
 
+        StringBuilder builder = new StringBuilder();
         if (request.getHeader("Authorization") != null) {
             String header = request.getHeader("Authorization");
             header = header.substring(7, header.length());
@@ -36,7 +36,7 @@ public class ResourceController {
             logger.info("Access Token ->");
             logger.info(util.objectToString(accessToken));
 
-            if (accessToken.getExpiresIn() > System.currentTimeMillis()) {
+            if (accessToken.getTime() > System.currentTimeMillis()) {
                 Enumeration headerNames = request.getHeaderNames();
                 while (headerNames.hasMoreElements()) {
                     String key = (String) headerNames.nextElement();
