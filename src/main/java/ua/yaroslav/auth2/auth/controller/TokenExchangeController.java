@@ -47,7 +47,9 @@ public class TokenExchangeController {
     public String getJSON(TokenRequestDto tokenRequest) throws IOException {
         logger.info(tokenRequest.toString());
         String s = generator.createTokensAndGetText(tokenRequest);
+        System.out.println("\n\n");
         System.out.println(s);
+        System.out.println("\n\n");
         return s;
     }
 }

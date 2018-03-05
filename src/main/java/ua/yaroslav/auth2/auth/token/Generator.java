@@ -85,9 +85,9 @@ public class Generator {
             logger.info("New Access Token:");
             logger.info(util.objectToString(access));
 
-            builder.append("{\n" + "\"token_type\":\"").append(access.getType()).append(",");
-            builder.append("\"access_token:\"").append(util.encodeObject(access)).append(",");
-            builder.append("\"refresh_token:\"").append(util.encodeObject(refresh)).append(",");
+            builder.append("{" + "\"token_type\":\"").append(access.getType()).append(",\n");
+            builder.append("\"access_token:\"").append(util.encodeObject(access)).append(",\n");
+            builder.append("\"refresh_token:\"").append(util.encodeObject(refresh)).append(",\n");
             builder.append("\"expires_in:\"").append(String.valueOf(access.getExpiresIn()));
 
         } else {
