@@ -28,19 +28,23 @@ public class TokenExchangeController {
     public ResponseEntity<?> getToken(TokenRequestDto tokenRequest) throws IOException {
         logger.info(tokenRequest.toString());
         if (tokenRequest.getGrantType().equals("authorization_code")) {
+
             try {
                 return ResponseEntity.ok().body(generator.getTokensAsJSON(tokenRequest));
             } catch (InvalidClientSecretException e) {
                 logger.error(e.toString());
                 return ResponseEntity.badRequest().body(e.toJSON());
             }
+
         } else if (tokenRequest.getGrantType().equals("refresh_token")) {
+
             try {
                 return ResponseEntity.ok().body(generator.getRefreshedTokenAsJSON(tokenRequest));
             } catch (InvalidClientSecretException e) {
                 logger.error(e.toString());
                 return ResponseEntity.badRequest().body(e.toJSON());
             }
+
         } else {
             return ResponseEntity.badRequest().body(new InvalidClientGrantType().toJSON());
         }
