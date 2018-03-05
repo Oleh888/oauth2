@@ -24,7 +24,7 @@ public class TokenExchangeController {
     }
 
 
-    @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/token", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TokenResponseDto> getToken(TokenRequestDto tokenRequest) throws IOException {
         if (tokenRequest.getGrantType().equals("authorization_code")) {
             logger.info(tokenRequest.toString());
