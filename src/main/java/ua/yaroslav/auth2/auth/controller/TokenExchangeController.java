@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
@@ -43,7 +42,7 @@ public class TokenExchangeController {
         }
     }
 
-    @GetMapping(value = "/token2", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/token2", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getJSON(TokenRequestDto tokenRequest) throws IOException {
         logger.info(tokenRequest.toString());
