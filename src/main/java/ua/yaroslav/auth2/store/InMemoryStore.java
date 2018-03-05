@@ -5,7 +5,6 @@ import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.entity.AuthCode;
 import ua.yaroslav.auth2.auth.entity.Client;
 
-import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -20,6 +19,7 @@ public class InMemoryStore {
         this.tokens = new CopyOnWriteArrayList<>();
         this.codes = new CopyOnWriteArrayList<>();
         this.clients = new HashMap<>();
+        this.clients.put("client", new Client("client","secret"));
     }
 
 
@@ -62,10 +62,5 @@ public class InMemoryStore {
 
     public HashMap<String, Client> getClients() {
         return clients;
-    }
-
-    @PostConstruct
-    public void init(){
-        this.clients.put("client", new Client("client","secret"));
     }
 }
