@@ -81,4 +81,8 @@ public class ResourceController {
     public List<AuthCode> codeList(){
         return codeStore.getCodes();
     }
+
+    private boolean checkAuth(){
+        return false;
+    }
 }
