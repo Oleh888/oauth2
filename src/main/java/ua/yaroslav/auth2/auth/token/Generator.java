@@ -6,27 +6,30 @@ import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenResponseDto;
-import ua.yaroslav.auth2.auth.entity.AccessToken;
-import ua.yaroslav.auth2.auth.entity.AuthCode;
-import ua.yaroslav.auth2.auth.entity.RefreshToken;
 import ua.yaroslav.auth2.auth.exception.InvalidClientAuthCodeException;
 import ua.yaroslav.auth2.auth.exception.InvalidClientSecretException;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
-import ua.yaroslav.auth2.store.InMemoryStore;
+import ua.yaroslav.auth2.entity.AccessToken;
+import ua.yaroslav.auth2.entity.AuthCode;
+import ua.yaroslav.auth2.entity.RefreshToken;
+import ua.yaroslav.auth2.store.iface.CodeStore;
+import ua.yaroslav.auth2.store.iface.TokenStore;
 
 import java.io.IOException;
 
 @Component
 public class Generator {
     private final Validator validator;
-    private final InMemoryStore store;
+    private final TokenStore tokenStore;
+    private final CodeStore codeStore;
     private final JSONUtil util;
     private static final Logger logger = LoggerFactory.getLogger(Generator.class);
 
 
-    public Generator(Validator validator, InMemoryStore store, JSONUtil util) {
+    public Generator(Validator validator, TokenStore tokenStore, CodeStore codeStore, JSONUtil util) {
         this.validator = validator;
-        this.store = store;
+        this.tokenStore = tokenStore;
+        this.codeStore = codeStore;
         this.util = util;
     }
 
@@ -38,7 +41,7 @@ public class Generator {
     public String getURL(AuthRequestDto authRequest) throws InvalidClientAuthCodeException {
         validator.validate(authRequest);
         AuthCode code = util.getCode(authRequest);
-        store.addCode(code);
+        codeStore.saveCode(code);
 
         URLBuilder builder = new URLBuilder();
         return builder
@@ -54,7 +57,7 @@ public class Generator {
         AuthCode authCode = util.readCodeFromB64(tokenRequest.getCode());
         AccessToken access = util.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
         RefreshToken refresh = util.getRefreshToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
-        store.addToken(access);
+        tokenStore.saveToken(access);
 
         logger.info("New Refresh Token:");
         logger.info(util.objectToString(refresh));
@@ -75,7 +78,7 @@ public class Generator {
 
         RefreshToken refresh = util.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
         AccessToken access = util.getAccessToken(refresh.getClientID(), refresh.getUsername(), tokenRequest.getScope());
-        store.addToken(access);
+        tokenStore.saveToken(access);
 
         logger.info("Refresh Token [from request]:");
         logger.info(util.objectToString(refresh));

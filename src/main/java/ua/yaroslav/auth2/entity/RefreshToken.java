@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.auth.entity;
+package ua.yaroslav.auth2.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

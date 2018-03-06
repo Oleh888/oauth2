@@ -1,7 +1,17 @@
-package ua.yaroslav.auth2.auth.entity;
+package ua.yaroslav.auth2.entity;
 
+import javax.persistence.*;
+
+@Table(name = "clients")
+@Entity
 public class Client {
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @Column
+    private long id;
+    @Column
     private String name;
+    @Column
     private String secret;
 
 

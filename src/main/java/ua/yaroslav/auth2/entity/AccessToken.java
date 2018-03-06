@@ -1,17 +1,30 @@
-package ua.yaroslav.auth2.auth.entity;
+package ua.yaroslav.auth2.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Table(name = "tokens")
+@Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccessToken {
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @Column
+    private long id;
+    @Column
     private String clientID;
+    @Column
     private String username;
+    @Column
     private long expiresIn;
+    @Column
     private String scope;
+    @Column
     private String type;
+    @Column
     private long time;
 
 
@@ -76,6 +89,14 @@ public class AccessToken {
         return time;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,5 +111,18 @@ public class AccessToken {
     @Override
     public int hashCode() {
         return Objects.hash(clientID, username, expiresIn, scope);
+    }
+
+    @Override
+    public String toString() {
+        return "AccessToken{" +
+                "id=" + id +
+                ", clientID='" + clientID + '\'' +
+                ", username='" + username + '\'' +
+                ", expiresIn=" + expiresIn +
+                ", scope='" + scope + '\'' +
+                ", type='" + type + '\'' +
+                ", time=" + time +
+                '}';
     }
 }

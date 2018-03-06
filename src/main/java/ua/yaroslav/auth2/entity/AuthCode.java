@@ -1,12 +1,22 @@
-package ua.yaroslav.auth2.auth.entity;
+package ua.yaroslav.auth2.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Table(name = "codes")
+@Entity
 public class AuthCode {
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @Column
+    private long id;
+    @Column
     private String clientID;
+    @Column
     private String username;
+    @Column
     private long expiresIn;
 
 

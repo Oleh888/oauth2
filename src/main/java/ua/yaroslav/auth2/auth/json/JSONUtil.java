@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
-import ua.yaroslav.auth2.auth.entity.AccessToken;
-import ua.yaroslav.auth2.auth.entity.AuthCode;
-import ua.yaroslav.auth2.auth.entity.RefreshToken;
+import ua.yaroslav.auth2.entity.AccessToken;
+import ua.yaroslav.auth2.entity.AuthCode;
+import ua.yaroslav.auth2.entity.RefreshToken;
 
 import java.io.IOException;
 import java.util.Base64;

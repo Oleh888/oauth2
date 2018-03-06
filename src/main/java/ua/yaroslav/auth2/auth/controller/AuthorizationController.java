@@ -12,18 +12,21 @@ import ua.yaroslav.auth2.auth.dto.LoginRequestDto;
 import ua.yaroslav.auth2.auth.exception.InvalidClientAuthCodeException;
 import ua.yaroslav.auth2.auth.exception.InvalidClientIDException;
 import ua.yaroslav.auth2.auth.token.Generator;
+import ua.yaroslav.auth2.store.PostgreTokenStore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
 public class AuthorizationController {
-    private final Generator generator;
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationController.class);
+    private final Generator generator;
+    private final PostgreTokenStore store;
 
 
-    public AuthorizationController(Generator generator) {
+    public AuthorizationController(Generator generator, PostgreTokenStore store) {
         this.generator = generator;
+        this.store = store;
     }
 
 

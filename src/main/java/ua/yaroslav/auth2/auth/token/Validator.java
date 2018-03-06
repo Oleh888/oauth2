@@ -9,33 +9,33 @@ import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
 import ua.yaroslav.auth2.auth.exception.InvalidClientAuthCodeException;
 import ua.yaroslav.auth2.auth.exception.InvalidClientIDException;
 import ua.yaroslav.auth2.auth.exception.InvalidClientSecretException;
-import ua.yaroslav.auth2.store.InMemoryStore;
+import ua.yaroslav.auth2.store.iface.ClientStore;
 
 @Component
 public class Validator {
-    private final InMemoryStore store;
+    private final ClientStore store;
     private final Logger logger = LoggerFactory.getLogger(Validator.class);
 
-    public Validator(InMemoryStore store) {
+    public Validator(ClientStore store) {
         this.store = store;
     }
 
-    public boolean validate(LoginRequestDto loginRequest) throws InvalidClientIDException {
+    public void validate(LoginRequestDto loginRequest) throws InvalidClientIDException {
         if (store.checkClient(loginRequest.getClientID()))
-            return true;
+            return;
         throw new InvalidClientIDException();
     }
 
-    public boolean validate(AuthRequestDto authRequest) throws InvalidClientAuthCodeException {
+    public void validate(AuthRequestDto authRequest) throws InvalidClientAuthCodeException {
         if (store.checkClient(authRequest.getClientID()) && authRequest.getResponseType().equals("code"))
-            return true;
+            return;
         throw new InvalidClientAuthCodeException();
 
     }
 
-    public boolean validate(TokenRequestDto tokenRequest) throws InvalidClientSecretException {
-        if(store.checkClient(tokenRequest.getClientID(), tokenRequest.getClientSecret()))
-            return true;
+    public void validate(TokenRequestDto tokenRequest) throws InvalidClientSecretException {
+        if (store.checkClient(tokenRequest.getClientID(), tokenRequest.getClientSecret()))
+            return;
         throw new InvalidClientSecretException();
 
     }
