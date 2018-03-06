@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.yaroslav.auth2.entity.AccessToken;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
+import ua.yaroslav.auth2.entity.AccessToken;
 import ua.yaroslav.auth2.entity.AuthCode;
 import ua.yaroslav.auth2.entity.Client;
 import ua.yaroslav.auth2.store.iface.ClientStore;
@@ -45,7 +45,7 @@ public class ResourceController {
             String header = request.getHeader("Authorization");
             header = header.substring(7, header.length());
             AccessToken accessToken = util.readTokenFromB64(header);
-            logger.info("Access Token ->");
+            logger.info("Access Token (decoded) ->");
             logger.info(util.objectToString(accessToken));
 
             if (accessToken.getTime() > System.currentTimeMillis()) {
@@ -68,21 +68,17 @@ public class ResourceController {
     }
 
     @GetMapping("/clients")
-    public List<Client> clientList(){
+    public List<Client> clientList() {
         return clientStore.getClients();
     }
 
     @GetMapping("/tokens")
-    public List<AccessToken> tokenList(){
+    public List<AccessToken> tokenList() {
         return tokenStore.getTokens();
     }
 
     @GetMapping("/codes")
-    public List<AuthCode> codeList(){
+    public List<AuthCode> codeList() {
         return codeStore.getCodes();
-    }
-
-    private boolean checkAuth(){
-        return false;
     }
 }

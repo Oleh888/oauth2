@@ -12,7 +12,8 @@ public class AuthRequestDto {
     public AuthRequestDto() {
     }
 
-    public AuthRequestDto(String username, String password, String client_id, String response_type, String redirect_uri, String scope) {
+    public AuthRequestDto(String username, String password, String client_id,
+                          String response_type, String redirect_uri, String scope) {
         this.username = username;
         this.password = password;
         this.client_id = client_id;
