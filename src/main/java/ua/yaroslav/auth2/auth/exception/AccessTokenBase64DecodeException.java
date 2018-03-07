@@ -16,7 +16,7 @@ public class AccessTokenBase64DecodeException extends Exception {
     }
 
     public String toJSON() {
-        return "{" + "\"error_type\":" + "\"" + type + "," +
+        return "{" + "\"error_type\":" + "\"" + type + "\"," +
                 "\"error_cause\":" + "\"" + cause.getMessage() +
                 "\"}";
     }
