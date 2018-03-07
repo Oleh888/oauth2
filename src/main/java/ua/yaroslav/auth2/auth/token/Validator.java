@@ -40,7 +40,7 @@ public class Validator {
 
     public void validate(TokenRequestDto tokenRequest)
             throws InvalidClientSecretException, InvalidClientIDException, InvalidClientGrantType {
-        if(tokenRequest.getGrantType() == null)
+        if (tokenRequest.getGrantType() == null)
             throw new InvalidClientGrantType();
         if (!store.checkClient(tokenRequest.getClientID()))
             throw new InvalidClientIDException();
@@ -51,13 +51,18 @@ public class Validator {
     }
 
     public void validate(HttpServletRequest request) throws IOException,
-            AccessTokenHasExpiredException, AccessTokenInvalidException {
+            AccessTokenHasExpiredException, AccessTokenInvalidException, AccessTokenBase64DecodeException {
         logger.info("Header: [" + request.getHeader("Authorization") + "]");
 
         if (request.getHeader("Authorization") != null) {
             String header = request.getHeader("Authorization");
             header = header.substring(7, header.length());
-            AccessToken accessToken = util.readTokenFromB64(header);
+            AccessToken accessToken;
+            try {
+                accessToken = util.readTokenFromB64(header);
+            } catch (com.fasterxml.jackson.core.JsonParseException e) {
+                throw new AccessTokenBase64DecodeException(e);
+            }
             logger.info("Access Token (decoded) ->");
             logger.info(util.objectToString(accessToken));
 

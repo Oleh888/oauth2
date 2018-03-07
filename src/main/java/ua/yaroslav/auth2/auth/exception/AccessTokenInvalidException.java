@@ -1,6 +1,6 @@
 package ua.yaroslav.auth2.auth.exception;
 
-public class AccessTokenInvalidException extends Throwable {
+public class AccessTokenInvalidException extends Exception {
     private final String type = "invalid_access_token";
 
     public AccessTokenInvalidException() {

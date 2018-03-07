@@ -90,7 +90,30 @@ public class Auth2ApplicationTests {
                 this.restTemplate.postForEntity("/token", params, String.class);
         TokenResponseDto token = mapper.readValue(response.getBody(), TokenResponseDto.class);
 
-        assertThat(response.getBody()).contains("");
+        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("invalid_client_id");
+    }
+
+    @Test
+    public void getPrivateDataWhenAccessTokenIsNotValid() throws IOException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.put("client_id", Collections.singletonList("client"));
+        params.put("client_secret", Collections.singletonList("secret"));
+        params.put("grant_type", Collections.singletonList("authorization_code"));
+        params.put("code", Collections.singletonList(getCode()));
+        params.put("scope", Collections.singletonList("read"));
+        ResponseEntity<String> r = this.restTemplate.postForEntity("/token", params, String.class);
+        TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
+
+        System.out.println("Token[pr]: " +  token.getAccess_token());
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " +  "123123");
+        HttpEntity entity = new HttpEntity(headers);
+        ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
+
+        System.out.println(response);
+        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("invalid_access_token");
     }
 
     private String getCode() {

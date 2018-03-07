@@ -1,6 +1,6 @@
 package ua.yaroslav.auth2.auth.exception;
 
-public class InvalidClientAuthCodeException extends Throwable {
+public class InvalidClientAuthCodeException extends Exception {
     private final String type = "invalid_client_authentication_code";
 
     public InvalidClientAuthCodeException() {

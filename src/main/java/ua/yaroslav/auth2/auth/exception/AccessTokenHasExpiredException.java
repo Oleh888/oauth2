@@ -1,6 +1,6 @@
 package ua.yaroslav.auth2.auth.exception;
 
-public class AccessTokenHasExpiredException extends Throwable {
+public class AccessTokenHasExpiredException extends Exception {
     private final String type = "access_token_has_expired";
 
     public AccessTokenHasExpiredException() {

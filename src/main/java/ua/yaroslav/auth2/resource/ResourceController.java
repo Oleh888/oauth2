@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.yaroslav.auth2.auth.exception.AccessTokenBase64DecodeException;
 import ua.yaroslav.auth2.auth.exception.AccessTokenHasExpiredException;
 import ua.yaroslav.auth2.auth.exception.AccessTokenInvalidException;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
@@ -51,6 +52,9 @@ public class ResourceController {
             logger.error(e.toString());
             return ResponseEntity.badRequest().body(e.toJSON());
         } catch (AccessTokenInvalidException e) {
+            logger.error(e.toString());
+            return ResponseEntity.badRequest().body(e.toJSON());
+        } catch (AccessTokenBase64DecodeException e) {
             logger.error(e.toString());
             return ResponseEntity.badRequest().body(e.toJSON());
         }
