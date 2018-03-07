@@ -2,7 +2,6 @@ package ua.yaroslav.auth2.auth.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
@@ -19,9 +18,8 @@ public class JSONUtil {
     private static ObjectMapper mapper;
 
 
-    public JSONUtil() {
-        mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+    public JSONUtil(ObjectMapper mapper) {
+        JSONUtil.mapper = mapper;
     }
 
 

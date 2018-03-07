@@ -54,10 +54,6 @@ public class TokenResponseDto {
         return access_token;
     }
 
-    public String getToken_type() {
-        return token_type;
-    }
-
     public long getExpires_in() {
         return expires_in;
     }
@@ -68,6 +64,10 @@ public class TokenResponseDto {
 
     public String getScope() {
         return scope;
+    }
+
+    public String getToken_type() {
+        return token_type;
     }
 
     public String toString() {

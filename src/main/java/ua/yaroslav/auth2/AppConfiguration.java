@@ -1,5 +1,7 @@
 package ua.yaroslav.auth2;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
@@ -35,5 +37,12 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
         WebContentInterceptor interceptor = new WebContentInterceptor();
         interceptor.setCacheSeconds(0);
         return interceptor;
+    }
+
+    @Bean
+    public ObjectMapper getMapper(){
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        return mapper;
     }
 }

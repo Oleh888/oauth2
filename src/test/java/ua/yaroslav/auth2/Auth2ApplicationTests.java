@@ -5,16 +5,22 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
+import ua.yaroslav.auth2.entity.AccessToken;
 
+import java.io.IOException;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,9 +29,10 @@ public class Auth2ApplicationTests {
     private TestRestTemplate restTemplate;
     @Autowired
     private JSONUtil util;
+    private String at;
 
     @Test
-    public void getTokenFromCode() {
+    public void getTokenFromCodeAndCheckFields() throws IOException {
         //given
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.put("client_id", Collections.singletonList("client"));
@@ -42,12 +49,29 @@ public class Auth2ApplicationTests {
         assertThat(response.getBody()).contains("access_token");
         assertThat(response.getBody()).contains("refresh_token");
         assertThat(response.getBody()).contains("expires_in");
-        //if type == bearer
+
+        System.out.println("response.getBody():");
+        System.out.println(response.getBody());
+        AccessToken token = util.readTokenFromB64(response.getBody());
+        assertEquals(token.getType(), "bearer");
+
+        at = response.getBody();
+        System.out.println(token);
+    }
+
+    @Test
+    public void getPrivateData() {
+        System.out.println(at);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + at);
+        HttpEntity entity = new HttpEntity(headers);
+        ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
+        System.out.println(response);
     }
 
     private String getCode() {
-        return util.encodeObject(util.getCode(new AuthRequestDto(
-                "login", "pass", "client", "code", "uri", "read")
+        return util.encodeObject(util.getCode(new AuthRequestDto
+                ("login", "pass", "client", "code", "uri", "read")
         ));
     }
 }
