@@ -2,7 +2,7 @@ package ua.yaroslav.auth2.auth.exception;
 
 public abstract class AbstractException extends Exception {
     protected Exception cause;
-
+    protected String type;
 
     public AbstractException() {
     }
@@ -12,5 +12,7 @@ public abstract class AbstractException extends Exception {
     }
 
 
-    public abstract String toJSON();
+    public String toJSON(){
+        return "{" + "\"error_type\":" + "\"" + type + "\"}";
+    }
 }
