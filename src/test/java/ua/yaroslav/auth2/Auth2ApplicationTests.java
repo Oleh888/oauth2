@@ -32,7 +32,6 @@ public class Auth2ApplicationTests {
 
     @Test
     public void getTokenFromCodeAndCheckFieldsWhenClientDataIsCorrect() throws IOException {
-        //given
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.put("client_id", Collections.singletonList("client"));
         params.put("client_secret", Collections.singletonList("secret"));
@@ -40,12 +39,10 @@ public class Auth2ApplicationTests {
         params.put("code", Collections.singletonList(getCode()));
         params.put("scope", Collections.singletonList("read"));
 
-        //when
         ResponseEntity<String> response =
                 this.restTemplate.postForEntity("/token", params, String.class);
         TokenResponseDto token = mapper.readValue(response.getBody(), TokenResponseDto.class);
 
-        //then
         assertThat(response.getBody()).contains("access_token");
         assertThat(response.getBody()).contains("refresh_token");
         assertThat(response.getBody()).contains("expires_in");
@@ -54,7 +51,6 @@ public class Auth2ApplicationTests {
 
     @Test
     public void getPrivateDataWhenAccessTokenIsValid() throws IOException {
-        //given
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.put("client_id", Collections.singletonList("client"));
         params.put("client_secret", Collections.singletonList("secret"));
@@ -64,14 +60,12 @@ public class Auth2ApplicationTests {
         ResponseEntity<String> r = this.restTemplate.postForEntity("/token", params, String.class);
         TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
 
-        //when
         System.out.println("Token[pr]: " +  token.getAccess_token());
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " +  token.getAccess_token());
         HttpEntity entity = new HttpEntity(headers);
         ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
 
-        //then
         System.out.println(response);
         assertEquals(response.getStatusCode(),HttpStatus.OK);
         assertThat(response.getBody()).contains("host");
@@ -108,6 +102,17 @@ public class Auth2ApplicationTests {
         System.out.println("Token[pr]: " +  token.getAccess_token());
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " +  "123123");
+        HttpEntity entity = new HttpEntity(headers);
+        ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
+
+        System.out.println(response);
+        assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).contains("access_token_base64_decode_exception");
+    }
+
+    @Test
+    public void getPrivateDataWhenAccessTokenNotPresent(){
+        HttpHeaders headers = new HttpHeaders();
         HttpEntity entity = new HttpEntity(headers);
         ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
 
