@@ -1,12 +1,10 @@
 package ua.yaroslav.auth2.auth.exception;
 
-import com.fasterxml.jackson.core.JsonParseException;
-
-public class AccessTokenBase64DecodeException extends Exception{
+public class AccessTokenBase64DecodeException extends Exception {
     private final String type = "access_token_base64_decode_exception";
-    private JsonParseException cause;
+    private Exception cause;
 
-    public AccessTokenBase64DecodeException(JsonParseException e){
+    public AccessTokenBase64DecodeException(Exception e) {
         this.cause = e;
     }
 

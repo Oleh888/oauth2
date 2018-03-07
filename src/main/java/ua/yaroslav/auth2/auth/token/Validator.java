@@ -12,7 +12,6 @@ import ua.yaroslav.auth2.entity.AccessToken;
 import ua.yaroslav.auth2.store.iface.ClientStore;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @Component
 public class Validator {
@@ -50,8 +49,8 @@ public class Validator {
 
     }
 
-    public void validate(HttpServletRequest request) throws IOException,
-            AccessTokenHasExpiredException, AccessTokenInvalidException, AccessTokenBase64DecodeException {
+    public void validate(HttpServletRequest request)
+            throws AccessTokenHasExpiredException, AccessTokenInvalidException, AccessTokenBase64DecodeException {
         logger.info("Header: [" + request.getHeader("Authorization") + "]");
 
         if (request.getHeader("Authorization") != null) {
@@ -60,7 +59,7 @@ public class Validator {
             AccessToken accessToken;
             try {
                 accessToken = util.readTokenFromB64(header);
-            } catch (com.fasterxml.jackson.core.JsonParseException e) {
+            } catch (Exception e) {
                 throw new AccessTokenBase64DecodeException(e);
             }
             logger.info("Access Token (decoded) ->");
