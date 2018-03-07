@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
 import ua.yaroslav.auth2.auth.exception.InvalidClientGrantType;
+import ua.yaroslav.auth2.auth.exception.InvalidClientIDException;
 import ua.yaroslav.auth2.auth.exception.InvalidClientSecretException;
 import ua.yaroslav.auth2.auth.token.Generator;
 
@@ -34,6 +35,9 @@ public class TokenExchangeController {
             } catch (InvalidClientSecretException e) {
                 logger.error(e.toString());
                 return ResponseEntity.badRequest().body(e.toJSON());
+            } catch (InvalidClientIDException e) {
+                logger.error(e.toString());
+                return ResponseEntity.badRequest().body(e.toJSON());
             }
 
         } else if (tokenRequest.getGrantType().equals("refresh_token")) {
@@ -41,6 +45,9 @@ public class TokenExchangeController {
             try {
                 return ResponseEntity.ok().body(generator.getRefreshedTokenAsJSON(tokenRequest));
             } catch (InvalidClientSecretException e) {
+                logger.error(e.toString());
+                return ResponseEntity.badRequest().body(e.toJSON());
+            } catch (InvalidClientIDException e) {
                 logger.error(e.toString());
                 return ResponseEntity.badRequest().body(e.toJSON());
             }

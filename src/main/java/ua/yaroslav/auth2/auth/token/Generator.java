@@ -7,6 +7,7 @@ import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenResponseDto;
 import ua.yaroslav.auth2.auth.exception.InvalidClientAuthCodeException;
+import ua.yaroslav.auth2.auth.exception.InvalidClientIDException;
 import ua.yaroslav.auth2.auth.exception.InvalidClientSecretException;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
 import ua.yaroslav.auth2.entity.AccessToken;
@@ -51,7 +52,8 @@ public class Generator {
                 .build();
     }
 
-    public TokenResponseDto getTokensAsJSON(TokenRequestDto tokenRequest) throws IOException, InvalidClientSecretException {
+    public TokenResponseDto getTokensAsJSON(TokenRequestDto tokenRequest)
+            throws IOException, InvalidClientSecretException, InvalidClientIDException {
         validator.validate(tokenRequest);
 
         AuthCode authCode = util.readCodeFromB64(tokenRequest.getCode());
@@ -73,7 +75,8 @@ public class Generator {
         );
     }
 
-    public TokenResponseDto getRefreshedTokenAsJSON(TokenRequestDto tokenRequest) throws IOException, InvalidClientSecretException {
+    public TokenResponseDto getRefreshedTokenAsJSON(TokenRequestDto tokenRequest)
+            throws IOException, InvalidClientSecretException, InvalidClientIDException {
         validator.validate(tokenRequest);
 
         RefreshToken refresh = util.readRefreshTokenFromB64(tokenRequest.getRefreshToken());

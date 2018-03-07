@@ -2,6 +2,7 @@ package ua.yaroslav.auth2.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.exception.AccessTokenHasExpiredException;
@@ -42,17 +43,24 @@ public class ResourceController {
 
 
     @GetMapping(value = {"/private"})
-    public String getPrivateData(HttpServletRequest request, HttpServletResponse response) throws IOException,
-            AccessTokenInvalidException, AccessTokenHasExpiredException {
+    public ResponseEntity<String> getPrivateData(HttpServletRequest request, HttpServletResponse response) throws IOException {
         logger.info("Private Resource was requested");
-        validator.validate(request);
+        try {
+            validator.validate(request);
+        } catch (AccessTokenHasExpiredException e) {
+            logger.error(e.toString());
+            return ResponseEntity.badRequest().body(e.toJSON());
+        } catch (AccessTokenInvalidException e) {
+            logger.error(e.toString());
+            return ResponseEntity.badRequest().body(e.toJSON());
+        }
 
         StringBuilder builder = new StringBuilder();
         writeHeaders(builder, request);
-        return builder.toString();
+        return ResponseEntity.ok().body(builder.toString());
     }
 
-    private void writeHeaders(StringBuilder builder, HttpServletRequest request){
+    private void writeHeaders(StringBuilder builder, HttpServletRequest request) {
         Enumeration headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
