@@ -56,12 +56,15 @@ public class Validator {
         if (request.getHeader("Authorization") != null) {
             String header = request.getHeader("Authorization");
             header = header.substring(7, header.length());
+
             AccessToken accessToken;
             try {
                 accessToken = util.readTokenFromB64(header);
+                logger.info(accessToken.toString());
             } catch (Exception e) {
                 throw new AccessTokenBase64DecodeException(e);
             }
+
             logger.info("Access Token (decoded) ->");
             logger.info(util.objectToString(accessToken));
 

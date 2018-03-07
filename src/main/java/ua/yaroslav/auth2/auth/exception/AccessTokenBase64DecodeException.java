@@ -1,15 +1,13 @@
 package ua.yaroslav.auth2.auth.exception;
 
-public class AccessTokenBase64DecodeException extends Exception {
+public class AccessTokenBase64DecodeException extends AbstractException {
     private final String type = "access_token_base64_decode_exception";
-    private Exception cause;
+
 
     public AccessTokenBase64DecodeException(Exception e) {
-        this.cause = e;
+        super(e);
     }
 
-    public AccessTokenBase64DecodeException() {
-    }
 
     public String toString() {
         return "Access Token Base64 Decode Exception";

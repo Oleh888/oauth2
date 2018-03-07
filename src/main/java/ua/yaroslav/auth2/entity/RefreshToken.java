@@ -68,7 +68,6 @@ public class RefreshToken {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(clientID, username, accessTokenID, scope);
     }
 }

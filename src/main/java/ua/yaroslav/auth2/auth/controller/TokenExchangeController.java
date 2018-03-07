@@ -34,13 +34,7 @@ public class TokenExchangeController {
 
         try {
             validator.validate(tokenRequest);
-        } catch (InvalidClientSecretException e) {
-            logger.error(e.toString());
-            return ResponseEntity.badRequest().body(e.toJSON());
-        } catch (InvalidClientIDException e) {
-            logger.error(e.toString());
-            return ResponseEntity.badRequest().body(e.toJSON());
-        } catch (InvalidClientGrantType e) {
+        } catch (InvalidClientSecretException | InvalidClientIDException | InvalidClientGrantType e) {
             logger.error(e.toString());
             return ResponseEntity.badRequest().body(e.toJSON());
         }

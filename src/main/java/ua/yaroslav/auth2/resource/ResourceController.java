@@ -19,7 +19,6 @@ import ua.yaroslav.auth2.store.iface.TokenStore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class ResourceController {
 
 
     @GetMapping(value = {"/private"})
-    public ResponseEntity<String> getPrivateData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<String> getPrivateData(HttpServletRequest request, HttpServletResponse response) {
         logger.info("Private Resource was requested");
         try {
             validator.validate(request);
@@ -69,6 +68,7 @@ public class ResourceController {
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
             String value = request.getHeader(key);
+            
             if (value.length() < 60)
                 builder.append(key).append(" -> [").append(value).append("]").append("<br>\n");
             else
