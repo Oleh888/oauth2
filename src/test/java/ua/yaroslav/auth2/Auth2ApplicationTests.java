@@ -6,10 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -34,7 +31,7 @@ public class Auth2ApplicationTests {
     private ObjectMapper mapper;
 
     @Test
-    public void getTokenFromCodeAndCheckFields() throws IOException {
+    public void getTokenFromCodeAndCheckFieldsWhenClientDataIsCorrect() throws IOException {
         //given
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.put("client_id", Collections.singletonList("client"));
@@ -56,7 +53,7 @@ public class Auth2ApplicationTests {
     }
 
     @Test
-    public void getPrivateData() throws IOException {
+    public void getPrivateDataWhenAccessTokenIsValid() throws IOException {
         //given
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.put("client_id", Collections.singletonList("client"));
@@ -64,7 +61,6 @@ public class Auth2ApplicationTests {
         params.put("grant_type", Collections.singletonList("authorization_code"));
         params.put("code", Collections.singletonList(getCode()));
         params.put("scope", Collections.singletonList("read"));
-
         ResponseEntity<String> r = this.restTemplate.postForEntity("/token", params, String.class);
         TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
 
@@ -74,10 +70,27 @@ public class Auth2ApplicationTests {
         headers.set("Authorization", "Bearer " +  token.getAccess_token());
         HttpEntity entity = new HttpEntity(headers);
         ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
-        System.out.println(response);
 
         //then
+        System.out.println(response);
+        assertEquals(response.getStatusCode(),HttpStatus.OK);
+        assertThat(response.getBody()).contains("host");
+    }
 
+    @Test
+    public void getTokenFromCodeAndCheckFieldsWhenClientDataIsNotCorrect() throws IOException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.put("client_id", Collections.singletonList("client2"));
+        params.put("client_secret", Collections.singletonList("secret"));
+        params.put("grant_type", Collections.singletonList("authorization_code"));
+        params.put("code", Collections.singletonList(getCode()));
+        params.put("scope", Collections.singletonList("read"));
+
+        ResponseEntity<String> response =
+                this.restTemplate.postForEntity("/token", params, String.class);
+        TokenResponseDto token = mapper.readValue(response.getBody(), TokenResponseDto.class);
+
+        assertThat(response.getBody()).contains("");
     }
 
     private String getCode() {

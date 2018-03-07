@@ -38,7 +38,10 @@ public class Validator {
 
     }
 
-    public void validate(TokenRequestDto tokenRequest) throws InvalidClientSecretException, InvalidClientIDException {
+    public void validate(TokenRequestDto tokenRequest)
+            throws InvalidClientSecretException, InvalidClientIDException, InvalidClientGrantType {
+        if(tokenRequest.getGrantType() == null)
+            throw new InvalidClientGrantType();
         if (!store.checkClient(tokenRequest.getClientID()))
             throw new InvalidClientIDException();
         if (store.checkClient(tokenRequest.getClientID(), tokenRequest.getClientSecret()))
