@@ -1,7 +1,11 @@
 package ua.yaroslav.auth2.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TokenResponseDto {
     private String access_token;
     private String token_type;
@@ -11,17 +15,24 @@ public class TokenResponseDto {
 
 
     public TokenResponseDto() {
-
     }
 
-    public TokenResponseDto(String access_token, String token_type, long expires_in, String scope) {
+    public TokenResponseDto(String access_token,
+                            String token_type,
+                            long expires_in,
+                            String scope) {
         this.access_token = access_token;
         this.token_type = token_type;
         this.expires_in = expires_in;
         this.scope = scope;
     }
 
-    public TokenResponseDto(String access_token, String token_type, long expires_in, String refresh_token, String scope) {
+    @JsonCreator
+    public TokenResponseDto(@JsonProperty("access_token") String access_token,
+                            @JsonProperty("token_type") String token_type,
+                            @JsonProperty("expires_in") long expires_in,
+                            @JsonProperty("refresh_token") String refresh_token,
+                            @JsonProperty("scope") String scope) {
         this.access_token = access_token;
         this.token_type = token_type;
         this.expires_in = expires_in;
