@@ -40,4 +40,13 @@ public class Client {
     public void setSecret(String secret) {
         this.secret = secret;
     }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", secret='" + secret + '\'' +
+                '}';
+    }
 }

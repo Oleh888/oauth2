@@ -1,14 +1,14 @@
-package ua.yaroslav.auth2.integration;
+package ua.yaroslav.auth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
@@ -16,44 +16,34 @@ import org.springframework.util.MultiValueMap;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenResponseDto;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
+import ua.yaroslav.auth2.entity.Client;
 import ua.yaroslav.auth2.store.PostgreClientStore;
-import ua.yaroslav.auth2.store.PostgreCodeStore;
-import ua.yaroslav.auth2.store.PostgreTokenStore;
-import ua.yaroslav.auth2.store.iface.ClientRepository;
-import ua.yaroslav.auth2.store.iface.CodeRepository;
-import ua.yaroslav.auth2.store.iface.TokenRepository;
 
 import java.io.IOException;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class FakeDatabaseTest {
+@AutoConfigureTestDatabase
+public class InMemoryDatabaseTest {
     private final String client = "test";
     private final String secret = "test";
 
-    @MockBean
-    private ClientRepository clientRepository;
-    @MockBean
-    private CodeRepository codeRepository;
-    @MockBean
-    private TokenRepository tokenRepository;
+    //@Autowired
+    //private ApplicationContext context;
 
-    @MockBean
+    @Autowired
     private PostgreClientStore clientStore;
-    @MockBean
-    private PostgreTokenStore tokenStore;
-    @MockBean
-    private PostgreCodeStore codeStore;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        when(clientStore.checkClient(client)).thenReturn(true);
-        when(clientStore.checkClient(client, secret)).thenReturn(true);
+        //PostgreClientStore cs = context.getBean("postgreClientStore", PostgreClientStore.class);
+        //cs.saveClient(new Client(client, secret));
+
+        clientStore.saveClient(new Client(client, secret));
+        clientStore.saveClient(new Client(client, secret));
     }
 
     @Autowired
@@ -65,6 +55,9 @@ public class FakeDatabaseTest {
 
     @Test
     public void getTokenFromCodeAndCheckFieldsWhenClientDataIsCorrect() throws IOException {
+        System.out.println("\nClients:");
+        System.out.println(clientStore.getClients() + "\n");
+
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.put("client_id", Collections.singletonList(client));
         params.put("client_secret", Collections.singletonList(secret));
