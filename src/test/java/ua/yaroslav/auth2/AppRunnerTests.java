@@ -24,22 +24,22 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
 public class AppRunnerTests {
-    private final String client = "test";
-    private final String secret = "test";
+    public static final String CLIENT = "test_client";
+    public static final String SECRET = "test_secret";
+    public static final String AUTHORIZATION_CODE = "authorization_code";
+    public static final String SCOPE = "read";
+    public static final String BEARER = "bearer";
+    public static final String TOKEN_URL = "/token";
+    public static final String PRIVATE_RESOURCE_URL = "/private";
 
     @Autowired
     private PostgreClientStore clientStore;
-
-    @Before
-    public void setUp() {
-        clientStore.saveClient(new Client(client, secret));
-    }
-
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired
@@ -47,55 +47,52 @@ public class AppRunnerTests {
     @Autowired
     private JSONUtil util;
 
-    @Test
-    public void getTokenFromCodeWhenClientDataIsCorrectThenTokenValid() throws IOException {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.put("client_id", Collections.singletonList(client));
-        params.put("client_secret", Collections.singletonList(secret));
-        params.put("grant_type", Collections.singletonList("authorization_code"));
-        params.put("code", Collections.singletonList(getCode()));
-        params.put("scope", Collections.singletonList("read"));
+    @Before
+    public void setUp() {
+        clientStore.saveClient(new Client(CLIENT, SECRET));
+    }
 
-        ResponseEntity<String> response = this.restTemplate.postForEntity("/token", params, String.class);
+    @Test
+    public void postWithAuthCodeShouldReturnValidAccessAndRefreshToken() throws IOException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.put("client_id", Collections.singletonList(CLIENT));
+        params.put("client_secret", Collections.singletonList(SECRET));
+        params.put("grant_type", Collections.singletonList(AUTHORIZATION_CODE));
+        params.put("code", Collections.singletonList(generateCode()));
+        params.put("scope", Collections.singletonList(SCOPE));
+
+        ResponseEntity<String> response = this.restTemplate.postForEntity(TOKEN_URL, params, String.class);
         TokenResponseDto token = mapper.readValue(response.getBody(), TokenResponseDto.class);
         AccessToken accessToken = util.readTokenFromB64(token.getAccess_token());
 
-        assertEquals(token.getToken_type(), "bearer");
-        assertEquals(accessToken.getScope(), "read");
-        assertEquals(accessToken.getClientID(), client);
+        assertEquals(token.getToken_type(), BEARER);
+        assertNotNull(token.getRefresh_token());
+        assertEquals(accessToken.getScope(), SCOPE);
+        assertEquals(accessToken.getClientID(), CLIENT);
         assertThat(accessToken.getTime()).isGreaterThanOrEqualTo(System.currentTimeMillis());
     }
 
     @Test
-    public void getPrivateDataWhenAccessTokenIsValidThenAccessGranted() throws IOException {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.put("client_id", Collections.singletonList(client));
-        params.put("client_secret", Collections.singletonList(secret));
-        params.put("grant_type", Collections.singletonList("authorization_code"));
-        params.put("code", Collections.singletonList(getCode()));
-        params.put("scope", Collections.singletonList("read"));
-        ResponseEntity<String> r = this.restTemplate.postForEntity("/token", params, String.class);
-        TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
-
+    public void getWithAccessTokenShouldReturnRequestHeaders() throws IOException {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.getAccess_token());
+        headers.set("Authorization", "Bearer " + generateAccessToken());
         HttpEntity entity = new HttpEntity(headers);
-        ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(PRIVATE_RESOURCE_URL, HttpMethod.GET, entity, String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertThat(response.getBody()).contains("host");
     }
 
     @Test
-    public void getTokenFromCodeWhenClientDataIsNotCorrectThenThrowInvalideClientIDException() throws IOException {
+    public void postWithAuthCodeAndInvalidClientIDShouldThrowAuthException() throws IOException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.put("client_id", Collections.singletonList("client2"));
-        params.put("client_secret", Collections.singletonList(secret));
-        params.put("grant_type", Collections.singletonList("authorization_code"));
-        params.put("code", Collections.singletonList(getCode()));
-        params.put("scope", Collections.singletonList("read"));
+        params.put("client_secret", Collections.singletonList(SECRET));
+        params.put("grant_type", Collections.singletonList(AUTHORIZATION_CODE));
+        params.put("code", Collections.singletonList(generateCode()));
+        params.put("scope", Collections.singletonList(SCOPE));
 
-        ResponseEntity<String> response = this.restTemplate.postForEntity("/token", params, String.class);
+        ResponseEntity<String> response = this.restTemplate.postForEntity(TOKEN_URL, params, String.class);
         TokenResponseDto token = mapper.readValue(response.getBody(), TokenResponseDto.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
@@ -103,38 +100,50 @@ public class AppRunnerTests {
     }
 
     @Test
-    public void getPrivateDataWhenAccessTokenIsNotValidThenThrowAccessTokenDecodeException() throws IOException {
+    public void getWithInvalidAccessTokenShouldThrowAccessTokenDecodeException() throws IOException {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.put("client_id", Collections.singletonList(client));
-        params.put("client_secret", Collections.singletonList(secret));
-        params.put("grant_type", Collections.singletonList("authorization_code"));
-        params.put("code", Collections.singletonList(getCode()));
-        params.put("scope", Collections.singletonList("read"));
-        ResponseEntity<String> r = this.restTemplate.postForEntity("/token", params, String.class);
+        params.put("client_id", Collections.singletonList(CLIENT));
+        params.put("client_secret", Collections.singletonList(SECRET));
+        params.put("grant_type", Collections.singletonList(AUTHORIZATION_CODE));
+        params.put("code", Collections.singletonList(generateCode()));
+        params.put("scope", Collections.singletonList(SCOPE));
+        ResponseEntity<String> r = this.restTemplate.postForEntity(TOKEN_URL, params, String.class);
         TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + "123123");
         HttpEntity entity = new HttpEntity(headers);
-        ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(PRIVATE_RESOURCE_URL, HttpMethod.GET, entity, String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).contains("access_token_base64_decode_exception");
     }
 
     @Test
-    public void getPrivateDataWhenAccessTokenNotPresentThenThrowInvalidAccessTokenException() {
+    public void getWithEmptyAccessTokenShouldThrowInvalidAccessTokenException() {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity entity = new HttpEntity(headers);
-        ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(PRIVATE_RESOURCE_URL, HttpMethod.GET, entity, String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).contains("invalid_access_token");
     }
 
-    private String getCode() {
+    private String generateCode() {
         return util.encodeObject(util.getCode(new AuthRequestDto
-                ("login", "pass", client, "code", "uri", "read")
+                ("login", "pass", CLIENT, "code", "uri", SCOPE)
         ));
+    }
+
+    private String generateAccessToken() throws IOException {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.put("client_id", Collections.singletonList(CLIENT));
+        params.put("client_secret", Collections.singletonList(SECRET));
+        params.put("grant_type", Collections.singletonList(AUTHORIZATION_CODE));
+        params.put("code", Collections.singletonList(generateCode()));
+        params.put("scope", Collections.singletonList(SCOPE));
+        ResponseEntity<String> r = this.restTemplate.postForEntity(TOKEN_URL, params, String.class);
+        TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
+        return token.getAccess_token();
     }
 }
