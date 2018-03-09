@@ -36,7 +36,6 @@ public class InMemoryDatabaseTest {
     @Before
     public void setUp() {
         clientStore.saveClient(new Client(client, secret));
-        clientStore.saveClient(new Client(client, secret));
     }
 
     @Autowired
