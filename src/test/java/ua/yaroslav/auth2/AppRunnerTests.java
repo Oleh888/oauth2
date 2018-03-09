@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class Auth2ApplicationTests {
+public class AppRunnerTests {
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired
@@ -60,14 +60,14 @@ public class Auth2ApplicationTests {
         ResponseEntity<String> r = this.restTemplate.postForEntity("/token", params, String.class);
         TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
 
-        System.out.println("Token[pr]: " +  token.getAccess_token());
+        System.out.println("Token[pr]: " + token.getAccess_token());
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " +  token.getAccess_token());
+        headers.set("Authorization", "Bearer " + token.getAccess_token());
         HttpEntity entity = new HttpEntity(headers);
         ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
 
         System.out.println(response);
-        assertEquals(response.getStatusCode(),HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertThat(response.getBody()).contains("host");
     }
 
@@ -99,9 +99,9 @@ public class Auth2ApplicationTests {
         ResponseEntity<String> r = this.restTemplate.postForEntity("/token", params, String.class);
         TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
 
-        System.out.println("Token[pr]: " +  token.getAccess_token());
+        System.out.println("Token[pr]: " + token.getAccess_token());
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " +  "123123");
+        headers.set("Authorization", "Bearer " + "123123");
         HttpEntity entity = new HttpEntity(headers);
         ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);
 
@@ -111,7 +111,7 @@ public class Auth2ApplicationTests {
     }
 
     @Test
-    public void getPrivateDataWhenAccessTokenNotPresent(){
+    public void getPrivateDataWhenAccessTokenNotPresent() {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity entity = new HttpEntity(headers);
         ResponseEntity<String> response = restTemplate.exchange("/private", HttpMethod.GET, entity, String.class);

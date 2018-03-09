@@ -35,8 +35,8 @@ dependencies {
 jacocoTestReport {
     group = "Reporting"
     reports {
-        xml.enabled true
-        csv.enabled false
-        html.destination "${buildDir}/reports/coverage"
+        xml.enabled = true
+        csv.enabled = false
+        html.destination = "${buildDir}/reports/coverage"
     }
 }
