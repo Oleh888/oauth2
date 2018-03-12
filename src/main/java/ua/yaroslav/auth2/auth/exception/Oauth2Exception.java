@@ -25,7 +25,7 @@ public class Oauth2Exception extends RuntimeException {
         if (cause == null) {
             return "{" + "\"error_type\":" + "\"" + type + "\"}";
         } else return "{" + "\"error_type\":" + "\"" + type + "\"," +
-                "\"error_description\":" + "\"" + cause.getMessage() + "\"" +
+                    "\"error_description\":" + "\"" + cause.getMessage() + "\"" +
                 "}";
     }
 

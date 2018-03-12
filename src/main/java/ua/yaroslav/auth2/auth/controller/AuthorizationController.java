@@ -33,13 +33,14 @@ public class AuthorizationController {
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void getCode(AuthRequestDto authRequest, Model model, HttpServletResponse response) throws IOException {
         logger.info(authRequest.toString());
-        try {
-            response.sendRedirect(generator.getURL(authRequest));
-        } catch (Oauth2Exception e) {
-            logger.error(e.toString());
-            model.addAttribute("exception", e.toString());
-            response.sendRedirect("/error");
-        }
+        response.sendRedirect(generator.getURL(authRequest));
+//        try {
+//            response.sendRedirect(generator.getURL(authRequest));
+//        } catch (Oauth2Exception e) {
+//            logger.error(e.toString());
+//            model.addAttribute("exception", e.toString());
+//            response.sendRedirect("/error");
+//        }
     }
 
     @GetMapping("/auth")
