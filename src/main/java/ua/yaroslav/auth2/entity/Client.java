@@ -9,7 +9,7 @@ public class Client {
     @Id
     @Column
     private long id;
-    @Column
+    @Column(unique=true)
     private String name;
     @Column
     private String secret;
@@ -43,7 +43,7 @@ public class Client {
 
     @Override
     public String toString() {
-        return "Client{" +
+        return "\nClient {" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", secret='" + secret + '\'' +

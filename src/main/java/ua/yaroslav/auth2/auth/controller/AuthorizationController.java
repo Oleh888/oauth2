@@ -34,13 +34,6 @@ public class AuthorizationController {
     public void getCode(AuthRequestDto authRequest, Model model, HttpServletResponse response) throws IOException {
         logger.info(authRequest.toString());
         response.sendRedirect(generator.getURL(authRequest));
-//        try {
-//            response.sendRedirect(generator.getURL(authRequest));
-//        } catch (Oauth2Exception e) {
-//            logger.error(e.toString());
-//            model.addAttribute("exception", e.toString());
-//            response.sendRedirect("/error");
-//        }
     }
 
     @GetMapping("/auth")

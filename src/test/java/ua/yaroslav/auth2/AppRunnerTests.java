@@ -49,7 +49,8 @@ public class AppRunnerTests {
 
     @Before
     public void setUp() {
-        clientStore.saveClient(new Client(CLIENT, SECRET));
+        if (clientStore.getClients().size() == 0)
+            clientStore.saveClient(new Client(CLIENT, SECRET));
     }
 
     @Test
