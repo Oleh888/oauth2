@@ -5,12 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.LoginRequestDto;
-import ua.yaroslav.auth2.auth.exception.InvalidClientAuthCodeException;
-import ua.yaroslav.auth2.auth.exception.InvalidClientIDException;
+import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
 import ua.yaroslav.auth2.auth.token.Generator;
 import ua.yaroslav.auth2.store.PostgreTokenStore;
 
@@ -35,7 +35,7 @@ public class AuthorizationController {
         logger.info(authRequest.toString());
         try {
             response.sendRedirect(generator.getURL(authRequest));
-        } catch (InvalidClientAuthCodeException e) {
+        } catch (Oauth2Exception e) {
             logger.error(e.toString());
             model.addAttribute("exception", e.toString());
             response.sendRedirect("/error");
@@ -44,18 +44,19 @@ public class AuthorizationController {
 
     @GetMapping("/auth")
     public String getLogin(LoginRequestDto loginRequest, Model model, HttpServletResponse response) {
-        try {
-            generator.getValidator().validate(loginRequest);
-            model.addAttribute("redirect_uri", loginRequest.getRedirectURI());
-            model.addAttribute("client_id", loginRequest.getClientID());
-            model.addAttribute("response_type", loginRequest.getResponseType());
-            model.addAttribute("access_type", loginRequest.getAccessType());
-            model.addAttribute("scope", loginRequest.getScope());
-            return "login";
-        } catch (InvalidClientIDException e) {
-            logger.error(e.toString());
-            model.addAttribute("exception", e.toString());
-            return "error";
-        }
+        generator.getValidator().validate(loginRequest);
+        model.addAttribute("redirect_uri", loginRequest.getRedirectURI());
+        model.addAttribute("client_id", loginRequest.getClientID());
+        model.addAttribute("response_type", loginRequest.getResponseType());
+        model.addAttribute("access_type", loginRequest.getAccessType());
+        model.addAttribute("scope", loginRequest.getScope());
+        return "login";
+    }
+
+    @ExceptionHandler({Oauth2Exception.class})
+    public String handleOauth2Exception(Oauth2Exception oe, Model model){
+        logger.error(oe.toString());
+        model.addAttribute("exception", oe.toString());
+        return "error";
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenResponseDto;
-import ua.yaroslav.auth2.auth.exception.InvalidClientAuthCodeException;
+import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
 import ua.yaroslav.auth2.entity.AccessToken;
 import ua.yaroslav.auth2.entity.AuthCode;
@@ -37,7 +37,7 @@ public class Generator {
         return validator;
     }
 
-    public String getURL(AuthRequestDto authRequest) throws InvalidClientAuthCodeException {
+    public String getURL(AuthRequestDto authRequest) throws Oauth2Exception {
         validator.validate(authRequest);
         AuthCode code = util.getCode(authRequest);
         codeStore.saveCode(code);

@@ -3,11 +3,10 @@ package ua.yaroslav.auth2.resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.yaroslav.auth2.auth.exception.AccessTokenBase64DecodeException;
-import ua.yaroslav.auth2.auth.exception.AccessTokenHasExpiredException;
-import ua.yaroslav.auth2.auth.exception.AccessTokenInvalidException;
+import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
 import ua.yaroslav.auth2.auth.token.Validator;
 import ua.yaroslav.auth2.entity.AccessToken;
@@ -45,35 +44,11 @@ public class ResourceController {
     @GetMapping(value = {"/private"})
     public ResponseEntity<String> getPrivateData(HttpServletRequest request, HttpServletResponse response) {
         logger.info("Private Resource was requested");
-        try {
-            validator.validate(request);
-        } catch (AccessTokenHasExpiredException e) {
-            logger.error(e.toString());
-            return ResponseEntity.badRequest().body(e.toJSON());
-        } catch (AccessTokenInvalidException e) {
-            logger.error(e.toString());
-            return ResponseEntity.badRequest().body(e.toJSON());
-        } catch (AccessTokenBase64DecodeException e) {
-            logger.error(e.toString());
-            return ResponseEntity.badRequest().body(e.toJSON());
-        }
+        validator.validate(request);
 
         StringBuilder builder = new StringBuilder();
         writeHeaders(builder, request);
         return ResponseEntity.ok().body(builder.toString());
-    }
-
-    private void writeHeaders(StringBuilder builder, HttpServletRequest request) {
-        Enumeration headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
-            String value = request.getHeader(key);
-            
-            if (value.length() < 60)
-                builder.append(key).append(" -> [").append(value).append("]").append("<br>\n");
-            else
-                builder.append(key).append(" -> [").append(value, 0, 60).append("...]").append("<br>\n");
-        }
     }
 
     @GetMapping("/clients")
@@ -89,5 +64,24 @@ public class ResourceController {
     @GetMapping("/codes")
     public List<AuthCode> codeList() {
         return codeStore.getCodes();
+    }
+
+    @ExceptionHandler(Oauth2Exception.class)
+    public ResponseEntity<?> handleOauth2Exception(Oauth2Exception oe) {
+        logger.error(oe.toString());
+        return ResponseEntity.badRequest().body(oe.toJSON());
+    }
+
+    private void writeHeaders(StringBuilder builder, HttpServletRequest request) {
+        Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = request.getHeader(key);
+
+            if (value.length() < 60)
+                builder.append(key).append(" -> [").append(value).append("]").append("<br>\n");
+            else
+                builder.append(key).append(" -> [").append(value, 0, 60).append("...]").append("<br>\n");
+        }
     }
 }

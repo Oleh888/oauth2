@@ -4,12 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
-import ua.yaroslav.auth2.auth.exception.InvalidClientGrantType;
-import ua.yaroslav.auth2.auth.exception.InvalidClientIDException;
-import ua.yaroslav.auth2.auth.exception.InvalidClientSecretException;
+import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
 import ua.yaroslav.auth2.auth.token.Generator;
 import ua.yaroslav.auth2.auth.token.Validator;
 
@@ -31,20 +30,20 @@ public class TokenExchangeController {
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getToken(TokenRequestDto tokenRequest) throws IOException {
         logger.info(tokenRequest.toString());
-
-        try {
-            validator.validate(tokenRequest);
-        } catch (InvalidClientSecretException | InvalidClientIDException | InvalidClientGrantType e) {
-            logger.error(e.toString());
-            return ResponseEntity.badRequest().body(e.toJSON());
-        }
+        validator.validate(tokenRequest);
 
         if (tokenRequest.getGrantType().equals("authorization_code")) {
             return ResponseEntity.ok().body(generator.getTokensAsJSON(tokenRequest));
         } else if (tokenRequest.getGrantType().equals("refresh_token")) {
             return ResponseEntity.ok().body(generator.getRefreshedTokenAsJSON(tokenRequest));
         } else {
-            return ResponseEntity.badRequest().body(new InvalidClientGrantType().toJSON());
+            return ResponseEntity.badRequest().body("invalid_client_grant_type");
         }
+    }
+
+    @ExceptionHandler(Oauth2Exception.class)
+    public ResponseEntity<?> handleOauth2Exception(Oauth2Exception oe){
+        logger.error(oe.toString());
+        return ResponseEntity.badRequest().body(oe.toJSON());
     }
 }
