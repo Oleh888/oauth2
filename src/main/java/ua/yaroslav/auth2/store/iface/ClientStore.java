@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface ClientStore {
     void saveClient(Client client);
-    boolean checkClient(String clientID);
-    boolean checkClient(String clientID, String clientSecret);
+    Client findByClientID(String cid);
+    boolean checkClient(String cid);
+    boolean checkClient(String cid, String clientSecret);
     List<Client> getClients();
 }

@@ -23,6 +23,11 @@ public class PostgreClientStore implements ClientStore {
     }
 
     @Override
+    public Client findByClientID(String cid) {
+        return this.repository.findByName(cid);
+    }
+
+    @Override
     public boolean checkClient(String clientID) {
         return this.repository.existsByName(clientID);
     }

@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2;
+package ua.yaroslav.auth2.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -29,7 +29,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
-public class AppRunnerTests {
+public class IntegrationTests {
     public static final String CLIENT = "test_client";
     public static final String SECRET = "test_secret";
     public static final String AUTHORIZATION_CODE = "authorization_code";
@@ -97,7 +97,7 @@ public class AppRunnerTests {
         TokenResponseDto token = mapper.readValue(response.getBody(), TokenResponseDto.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("invalid_client_id");
+        assertThat(response.getBody()).contains("invalid_request");
     }
 
     @Test
@@ -117,7 +117,9 @@ public class AppRunnerTests {
         ResponseEntity<String> response = restTemplate.exchange(PRIVATE_RESOURCE_URL, HttpMethod.GET, entity, String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("access_token_base64_decode_exception");
+        System.out.println(response.getBody());
+        System.out.println();
+        assertThat(response.getBody()).contains("server_error");
     }
 
     @Test
@@ -127,7 +129,7 @@ public class AppRunnerTests {
         ResponseEntity<String> response = restTemplate.exchange(PRIVATE_RESOURCE_URL, HttpMethod.GET, entity, String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody()).contains("invalid_access_token");
+        assertThat(response.getBody()).contains("access_denied");
     }
 
     private String generateCode() {

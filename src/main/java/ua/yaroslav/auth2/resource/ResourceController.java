@@ -3,10 +3,8 @@ package ua.yaroslav.auth2.resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
 import ua.yaroslav.auth2.auth.json.JSONUtil;
 import ua.yaroslav.auth2.auth.token.Validator;
 import ua.yaroslav.auth2.entity.AccessToken;
@@ -64,12 +62,6 @@ public class ResourceController {
     @GetMapping("/codes")
     public List<AuthCode> codeList() {
         return codeStore.getCodes();
-    }
-
-    @ExceptionHandler(Oauth2Exception.class)
-    public ResponseEntity<?> handleOauth2Exception(Oauth2Exception oe) {
-        logger.error(oe.toString());
-        return ResponseEntity.badRequest().body(oe.toJSON());
     }
 
     private void writeHeaders(StringBuilder builder, HttpServletRequest request) {

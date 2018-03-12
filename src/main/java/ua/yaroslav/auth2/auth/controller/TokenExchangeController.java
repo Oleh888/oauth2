@@ -4,10 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
+import ua.yaroslav.auth2.auth.exception.ErrorType;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
 import ua.yaroslav.auth2.auth.token.Generator;
 import ua.yaroslav.auth2.auth.token.Validator;
@@ -37,13 +37,7 @@ public class TokenExchangeController {
         } else if (tokenRequest.getGrantType().equals("refresh_token")) {
             return ResponseEntity.ok().body(generator.getRefreshedTokenAsJSON(tokenRequest));
         } else {
-            return ResponseEntity.badRequest().body("invalid_client_grant_type");
+            throw new Oauth2Exception(ErrorType.invalid_request, "Invalid Grant Type");
         }
-    }
-
-    @ExceptionHandler(Oauth2Exception.class)
-    public ResponseEntity<?> handleOauth2Exception(Oauth2Exception oe){
-        logger.error(oe.toString());
-        return ResponseEntity.badRequest().body(oe.toJSON());
     }
 }
