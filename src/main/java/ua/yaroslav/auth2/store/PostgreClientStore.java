@@ -11,9 +11,11 @@ import java.util.List;
 public class PostgreClientStore implements ClientStore {
     private final ClientRepository repository;
 
+
     public PostgreClientStore(ClientRepository repository) {
         this.repository = repository;
     }
+
 
     @Override
     public void saveClient(Client client) {
@@ -27,7 +29,8 @@ public class PostgreClientStore implements ClientStore {
 
     @Override
     public boolean checkClient(String clientID, String clientSecret) {
-        return this.repository.existsByName(clientID) && this.repository.existsBySecret(clientSecret);
+        Client client = repository.findByName(clientID);
+        return client.getSecret().equals(clientSecret);
     }
 
     @Override

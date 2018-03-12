@@ -27,7 +27,7 @@ public class Validator {
     public void validate(LoginRequestDto loginRequest) throws Oauth2Exception {
         if (store.checkClient(loginRequest.getClientID()))
             return;
-        throw new Oauth2Exception("invalid_client_id");//
+        throw new Oauth2Exception("invalid_client_id");
     }
 
     public void validate(AuthRequestDto authRequest) throws Oauth2Exception {

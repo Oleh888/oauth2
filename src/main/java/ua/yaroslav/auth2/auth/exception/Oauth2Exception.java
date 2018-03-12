@@ -30,6 +30,6 @@ public class Oauth2Exception extends RuntimeException {
     }
 
     public String toString() {
-        return type.replace('_', ' ');
+        return "Oauth2Exception: " + type.replace('_', ' ');
     }
 }

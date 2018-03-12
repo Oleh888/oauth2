@@ -11,9 +11,11 @@ import java.util.List;
 public class PostgreTokenStore implements TokenStore {
     private final TokenRepository repository;
 
+
     public PostgreTokenStore(TokenRepository repository) {
         this.repository = repository;
     }
+
 
     @Override
     public void saveToken(AccessToken accessToken) {
