@@ -31,13 +31,13 @@ public class AuthorizationController {
 
 
     @PostMapping(value = {"/auth"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public void getCode(AuthRequestDto authRequest, Model model, HttpServletResponse response) throws IOException {
+    public void getCode(AuthRequestDto authRequest, HttpServletResponse response) throws IOException {
         logger.info(authRequest.toString());
         response.sendRedirect(generator.getURL(authRequest));
     }
 
     @GetMapping("/auth")
-    public String getLogin(LoginRequestDto loginRequest, Model model, HttpServletResponse response) {
+    public String getLogin(LoginRequestDto loginRequest, Model model) {
         generator.getValidator().validate(loginRequest);
         model.addAttribute("redirect_uri", loginRequest.getRedirectURI());
         model.addAttribute("client_id", loginRequest.getClientID());
