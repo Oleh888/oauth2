@@ -21,7 +21,7 @@ public class AuthorizationExceptionHandler {
     }
 
     @ExceptionHandler(LoginException.class)
-    public String handleOauth2Exception(LoginException le, Model model) {
+    public String handleLoginException(LoginException le, Model model) {
         logger.error(le.getMessage());
         model.addAttribute("exception", le.toString());
         return "error";
