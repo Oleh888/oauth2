@@ -1,19 +1,19 @@
-package ua.yaroslav.auth2.auth.json;
+package ua.yaroslav.auth2.auth.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
-import ua.yaroslav.auth2.entity.AccessToken;
-import ua.yaroslav.auth2.entity.AuthCode;
-import ua.yaroslav.auth2.entity.RefreshToken;
+import ua.yaroslav.auth2.auth.entity.AccessToken;
+import ua.yaroslav.auth2.auth.entity.AuthCode;
+import ua.yaroslav.auth2.auth.entity.RefreshToken;
 
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Objects;
 
-@Component
+@Service
 public class JSONUtil {
     private static ObjectMapper mapper;
 
@@ -66,7 +66,7 @@ public class JSONUtil {
         return mapper.readValue(new String(Base64.getDecoder().decode(token.getBytes())), RefreshToken.class);
     }
 
-    public static String responseToString(Object code){
+    public static String responseToString(Object code) {
         try {
             return "\n" + mapper.writeValueAsString(code) + "\n";
         } catch (JsonProcessingException e) {

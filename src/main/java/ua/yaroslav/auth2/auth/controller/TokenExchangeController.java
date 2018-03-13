@@ -9,33 +9,33 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
 import ua.yaroslav.auth2.auth.exception.ErrorType;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
-import ua.yaroslav.auth2.auth.token.Generator;
-import ua.yaroslav.auth2.auth.token.Validator;
+import ua.yaroslav.auth2.auth.service.TokenService;
+import ua.yaroslav.auth2.auth.service.ValidationService;
 
 import java.io.IOException;
 
 @RestController
 public class TokenExchangeController {
     private static final Logger logger = LoggerFactory.getLogger(TokenExchangeController.class);
-    private final Generator generator;
-    private final Validator validator;
+    private final TokenService tokenService;
+    private final ValidationService validationService;
 
 
-    public TokenExchangeController(Generator generator, Validator validator) {
-        this.generator = generator;
-        this.validator = validator;
+    public TokenExchangeController(TokenService tokenService, ValidationService validationService) {
+        this.tokenService = tokenService;
+        this.validationService = validationService;
     }
 
 
     @PostMapping(value = "/token", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getToken(TokenRequestDto tokenRequest) throws IOException {
         logger.info(tokenRequest.toString());
-        validator.validate(tokenRequest);
+        validationService.validate(tokenRequest);
 
         if (tokenRequest.getGrantType().equals("authorization_code")) {
-            return ResponseEntity.ok().body(generator.getTokensAsJSON(tokenRequest));
+            return ResponseEntity.ok().body(tokenService.getTokensAsJSON(tokenRequest));
         } else if (tokenRequest.getGrantType().equals("refresh_token")) {
-            return ResponseEntity.ok().body(generator.getRefreshedTokenAsJSON(tokenRequest));
+            return ResponseEntity.ok().body(tokenService.getRefreshedTokenAsJSON(tokenRequest));
         } else {
             throw new Oauth2Exception(ErrorType.invalid_request, "Invalid Grant Type");
         }

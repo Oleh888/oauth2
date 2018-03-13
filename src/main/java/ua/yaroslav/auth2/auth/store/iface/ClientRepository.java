@@ -1,8 +1,8 @@
-package ua.yaroslav.auth2.store.iface;
+package ua.yaroslav.auth2.auth.store.iface;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import ua.yaroslav.auth2.entity.Client;
+import ua.yaroslav.auth2.auth.entity.Client;
 
 @Repository
 public interface ClientRepository extends CrudRepository<Client, Long> {

@@ -1,6 +1,6 @@
-package ua.yaroslav.auth2.store.iface;
+package ua.yaroslav.auth2.auth.store.iface;
 
-import ua.yaroslav.auth2.entity.Client;
+import ua.yaroslav.auth2.auth.entity.Client;
 
 import java.util.List;
 

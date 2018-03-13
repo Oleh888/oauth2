@@ -1,34 +1,34 @@
-package ua.yaroslav.auth2.auth.token;
+package ua.yaroslav.auth2.auth.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.LoginRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
+import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.exception.ErrorType;
+import ua.yaroslav.auth2.auth.exception.LoginException;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
-import ua.yaroslav.auth2.auth.json.JSONUtil;
-import ua.yaroslav.auth2.entity.AccessToken;
-import ua.yaroslav.auth2.store.iface.ClientStore;
+import ua.yaroslav.auth2.auth.store.iface.ClientStore;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Component
-public class Validator {
-    private final Logger logger = LoggerFactory.getLogger(Validator.class);
+@Service
+public class ValidationService {
+    private final Logger logger = LoggerFactory.getLogger(ValidationService.class);
     private final ClientStore store;
     private final JSONUtil util;
 
-    public Validator(ClientStore store, JSONUtil util) {
+    public ValidationService(ClientStore store, JSONUtil util) {
         this.store = store;
         this.util = util;
     }
 
-    public void validate(LoginRequestDto loginRequest) throws Oauth2Exception {
+    public void validate(LoginRequestDto loginRequest) throws LoginException {
         if (store.checkClient(loginRequest.getClientID()))
             return;
-        throw new Oauth2Exception(ErrorType.invalid_request, "Invalide Client ID");
+        throw new LoginException("Invalid Client ID");
     }
 
     public void validate(AuthRequestDto authRequest) throws Oauth2Exception {
@@ -43,10 +43,10 @@ public class Validator {
         if (tokenRequest.getGrantType() == null)
             throw new Oauth2Exception(ErrorType.invalid_request, "Invalid Grant Type");
         if (!store.checkClient(tokenRequest.getClientID()))
-            throw new Oauth2Exception(ErrorType.invalid_request, "Invalide Client ID");
+            throw new Oauth2Exception(ErrorType.invalid_request, "Invalid Client ID");
         if (store.checkClient(tokenRequest.getClientID(), tokenRequest.getClientSecret()))
             return;
-        throw new Oauth2Exception(ErrorType.invalid_request, "Invalide Client Secret");
+        throw new Oauth2Exception(ErrorType.invalid_request, "Invalid Client Secret");
 
     }
 

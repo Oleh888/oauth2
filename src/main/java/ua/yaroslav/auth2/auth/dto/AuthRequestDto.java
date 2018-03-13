@@ -71,6 +71,7 @@ public class AuthRequestDto {
         this.redirect_uri = redirect_uri;
     }
 
+    @Override
     public String toString() {
         return "\n\n" + this.getClass().getSimpleName() + ": " +
                 "\n   client_id:     \n\t\t" + client_id +

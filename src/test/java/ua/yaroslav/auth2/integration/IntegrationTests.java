@@ -14,10 +14,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenResponseDto;
-import ua.yaroslav.auth2.auth.json.JSONUtil;
-import ua.yaroslav.auth2.entity.AccessToken;
-import ua.yaroslav.auth2.entity.Client;
-import ua.yaroslav.auth2.store.PostgreClientStore;
+import ua.yaroslav.auth2.auth.service.JSONUtil;
+import ua.yaroslav.auth2.auth.entity.AccessToken;
+import ua.yaroslav.auth2.auth.entity.Client;
+import ua.yaroslav.auth2.auth.store.PostgresClientStore;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -35,11 +35,11 @@ public class IntegrationTests {
     public static final String AUTHORIZATION_CODE = "authorization_code";
     public static final String SCOPE = "read";
     public static final String BEARER = "bearer";
-    public static final String TOKEN_URL = "/token";
+    public static final String TOKEN_URL = "/service";
     public static final String PRIVATE_RESOURCE_URL = "/private";
 
     @Autowired
-    private PostgreClientStore clientStore;
+    private PostgresClientStore clientStore;
     @Autowired
     private TestRestTemplate restTemplate;
     @Autowired

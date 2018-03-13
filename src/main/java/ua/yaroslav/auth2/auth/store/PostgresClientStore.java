@@ -1,18 +1,18 @@
-package ua.yaroslav.auth2.store;
+package ua.yaroslav.auth2.auth.store;
 
 import org.springframework.stereotype.Service;
-import ua.yaroslav.auth2.entity.Client;
-import ua.yaroslav.auth2.store.iface.ClientRepository;
-import ua.yaroslav.auth2.store.iface.ClientStore;
+import ua.yaroslav.auth2.auth.entity.Client;
+import ua.yaroslav.auth2.auth.store.iface.ClientRepository;
+import ua.yaroslav.auth2.auth.store.iface.ClientStore;
 
 import java.util.List;
 
 @Service
-public class PostgreClientStore implements ClientStore {
+public class PostgresClientStore implements ClientStore {
     private final ClientRepository repository;
 
 
-    public PostgreClientStore(ClientRepository repository) {
+    public PostgresClientStore(ClientRepository repository) {
         this.repository = repository;
     }
 

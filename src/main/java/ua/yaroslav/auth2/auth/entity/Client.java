@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.entity;
+package ua.yaroslav.auth2.auth.entity;
 
 import javax.persistence.*;
 
