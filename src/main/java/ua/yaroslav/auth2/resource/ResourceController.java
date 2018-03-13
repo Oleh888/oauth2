@@ -5,11 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.entity.Client;
 import ua.yaroslav.auth2.auth.service.ValidationService;
 import ua.yaroslav.auth2.auth.store.ClientStore;
-import ua.yaroslav.auth2.auth.store.TokenRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -19,14 +17,11 @@ import java.util.List;
 public class ResourceController {
     private final static Logger logger = LoggerFactory.getLogger(ResourceController.class);
     private final ClientStore clientStore;
-    private final TokenRepository tokenRepository;
     private final ValidationService validationService;
 
 
-    public ResourceController(ClientStore clientStore, ValidationService validator,
-                              TokenRepository tokenRepository) {
+    public ResourceController(ClientStore clientStore, ValidationService validator) {
         this.clientStore = clientStore;
-        this.tokenRepository = tokenRepository;
         this.validationService = validator;
     }
 
@@ -41,11 +36,6 @@ public class ResourceController {
     @GetMapping("/clients")
     public List<Client> clientList() {
         return clientStore.getClients();
-    }
-
-    @GetMapping("/tokens")
-    public List<AccessToken> tokenList() {
-        return (List<AccessToken>) tokenRepository.findAll();
     }
 
     private String writeHeaders(HttpServletRequest request) {

@@ -15,7 +15,6 @@ import ua.yaroslav.auth2.auth.entity.RefreshToken;
 import ua.yaroslav.auth2.auth.exception.ErrorType;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
 import ua.yaroslav.auth2.auth.service.TokenService;
-import ua.yaroslav.auth2.auth.store.TokenRepository;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -23,13 +22,11 @@ import java.util.Objects;
 
 @Service
 public class TokenServiceImpl implements TokenService {
-    private final TokenRepository tokenRepository;
     private final ObjectMapper mapper;
     private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 
 
-    public TokenServiceImpl(ObjectMapper mapper, TokenRepository tokenRepository) {
-        this.tokenRepository = tokenRepository;
+    public TokenServiceImpl(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
@@ -40,7 +37,7 @@ public class TokenServiceImpl implements TokenService {
         try {
             return encodeObject(code);
         } catch (JsonProcessingException e) {
-            throw new Oauth2Exception(ErrorType.server_error, "Access Token Base64 Encode Exception");
+            throw new Oauth2Exception(ErrorType.server_error, "Base64 Encode Exception");
         }
     }
 
@@ -49,7 +46,6 @@ public class TokenServiceImpl implements TokenService {
         AuthCode authCode = readCodeFromB64(tokenRequest.getCode());
         AccessToken access = createAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
         RefreshToken refresh = createRefreshToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
-        tokenRepository.save(access);
 
         logger.info("New Refresh Token:");
         logger.info(objectAsJSON(refresh));
@@ -69,7 +65,6 @@ public class TokenServiceImpl implements TokenService {
     public TokenResponseDto getRefreshedTokenAsJSON(TokenRequestDto tokenRequest) throws IOException {
         RefreshToken refresh = readRefreshTokenFromB64(tokenRequest.getRefreshToken());
         AccessToken access = createAccessToken(refresh.getClientID(), refresh.getUsername(), tokenRequest.getScope());
-        tokenRepository.save(access);
 
         logger.info("Refresh Token [from request]:");
         logger.info(objectAsJSON(refresh));
@@ -105,11 +100,11 @@ public class TokenServiceImpl implements TokenService {
         return mapper.readValue(new String(Base64.getDecoder().decode(code.getBytes())), AuthCode.class);
     }
 
-    private String encodeObject(Object code) throws JsonProcessingException {
-        return Base64.getEncoder().encodeToString(Objects.requireNonNull(objectAsJSON(code)).getBytes());
-    }
-
     private String objectAsJSON(Object code) throws JsonProcessingException {
         return mapper.writeValueAsString(code);
+    }
+
+    private String encodeObject(Object code) throws JsonProcessingException {
+        return Base64.getEncoder().encodeToString(Objects.requireNonNull(objectAsJSON(code)).getBytes());
     }
 }
