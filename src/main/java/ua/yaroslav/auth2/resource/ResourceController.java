@@ -6,12 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.entity.AccessToken;
-import ua.yaroslav.auth2.auth.entity.AuthCode;
 import ua.yaroslav.auth2.auth.entity.Client;
 import ua.yaroslav.auth2.auth.service.ValidationService;
-import ua.yaroslav.auth2.auth.service.implementation.JSONUtil;
 import ua.yaroslav.auth2.auth.store.ClientStore;
-import ua.yaroslav.auth2.auth.store.CodeRepository;
 import ua.yaroslav.auth2.auth.store.TokenRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,20 +18,15 @@ import java.util.List;
 @RestController
 public class ResourceController {
     private final static Logger logger = LoggerFactory.getLogger(ResourceController.class);
-    private final JSONUtil util;
     private final ClientStore clientStore;
     private final TokenRepository tokenRepository;
-    private final CodeRepository codeRepository;
     private final ValidationService validationService;
 
 
-    public ResourceController(JSONUtil util, ClientStore clientStore,
-                              TokenRepository tokenRepository, CodeRepository codeRepository,
-                              ValidationService validator) {
-        this.util = util;
+    public ResourceController(ClientStore clientStore, ValidationService validator,
+                              TokenRepository tokenRepository) {
         this.clientStore = clientStore;
         this.tokenRepository = tokenRepository;
-        this.codeRepository = codeRepository;
         this.validationService = validator;
     }
 
@@ -54,11 +46,6 @@ public class ResourceController {
     @GetMapping("/tokens")
     public List<AccessToken> tokenList() {
         return (List<AccessToken>) tokenRepository.findAll();
-    }
-
-    @GetMapping("/codes")
-    public List<AuthCode> codeList() {
-        return (List<AuthCode>) codeRepository.findAll();
     }
 
     private String writeHeaders(HttpServletRequest request) {

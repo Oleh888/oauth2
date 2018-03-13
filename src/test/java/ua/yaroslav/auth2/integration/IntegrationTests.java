@@ -1,5 +1,6 @@
 package ua.yaroslav.auth2.integration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,15 +13,16 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenResponseDto;
-import ua.yaroslav.auth2.auth.service.implementation.JSONUtil;
 import ua.yaroslav.auth2.auth.entity.AccessToken;
+import ua.yaroslav.auth2.auth.entity.AuthCode;
 import ua.yaroslav.auth2.auth.entity.Client;
 import ua.yaroslav.auth2.auth.store.implementation.PostgresClientStore;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Collections;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -44,8 +46,6 @@ public class IntegrationTests {
     private TestRestTemplate restTemplate;
     @Autowired
     private ObjectMapper mapper;
-    @Autowired
-    private JSONUtil util;
 
     @Before
     public void setUp() {
@@ -64,7 +64,7 @@ public class IntegrationTests {
 
         ResponseEntity<String> response = this.restTemplate.postForEntity(TOKEN_URL, params, String.class);
         TokenResponseDto token = mapper.readValue(response.getBody(), TokenResponseDto.class);
-        AccessToken accessToken = util.readTokenFromB64(token.getAccessToken());
+        AccessToken accessToken = readTokenFromB64(token.getAccessToken());
 
         assertEquals(token.getToken_type(), BEARER);
         assertNotNull(token.getRefresh_token());
@@ -133,9 +133,7 @@ public class IntegrationTests {
     }
 
     private String generateCode() {
-        return util.encodeObject(util.getCode(new AuthRequestDto
-                ("login", "pass", CLIENT, "code", "uri", SCOPE)
-        ));
+        return encodeObject(new AuthCode(CLIENT, "login", 15 * 1000 * 5));
     }
 
     private String generateAccessToken() throws IOException {
@@ -148,5 +146,22 @@ public class IntegrationTests {
         ResponseEntity<String> r = this.restTemplate.postForEntity(TOKEN_URL, params, String.class);
         TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
         return token.getAccessToken();
+    }
+
+    private AccessToken readTokenFromB64(String token) throws IOException {
+        return mapper.readValue(new String(Base64.getDecoder().decode(token.getBytes())), AccessToken.class);
+    }
+
+    private String encodeObject(Object code) {
+        return Base64.getEncoder().encodeToString(Objects.requireNonNull(objectToJSON(code)).getBytes());
+    }
+
+    private String objectToJSON(Object code) {
+        try {
+            return "\n" + mapper.writeValueAsString(code) + "\n";
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.LoginRequestDto;
-import ua.yaroslav.auth2.auth.service.implementation.JSONUtil;
 import ua.yaroslav.auth2.auth.service.TokenService;
 import ua.yaroslav.auth2.auth.service.ValidationService;
 
@@ -21,13 +20,11 @@ public class AuthorizationController {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationController.class);
     private final TokenService tokenService;
     private final ValidationService validationService;
-    private final JSONUtil util;
 
 
-    public AuthorizationController(TokenService tokenService, ValidationService validationService, JSONUtil util) {
+    public AuthorizationController(TokenService tokenService, ValidationService validationService) {
         this.tokenService = tokenService;
         this.validationService = validationService;
-        this.util = util;
     }
 
 
@@ -35,8 +32,7 @@ public class AuthorizationController {
     public void getCode(AuthRequestDto authRequest, HttpServletResponse response) throws IOException {
         validationService.validate(authRequest);
         logger.info(authRequest.toString());
-        response.sendRedirect(authRequest.getRedirectURI() +
-                "?code=" + util.encodeObject(tokenService.getCode(authRequest)));
+        response.sendRedirect(authRequest.getRedirectURI() + "?code=" + tokenService.getCode(authRequest));
     }
 
     @GetMapping("/auth")

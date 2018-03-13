@@ -1,5 +1,6 @@
 package ua.yaroslav.auth2.auth.service.implementation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,17 @@ import ua.yaroslav.auth2.auth.service.ValidationService;
 import ua.yaroslav.auth2.auth.store.ClientStore;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Base64;
 
 @Service
 public class ValidationServiceImpl implements ValidationService {
     private final Logger logger = LoggerFactory.getLogger(ValidationServiceImpl.class);
     private final ClientStore store;
-    private final JSONUtil util;
+    private final ObjectMapper mapper;
 
-    public ValidationServiceImpl(ClientStore store, JSONUtil util) {
+    public ValidationServiceImpl(ClientStore store, ObjectMapper mapper) {
         this.store = store;
-        this.util = util;
+        this.mapper = mapper;
     }
 
     @Override
@@ -63,14 +65,14 @@ public class ValidationServiceImpl implements ValidationService {
 
             AccessToken accessToken;
             try {
-                accessToken = util.readTokenFromB64(header);
+                accessToken = mapper.readValue(new String(Base64.getDecoder().decode(header.getBytes())), AccessToken.class);
                 logger.info(accessToken.toString());
             } catch (Exception e) {
                 throw new Oauth2Exception(ErrorType.server_error, "Access Token Base64 Decode Exception");
             }
 
             logger.info("Access Token (decoded) ->");
-            logger.info(util.objectToString(accessToken));
+            logger.info(accessToken.toString());
 
             if (accessToken.getTime() < System.currentTimeMillis())
                 throw new Oauth2Exception(ErrorType.access_denied, "Access Token Has Expired");

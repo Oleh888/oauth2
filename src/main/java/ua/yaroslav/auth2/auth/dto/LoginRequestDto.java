@@ -1,7 +1,5 @@
 package ua.yaroslav.auth2.auth.dto;
 
-import ua.yaroslav.auth2.auth.service.implementation.JSONUtil;
-
 public class LoginRequestDto {
     private String client_id;
     private String response_type;
@@ -61,10 +59,5 @@ public class LoginRequestDto {
 
     public void setScope(String scope) {
         this.scope = scope;
-    }
-
-    @Override
-    public String toString() {
-        return JSONUtil.responseToString(this);
     }
 }

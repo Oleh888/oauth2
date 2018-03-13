@@ -3,7 +3,6 @@ package ua.yaroslav.auth2.auth.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ua.yaroslav.auth2.auth.service.implementation.JSONUtil;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TokenResponseDto {
@@ -80,10 +79,5 @@ public class TokenResponseDto {
 
     public String getToken_type() {
         return token_type;
-    }
-
-    @Override
-    public String toString() {
-        return JSONUtil.responseToString(this);
     }
 }
