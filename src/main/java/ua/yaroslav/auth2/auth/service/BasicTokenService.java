@@ -10,32 +10,35 @@ import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.entity.AuthCode;
 import ua.yaroslav.auth2.auth.entity.RefreshToken;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
+import ua.yaroslav.auth2.auth.service.iface.TokenService;
 import ua.yaroslav.auth2.auth.store.iface.CodeRepository;
 import ua.yaroslav.auth2.auth.store.iface.TokenRepository;
 
 import java.io.IOException;
 
 @Service
-public class TokenService {
+public class BasicTokenService implements TokenService {
     private final TokenRepository tokenRepository;
     private final CodeRepository codeRepository;
     private final JSONUtil util;
-    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BasicTokenService.class);
 
 
-    public TokenService(JSONUtil util, TokenRepository tokenRepository, CodeRepository codeRepository) {
+    public BasicTokenService(JSONUtil util, TokenRepository tokenRepository, CodeRepository codeRepository) {
         this.tokenRepository = tokenRepository;
         this.codeRepository = codeRepository;
         this.util = util;
     }
 
 
+    @Override
     public AuthCode getCode(AuthRequestDto authRequest) throws Oauth2Exception {
         AuthCode code = util.getCode(authRequest);
         codeRepository.save(code);
         return code;
     }
 
+    @Override
     public TokenResponseDto getTokensAsJSON(TokenRequestDto tokenRequest) throws IOException {
         AuthCode authCode = util.readCodeFromB64(tokenRequest.getCode());
         AccessToken access = util.getAccessToken(authCode.getClientID(), authCode.getUsername(), tokenRequest.getScope());
@@ -56,6 +59,7 @@ public class TokenService {
         );
     }
 
+    @Override
     public TokenResponseDto getRefreshedTokenAsJSON(TokenRequestDto tokenRequest) throws IOException {
         RefreshToken refresh = util.readRefreshTokenFromB64(tokenRequest.getRefreshToken());
         AccessToken access = util.getAccessToken(refresh.getClientID(), refresh.getUsername(), tokenRequest.getScope());

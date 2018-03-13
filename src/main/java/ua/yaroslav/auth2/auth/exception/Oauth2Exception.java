@@ -1,7 +1,5 @@
 package ua.yaroslav.auth2.auth.exception;
 
-import ua.yaroslav.auth2.auth.dto.ErrorResponseDto;
-
 public class Oauth2Exception extends RuntimeException {
     private ErrorType error;
     private String error_description;
@@ -16,12 +14,16 @@ public class Oauth2Exception extends RuntimeException {
     }
 
 
+    public ErrorType getError() {
+        return error;
+    }
+
+    public String getErrorDescription() {
+        return error_description;
+    }
+
     @Override
     public String toString() {
         return "Oauth2Exception [" + error + "]: " + error_description;
-    }
-
-    public ErrorResponseDto getResponse() {
-        return new ErrorResponseDto(error, error_description);
     }
 }

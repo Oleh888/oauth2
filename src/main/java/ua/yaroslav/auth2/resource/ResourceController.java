@@ -9,7 +9,7 @@ import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.entity.AuthCode;
 import ua.yaroslav.auth2.auth.entity.Client;
 import ua.yaroslav.auth2.auth.service.JSONUtil;
-import ua.yaroslav.auth2.auth.service.ValidationService;
+import ua.yaroslav.auth2.auth.service.BasicValidationService;
 import ua.yaroslav.auth2.auth.store.iface.ClientStore;
 import ua.yaroslav.auth2.auth.store.iface.CodeRepository;
 import ua.yaroslav.auth2.auth.store.iface.TokenRepository;
@@ -25,11 +25,11 @@ public class ResourceController {
     private final ClientStore clientStore;
     private final TokenRepository tokenRepository;
     private final CodeRepository codeRepository;
-    private final ValidationService validator;
+    private final BasicValidationService validator;
 
 
     public ResourceController(JSONUtil util, ClientStore clientStore,
-                              TokenRepository tokenRepository, CodeRepository codeRepository, ValidationService validator) {
+                              TokenRepository tokenRepository, CodeRepository codeRepository, BasicValidationService validator) {
         this.util = util;
         this.clientStore = clientStore;
         this.tokenRepository = tokenRepository;

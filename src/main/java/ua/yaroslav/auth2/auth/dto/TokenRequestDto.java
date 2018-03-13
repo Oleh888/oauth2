@@ -12,7 +12,8 @@ public class TokenRequestDto {
     public TokenRequestDto() {
     }
 
-    public TokenRequestDto(String client_id, String client_secret, String grant_type, String code, String scope, String refresh_token) {
+    public TokenRequestDto(String client_id, String client_secret, String grant_type,
+                           String code, String scope, String refresh_token) {
         this.client_id = client_id;
         this.client_secret = client_secret;
         this.grant_type = grant_type;
@@ -82,6 +83,6 @@ public class TokenRequestDto {
                 "\n   grant_type:    \n\t\t" + grant_type +
                 "\n   code:          \n\t\t" + cd +
                 "\n   refresh_token: \n\t\t" + rf +
-                "\n   scope:         \n\t\t" + "[" + scope + "]\n";
+                "\n   scope:         \n\t\t" + "[" + scope + "]";
     }
 }

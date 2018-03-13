@@ -35,7 +35,7 @@ public class IntegrationTests {
     public static final String AUTHORIZATION_CODE = "authorization_code";
     public static final String SCOPE = "read";
     public static final String BEARER = "bearer";
-    public static final String TOKEN_URL = "/service";
+    public static final String TOKEN_URL = "/token";
     public static final String PRIVATE_RESOURCE_URL = "/private";
 
     @Autowired
@@ -64,7 +64,7 @@ public class IntegrationTests {
 
         ResponseEntity<String> response = this.restTemplate.postForEntity(TOKEN_URL, params, String.class);
         TokenResponseDto token = mapper.readValue(response.getBody(), TokenResponseDto.class);
-        AccessToken accessToken = util.readTokenFromB64(token.getAccess_token());
+        AccessToken accessToken = util.readTokenFromB64(token.getAccessToken());
 
         assertEquals(token.getToken_type(), BEARER);
         assertNotNull(token.getRefresh_token());
@@ -147,6 +147,6 @@ public class IntegrationTests {
         params.put("scope", Collections.singletonList(SCOPE));
         ResponseEntity<String> r = this.restTemplate.postForEntity(TOKEN_URL, params, String.class);
         TokenResponseDto token = mapper.readValue(r.getBody(), TokenResponseDto.class);
-        return token.getAccess_token();
+        return token.getAccessToken();
     }
 }

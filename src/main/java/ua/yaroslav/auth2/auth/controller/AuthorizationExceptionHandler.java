@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ua.yaroslav.auth2.auth.dto.ErrorResponseDto;
 import ua.yaroslav.auth2.auth.exception.LoginException;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
 
@@ -16,7 +17,7 @@ public class AuthorizationExceptionHandler {
     @ExceptionHandler(Oauth2Exception.class)
     public ResponseEntity<?> handleOauth2Exception(Oauth2Exception oe) {
         logger.error(oe.toString());
-        return ResponseEntity.badRequest().body(oe.getResponse());
+        return ResponseEntity.badRequest().body(new ErrorResponseDto(oe.getError(), oe.getErrorDescription()));
     }
 
     @ExceptionHandler(LoginException.class)

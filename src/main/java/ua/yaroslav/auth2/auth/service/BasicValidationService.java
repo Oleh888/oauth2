@@ -10,27 +10,30 @@ import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.exception.ErrorType;
 import ua.yaroslav.auth2.auth.exception.LoginException;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
+import ua.yaroslav.auth2.auth.service.iface.ValidationService;
 import ua.yaroslav.auth2.auth.store.iface.ClientStore;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Service
-public class ValidationService {
-    private final Logger logger = LoggerFactory.getLogger(ValidationService.class);
+public class BasicValidationService implements ValidationService {
+    private final Logger logger = LoggerFactory.getLogger(BasicValidationService.class);
     private final ClientStore store;
     private final JSONUtil util;
 
-    public ValidationService(ClientStore store, JSONUtil util) {
+    public BasicValidationService(ClientStore store, JSONUtil util) {
         this.store = store;
         this.util = util;
     }
 
+    @Override
     public void validate(LoginRequestDto loginRequest) throws LoginException {
         if (store.checkClient(loginRequest.getClientID()))
             return;
         throw new LoginException("Invalid Client ID");
     }
 
+    @Override
     public void validate(AuthRequestDto authRequest) throws Oauth2Exception {
         if (store.checkClient(authRequest.getClientID()) && authRequest.getResponseType().equals("code"))
             return;
@@ -38,8 +41,8 @@ public class ValidationService {
 
     }
 
-    public void validate(TokenRequestDto tokenRequest)
-            throws Oauth2Exception {
+    @Override
+    public void validate(TokenRequestDto tokenRequest) throws Oauth2Exception {
         if (tokenRequest.getGrantType() == null)
             throw new Oauth2Exception(ErrorType.invalid_request, "Invalid Grant Type");
         if (!store.checkClient(tokenRequest.getClientID()))
@@ -50,6 +53,7 @@ public class ValidationService {
 
     }
 
+    @Override
     public void validate(HttpServletRequest request) throws Oauth2Exception {
         logger.info("Header: [" + request.getHeader("Authorization") + "]");
 

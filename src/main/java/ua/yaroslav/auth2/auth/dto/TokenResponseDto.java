@@ -61,7 +61,8 @@ public class TokenResponseDto {
         this.scope = scope;
     }
 
-    public String getAccess_token() {
+    @JsonProperty("access_token")
+    public String getAccessToken() {
         return access_token;
     }
 
