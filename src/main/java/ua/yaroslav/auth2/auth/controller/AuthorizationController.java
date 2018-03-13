@@ -39,6 +39,7 @@ public class AuthorizationController {
     public String getLogin(LoginRequestDto loginRequest, Model model) {
         validationService.validate(loginRequest);
         logger.info(loginRequest.toString());
+        System.out.println("lasdaksjdlkasjdlkasdj");
         model.addAttribute("redirect_uri", loginRequest.getRedirectURI());
         model.addAttribute("client_id", loginRequest.getClientID());
         model.addAttribute("response_type", loginRequest.getResponseType());
