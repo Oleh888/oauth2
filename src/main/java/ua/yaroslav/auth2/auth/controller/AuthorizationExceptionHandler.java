@@ -23,6 +23,7 @@ public class AuthorizationExceptionHandler {
     @ExceptionHandler(LoginException.class)
     public String handleOauth2Exception(LoginException le, Model model) {
         logger.error(le.getMessage());
+        System.out.println("Error maafaka");
         model.addAttribute("exception", le.toString());
         return "error";
     }
