@@ -17,13 +17,14 @@ public class AuthorizationExceptionHandler {
     @ExceptionHandler(Oauth2Exception.class)
     public ResponseEntity<?> handleOauth2Exception(Oauth2Exception oe) {
         logger.error(oe.toString());
+        System.out.println("OAuth2ErrorMaafaka");
         return ResponseEntity.badRequest().body(new ErrorResponseDto(oe.getError(), oe.getErrorDescription()));
     }
 
     @ExceptionHandler(LoginException.class)
     public String handleOauth2Exception(LoginException le, Model model) {
         logger.error(le.getMessage());
-        System.out.println("Error maafaka");
+        System.out.println("LoginErrorMaafaka");
         model.addAttribute("exception", le.toString());
         return "error";
     }
