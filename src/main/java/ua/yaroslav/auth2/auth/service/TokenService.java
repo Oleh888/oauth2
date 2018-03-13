@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.auth.service.iface;
+package ua.yaroslav.auth2.auth.service;
 
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;

@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.auth.service;
+package ua.yaroslav.auth2.auth.service.implementation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

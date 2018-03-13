@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.auth.service;
+package ua.yaroslav.auth2.auth.service.implementation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,21 +10,21 @@ import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.entity.AuthCode;
 import ua.yaroslav.auth2.auth.entity.RefreshToken;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
-import ua.yaroslav.auth2.auth.service.iface.TokenService;
-import ua.yaroslav.auth2.auth.store.iface.CodeRepository;
-import ua.yaroslav.auth2.auth.store.iface.TokenRepository;
+import ua.yaroslav.auth2.auth.service.TokenService;
+import ua.yaroslav.auth2.auth.store.CodeRepository;
+import ua.yaroslav.auth2.auth.store.TokenRepository;
 
 import java.io.IOException;
 
 @Service
-public class BasicTokenService implements TokenService {
+public class TokenServiceImpl implements TokenService {
     private final TokenRepository tokenRepository;
     private final CodeRepository codeRepository;
     private final JSONUtil util;
-    private static final Logger logger = LoggerFactory.getLogger(BasicTokenService.class);
+    private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 
 
-    public BasicTokenService(JSONUtil util, TokenRepository tokenRepository, CodeRepository codeRepository) {
+    public TokenServiceImpl(JSONUtil util, TokenRepository tokenRepository, CodeRepository codeRepository) {
         this.tokenRepository = tokenRepository;
         this.codeRepository = codeRepository;
         this.util = util;

@@ -14,10 +14,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.TokenResponseDto;
-import ua.yaroslav.auth2.auth.service.JSONUtil;
+import ua.yaroslav.auth2.auth.service.implementation.JSONUtil;
 import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.entity.Client;
-import ua.yaroslav.auth2.auth.store.PostgresClientStore;
+import ua.yaroslav.auth2.auth.store.implementation.PostgresClientStore;
 
 import java.io.IOException;
 import java.util.Collections;

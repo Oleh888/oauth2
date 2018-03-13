@@ -1,6 +1,6 @@
 package ua.yaroslav.auth2.auth.dto;
 
-import ua.yaroslav.auth2.auth.service.JSONUtil;
+import ua.yaroslav.auth2.auth.service.implementation.JSONUtil;
 
 public class LoginRequestDto {
     private String client_id;

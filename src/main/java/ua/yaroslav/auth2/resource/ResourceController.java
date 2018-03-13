@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.entity.AuthCode;
 import ua.yaroslav.auth2.auth.entity.Client;
-import ua.yaroslav.auth2.auth.service.JSONUtil;
-import ua.yaroslav.auth2.auth.service.BasicValidationService;
-import ua.yaroslav.auth2.auth.store.iface.ClientStore;
-import ua.yaroslav.auth2.auth.store.iface.CodeRepository;
-import ua.yaroslav.auth2.auth.store.iface.TokenRepository;
+import ua.yaroslav.auth2.auth.service.ValidationService;
+import ua.yaroslav.auth2.auth.service.implementation.JSONUtil;
+import ua.yaroslav.auth2.auth.store.ClientStore;
+import ua.yaroslav.auth2.auth.store.CodeRepository;
+import ua.yaroslav.auth2.auth.store.TokenRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -25,23 +25,24 @@ public class ResourceController {
     private final ClientStore clientStore;
     private final TokenRepository tokenRepository;
     private final CodeRepository codeRepository;
-    private final BasicValidationService validator;
+    private final ValidationService validationService;
 
 
     public ResourceController(JSONUtil util, ClientStore clientStore,
-                              TokenRepository tokenRepository, CodeRepository codeRepository, BasicValidationService validator) {
+                              TokenRepository tokenRepository, CodeRepository codeRepository,
+                              ValidationService validator) {
         this.util = util;
         this.clientStore = clientStore;
         this.tokenRepository = tokenRepository;
         this.codeRepository = codeRepository;
-        this.validator = validator;
+        this.validationService = validator;
     }
 
 
     @GetMapping(value = {"/private"})
     public ResponseEntity<String> getPrivateData(HttpServletRequest request) {
         logger.info("Private Resource was requested");
-        validator.validate(request);
+        validationService.validate(request);
         return ResponseEntity.ok().body(writeHeaders(request));
     }
 

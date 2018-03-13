@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.auth.service;
+package ua.yaroslav.auth2.auth.service.implementation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,18 +10,18 @@ import ua.yaroslav.auth2.auth.entity.AccessToken;
 import ua.yaroslav.auth2.auth.exception.ErrorType;
 import ua.yaroslav.auth2.auth.exception.LoginException;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
-import ua.yaroslav.auth2.auth.service.iface.ValidationService;
-import ua.yaroslav.auth2.auth.store.iface.ClientStore;
+import ua.yaroslav.auth2.auth.service.ValidationService;
+import ua.yaroslav.auth2.auth.store.ClientStore;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Service
-public class BasicValidationService implements ValidationService {
-    private final Logger logger = LoggerFactory.getLogger(BasicValidationService.class);
+public class ValidationServiceImpl implements ValidationService {
+    private final Logger logger = LoggerFactory.getLogger(ValidationServiceImpl.class);
     private final ClientStore store;
     private final JSONUtil util;
 
-    public BasicValidationService(ClientStore store, JSONUtil util) {
+    public ValidationServiceImpl(ClientStore store, JSONUtil util) {
         this.store = store;
         this.util = util;
     }

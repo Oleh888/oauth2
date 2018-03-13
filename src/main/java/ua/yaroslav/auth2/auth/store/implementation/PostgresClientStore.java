@@ -1,9 +1,9 @@
-package ua.yaroslav.auth2.auth.store;
+package ua.yaroslav.auth2.auth.store.implementation;
 
 import org.springframework.stereotype.Service;
 import ua.yaroslav.auth2.auth.entity.Client;
-import ua.yaroslav.auth2.auth.store.iface.ClientRepository;
-import ua.yaroslav.auth2.auth.store.iface.ClientStore;
+import ua.yaroslav.auth2.auth.store.ClientRepository;
+import ua.yaroslav.auth2.auth.store.ClientStore;
 
 import java.util.List;
 

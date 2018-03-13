@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2.auth.store.iface;
+package ua.yaroslav.auth2.auth.store;
 
 import ua.yaroslav.auth2.auth.entity.Client;
 
