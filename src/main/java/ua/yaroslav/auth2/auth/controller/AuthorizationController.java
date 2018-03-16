@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ua.yaroslav.auth2.auth.dto.AuthRequestDto;
 import ua.yaroslav.auth2.auth.dto.LoginRequestDto;
-import ua.yaroslav.auth2.auth.service.TokenService;
-import ua.yaroslav.auth2.auth.service.ValidationService;
+import ua.yaroslav.auth2.auth.service.token.TokenService;
+import ua.yaroslav.auth2.auth.service.token.ValidationService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

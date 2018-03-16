@@ -1,4 +1,4 @@
-package ua.yaroslav.auth2;
+package ua.yaroslav.auth2.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

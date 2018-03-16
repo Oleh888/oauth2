@@ -51,6 +51,7 @@ public class IntegrationTests {
     public void setUp() {
         if (clientStore.getClients().size() == 0)
             clientStore.saveClient(new Client(CLIENT, SECRET));
+        System.out.println("clients: " + clientStore.getClients());
     }
 
     @Test

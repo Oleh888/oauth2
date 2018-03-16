@@ -1,11 +1,9 @@
-#logging.level.org.springframework.web: debug
-
 spring:
   datasource:
-    url: jdbc:postgresql://ec2-54-246-108-119.eu-west-1.compute.amazonaws.com:5432/d6g5mssehjgg60?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
-    username: fjzdqnatlgiidh
-    password: 26c4b3d0c09319adbdc56539e542b6b00b7cace16c22585decbb6d3e60960184
-    platform: postgresql
+    url: jdbc:sqlserver://server-2018.database.windows.net:1433;database=oauth2db;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: admin-db@server-2018
+    password: 14111993qw_
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     hibernate:
       ddl-auto: update

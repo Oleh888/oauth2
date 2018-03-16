@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.entity.Client;
-import ua.yaroslav.auth2.auth.service.ValidationService;
+import ua.yaroslav.auth2.auth.service.token.ValidationService;
 import ua.yaroslav.auth2.auth.store.ClientStore;
 
 import javax.servlet.http.HttpServletRequest;

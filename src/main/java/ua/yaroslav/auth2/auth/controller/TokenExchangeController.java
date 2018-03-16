@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.yaroslav.auth2.auth.dto.TokenRequestDto;
 import ua.yaroslav.auth2.auth.exception.ErrorType;
 import ua.yaroslav.auth2.auth.exception.Oauth2Exception;
-import ua.yaroslav.auth2.auth.service.TokenService;
-import ua.yaroslav.auth2.auth.service.ValidationService;
+import ua.yaroslav.auth2.auth.service.token.TokenService;
+import ua.yaroslav.auth2.auth.service.token.ValidationService;
 
 import java.io.IOException;
 
