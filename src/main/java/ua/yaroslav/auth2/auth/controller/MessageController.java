@@ -17,7 +17,7 @@ public class MessageController {
     }
 
     @GetMapping("/send/{message}")
-    String queue1(@PathVariable("message") String message) {
+    String postMessage(@PathVariable("message") String message) {
         logger.info("Send to exchange: " + message);
         template.setExchange("exchange");
         template.convertAndSend(message);

@@ -6,8 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.13.0')
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
     }
 }
 
@@ -15,23 +14,22 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: "jacoco"
-apply plugin: 'com.palantir.docker'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'ua.yaroslav'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = 1.8
+jar.baseName = 'yar'
 
 repositories {
     mavenCentral()
 }
-
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'org.springframework.amqp:spring-rabbit:1.7.6.RELEASE'
-
     compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '6.1.0.jre7'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
@@ -45,10 +43,4 @@ jacocoTestReport {
         csv.enabled = false
         html.destination = "${buildDir}/reports/coverage"
     }
-}
-
-docker {
-    name = "${project.group}/${jar.baseName}"
-    files jar.archivePath
-    buildArgs(['JAR_FILE': "${jar.archiveName}"])
 }

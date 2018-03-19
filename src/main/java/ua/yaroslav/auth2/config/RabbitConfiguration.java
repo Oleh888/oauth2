@@ -18,9 +18,12 @@ public class RabbitConfiguration {
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("localhost");
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("13.82.237.21");
+        connectionFactory.setUsername("guest");
+        connectionFactory.setPassword("guest");
         connectionFactory.setConnectionTimeout(3000);
         connectionFactory.setRequestedHeartBeat(30);
+        logger.info("HOST: " + connectionFactory.getHost());
         return connectionFactory;
     }
 
