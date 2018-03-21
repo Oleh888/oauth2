@@ -3,28 +3,16 @@ package ua.yaroslav.auth2.auth.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Table(name = "tokens")
-@Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccessToken {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
-    @Column
     private long id;
-    @Column
     private String clientID;
-    @Column
     private String username;
-    @Column
     private long expiresIn;
-    @Column
     private String scope;
-    @Column
     private String type;
-    @Column
     private long time;
 
 
