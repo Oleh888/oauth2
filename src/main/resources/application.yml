@@ -9,10 +9,8 @@ spring:
       ddl-auto: update
     generate-ddl: true
 
-logging:
-  level:
-    org:
-      springframework:
-        web: DEBUG
-
-#    logging.level.org.springframework.web=DEBUG
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        web: DEBUG

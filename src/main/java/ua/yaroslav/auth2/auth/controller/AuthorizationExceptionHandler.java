@@ -22,7 +22,7 @@ public class AuthorizationExceptionHandler {
 
     @ExceptionHandler(LoginException.class)
     public String handleLoginException(LoginException le, Model model) {
-        logger.error(le.getMessage());
+        logger.error(le.toString());
         model.addAttribute("exception", le.toString());
         return "error";
     }
